@@ -7,6 +7,8 @@ export interface Location {
   longitude: number;
 }
 
+export type POIStatus = "submitted" | "validated";
+
 export interface POI {
   // Mapping direct avec la DB
   poi_id: string; // UUID
@@ -42,6 +44,20 @@ export interface POI {
 
   // Operation Time Plan JSON
   operation_time_plan?: OperationTimePlan;
+
+  // New fields
+  status: POIStatus;
+  submitted_by?: string; // User ID
+}
+
+export type UserRole = "client" | "admin";
+
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: UserRole;
+  organization?: string;
 }
 
 export interface RouteStats {

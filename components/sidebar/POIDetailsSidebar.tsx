@@ -1,10 +1,11 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { POI } from "@/types";
-import { X, Navigation, Bookmark, Share2, Smartphone, Globe, Clock, MapPin, Star, MessageSquare, Edit } from "lucide-react";
+import { X, Navigation, Bookmark, Share2, Smartphone, Globe, Clock, MapPin, Star, MessageSquare, Edit, CheckCircle } from "lucide-react";
 import { getCategoryConfig } from "@/data/categories";
 import { useRouter } from "next/navigation";
 import { useUserData } from "@/hooks/useUserData"; // Pour vérifier propriété
+import { useAuth } from "@/hooks/useAuth";
 
 interface PoiDetailsProps {
   poi: POI;
@@ -16,10 +17,13 @@ interface PoiDetailsProps {
 export const PoiDetailsSidebar = ({ poi, onClose, isOpen, onOpenDirections }: PoiDetailsProps) => {
   const categoryConfig = getCategoryConfig(poi.poi_category);
   const router = useRouter();
-  const { myPois } = useUserData();
+  const { myPois, validatePoi } = useUserData();
+  const { user } = useAuth();
 
   // Vérifier si le POI appartient à l'utilisateur
   const isOwner = myPois.some(p => p.poi_id === poi.poi_id);
+  const isAdmin = user?.role === "admin";
+  const canValidate = isAdmin && poi.status === "submitted";
 
   const handleEdit = () => {
     router.push(`/add-poi?id=${poi.poi_id}`);
@@ -60,9 +64,27 @@ export const PoiDetailsSidebar = ({ poi, onClose, isOpen, onOpenDirections }: Po
       {/* CONTENU */}
       <div className="p-6 space-y-6 pb-20">
         
+        {/* STATUS BADGE */}
+        {poi.status === "submitted" && (
+          <div className="bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 px-3 py-1 rounded-full text-xs font-bold w-fit mb-2">
+            En attente de validation
+          </div>
+        )}
+
         {/* TITRE & REVIEW */}
-        <div>
-          <h1 className="text-3xl font-bold text-zinc-900 dark:text-zinc-50 leading-tight">{poi.poi_name}</h1>
+        <div className="flex justify-between items-start gap-4">
+          <h1 className="text-3xl font-bold text-zinc-900 dark:text-zinc-50 leading-tight flex-1">{poi.poi_name}</h1>
+          {canValidate && (
+             <button
+                onClick={() => { validatePoi(poi.poi_id); onClose(); }}
+                className="bg-green-600 hover:bg-green-700 text-white p-2 rounded-xl shadow-lg transition-colors flex items-center gap-2"
+                title="Valider ce point d&apos;intérêt"
+             >
+                <CheckCircle size={20} />
+                <span className="text-xs font-bold pr-1">Valider</span>
+             </button>
+          )}
+        </div>
           <div className="flex items-center gap-2 mt-3">
             <span className="font-black text-sm bg-green-600 text-white px-1.5 rounded">{poi.rating || "N/A"}</span>
             <div className="flex text-yellow-500">
@@ -76,7 +98,6 @@ export const PoiDetailsSidebar = ({ poi, onClose, isOpen, onOpenDirections }: Po
                 {categoryConfig.icon} {categoryConfig.label}
             </span>
           </div>
-        </div>
 
         {/* ACTIONS CIRCULAIRES */}
         <div className="flex justify-between px-2 py-2">

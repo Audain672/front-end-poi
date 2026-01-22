@@ -11,6 +11,7 @@ import { POI_DATA } from "@/data/mockData";
 import { POI, Location, TransportMode } from "@/types";
 import { getRoute } from "@/services/routingService";
 import { useUserData } from "@/hooks/useUserData";
+import { useAuth } from "@/hooks/useAuth";
 import { Settings as SettingsIcon, Check, X } from "lucide-react";
 import { Loader } from "@/components/ui/Loader";
 import { MobileNavBar } from "@/components/navigation/MobileNavbar";
@@ -36,6 +37,7 @@ export default function Home() {
   }>({ type: null });
   
   const { savedPois, recentPois, recentTrips, mapStyle, addRecentPoi, addTrip, toggleMapStyle, myPois } = useUserData();
+  const { user } = useAuth();
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   
   // États transverses
@@ -140,11 +142,19 @@ export default function Home() {
   const filteredPois = useMemo(() => {
     const base = [...POI_DATA, ...myPois]; // Fusion
     return base.filter((poi) => {
+      // Visibilité basée sur le statut et le rôle
+      const isVisible =
+        user?.role === "admin" ||
+        poi.status === "validated" ||
+        (poi.submitted_by && user?.id && poi.submitted_by === user.id);
+
+      if (!isVisible) return false;
+
       const cat = selectedCategory ? poi.poi_category === selectedCategory : true;
       const search = searchQuery ? poi.poi_name.toLowerCase().includes(searchQuery.toLowerCase()) : true;
       return cat && search;
     });
-  }, [selectedCategory, searchQuery, myPois]);
+  }, [selectedCategory, searchQuery, myPois, user]);
 
   return (
     <main className="relative h-screen w-screen overflow-hidden bg-zinc-50 dark:bg-black font-sans">

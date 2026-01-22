@@ -15,6 +15,7 @@ import "maplibre-gl/dist/maplibre-gl.css";
 
 import { POI, Location } from "@/types";
 import { useUserData } from "@/hooks/useUserData";
+import { useAuth } from "@/hooks/useAuth";
 import { CATEGORIES } from "@/data/categories";
 import { Button } from "@/components/ui/Button";
 import { FormInput } from "@/components/ui/form/FormInput";
@@ -34,6 +35,7 @@ function AddPoiContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { addMyPoi, updateMyPoi, myPois } = useUserData();
+  const { user, isAuthenticated, isLoading: authLoading } = useAuth();
   
   // States
   const [isLoading, setIsLoading] = useState(true);
@@ -62,6 +64,13 @@ function AddPoiContent() {
   // State temporaire pour la carte plein écran
   const [tempLocation, setTempLocation] = useState<Location>({ latitude: 0, longitude: 0 });
   const mapRef = useRef<MapRef>(null);
+
+  // Auth protection
+  useEffect(() => {
+    if (!authLoading && !isAuthenticated) {
+      router.push("/login");
+    }
+  }, [isAuthenticated, authLoading, router]);
 
   // Initialisation
   useEffect(() => {
@@ -158,7 +167,9 @@ function AddPoiContent() {
         poi_keywords: keywordsString.split(",").map(s => s.trim()).filter(Boolean),
         rating: formData.rating || 4.5,
         review_count: formData.review_count || 0,
-        popularity_score: 10
+        popularity_score: 10,
+        status: editId ? (formData.status || "submitted") : "submitted",
+        submitted_by: editId ? formData.submitted_by : user?.id
     };
 
     if (editId) updateMyPoi(finalPoi);
@@ -166,7 +177,7 @@ function AddPoiContent() {
     router.push("/");
   };
 
-  if (isLoading) return <div className="h-screen w-full bg-zinc-50 dark:bg-black flex items-center justify-center"><Loader2 className="animate-spin text-primary" size={40}/></div>;
+  if (isLoading || authLoading || !isAuthenticated) return <div className="h-screen w-full bg-zinc-50 dark:bg-black flex items-center justify-center"><Loader2 className="animate-spin text-primary" size={40}/></div>;
 
   return (
     <div className="h-screen w-full bg-zinc-50 dark:bg-black font-sans overflow-y-auto">

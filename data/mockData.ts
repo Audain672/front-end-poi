@@ -13,7 +13,7 @@ export const POI_DATA: POI[] = [
     review_count: 1836,
     address_informal: "Quartier Mvog-Betsi",
     address_city: "Yaoundé",
-    popularity_score: 90,
+    popularity_score: 90, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1558506283-a9ae347640db?q=80&w=800&auto=format&fit=crop"],
     poi_contacts: { phone: "6 91 10 42 61" },
     operation_time_plan: { monday: { open: "08:00", close: "17:00" } }
@@ -29,7 +29,7 @@ export const POI_DATA: POI[] = [
     review_count: 2000,
     address_informal: "Centre Administratif",
     address_city: "Yaoundé",
-    popularity_score: 98,
+    popularity_score: 98, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1544799059-e932470783c5?q=80&w=800"],
     poi_contacts: { phone: "2 22 22 22 22" }
   },
@@ -44,7 +44,7 @@ export const POI_DATA: POI[] = [
     review_count: 500,
     address_informal: "Colline de Mvolyé",
     address_city: "Yaoundé",
-    popularity_score: 85,
+    popularity_score: 85, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1548544149-48bc7a61d8da?q=80&w=800"],
   },
   {
@@ -58,7 +58,7 @@ export const POI_DATA: POI[] = [
     review_count: 900,
     address_informal: "Carrefour Warda",
     address_city: "Yaoundé",
-    popularity_score: 89,
+    popularity_score: 89, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=800"],
   },
   {
@@ -72,7 +72,7 @@ export const POI_DATA: POI[] = [
     review_count: 1200,
     address_informal: "Plateau Atemengue",
     address_city: "Yaoundé",
-    popularity_score: 92,
+    popularity_score: 92, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1596422846543-75c6fc197f07?q=80&w=800"],
   },
 
@@ -88,7 +88,7 @@ export const POI_DATA: POI[] = [
     review_count: 56,
     address_informal: "Entrée IRIC, Obili",
     address_city: "Yaoundé",
-    popularity_score: 75,
+    popularity_score: 75, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1604328698692-f76ea9498e76?q=80&w=800"],
   },
   {
@@ -102,7 +102,7 @@ export const POI_DATA: POI[] = [
     review_count: 3500,
     address_informal: "Grand carrefour Briqueterie",
     address_city: "Yaoundé",
-    popularity_score: 100,
+    popularity_score: 100, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1529193591184-b1d580690dd0?q=80&w=800"],
     operation_time_plan: { monday: { open: "17:00", close: "02:00" } }
   },
@@ -117,7 +117,7 @@ export const POI_DATA: POI[] = [
     review_count: 850,
     address_informal: "Montée Jouvence",
     address_city: "Yaoundé",
-    popularity_score: 88,
+    popularity_score: 88, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1516684988770-96f24d77d70a?q=80&w=800"],
   },
   {
@@ -131,7 +131,7 @@ export const POI_DATA: POI[] = [
     review_count: 120,
     address_informal: "Face Lycée Leclerc",
     address_city: "Yaoundé",
-    popularity_score: 82,
+    popularity_score: 82, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1627308595133-c2152bd6e4f3?q=80&w=800"],
   },
   {
@@ -145,7 +145,7 @@ export const POI_DATA: POI[] = [
     review_count: 45,
     address_informal: "Mfandena, rue cachée",
     address_city: "Yaoundé",
-    popularity_score: 70,
+    popularity_score: 70, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1596797038530-2c107229654b?q=80&w=800"],
   },
 
@@ -161,7 +161,7 @@ export const POI_DATA: POI[] = [
     review_count: 3100,
     address_informal: "Boulevard du 20 Mai",
     address_city: "Yaoundé",
-    popularity_score: 95,
+    popularity_score: 95, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=800"],
     poi_contacts: { phone: "2 22 23 36 46" }
   },
@@ -176,7 +176,7 @@ export const POI_DATA: POI[] = [
     review_count: 1500,
     address_informal: "Mont Fébé",
     address_city: "Yaoundé",
-    popularity_score: 87,
+    popularity_score: 87, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1455587734955-081b22074882?q=80&w=800"],
   },
 
@@ -192,7 +192,7 @@ export const POI_DATA: POI[] = [
     review_count: 400,
     address_informal: "Bastos, rue des ambassades",
     address_city: "Yaoundé",
-    popularity_score: 88,
+    popularity_score: 88, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1514362545857-3bc16549766b?q=80&w=800"],
   },
   {
@@ -206,7 +206,7 @@ export const POI_DATA: POI[] = [
     review_count: 900,
     address_informal: "Montée Elig-Essono",
     address_city: "Yaoundé",
-    popularity_score: 93,
+    popularity_score: 93, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1566737236500-c8ac43014a67?q=80&w=800"],
   },
   {
@@ -220,7 +220,7 @@ export const POI_DATA: POI[] = [
     review_count: 600,
     address_informal: "Bastos",
     address_city: "Yaoundé",
-    popularity_score: 85,
+    popularity_score: 85, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1575852230006-2581691a0c44?q=80&w=800"],
   },
   {
@@ -234,7 +234,7 @@ export const POI_DATA: POI[] = [
     review_count: 300,
     address_informal: "Quartier Omnisports",
     address_city: "Yaoundé",
-    popularity_score: 80,
+    popularity_score: 80, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1506157786151-b8491531f063?q=80&w=800"],
   },
   {
@@ -248,7 +248,7 @@ export const POI_DATA: POI[] = [
     review_count: 80,
     address_informal: "Avenue Germaine",
     address_city: "Yaoundé",
-    popularity_score: 75,
+    popularity_score: 75, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1605333144866-e3d8f8be0f96?q=80&w=800"],
   },
 
@@ -264,7 +264,7 @@ export const POI_DATA: POI[] = [
     review_count: 4000,
     address_informal: "Centre-ville",
     address_city: "Yaoundé",
-    popularity_score: 96,
+    popularity_score: 96, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1488459716781-31db52582fe9?q=80&w=800"],
   },
   {
@@ -278,7 +278,7 @@ export const POI_DATA: POI[] = [
     review_count: 5000,
     address_informal: "Boulevard Kennedy",
     address_city: "Yaoundé",
-    popularity_score: 99,
+    popularity_score: 99, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1606787366850-de6330128bfc?q=80&w=800"],
   },
   {
@@ -292,7 +292,7 @@ export const POI_DATA: POI[] = [
     review_count: 2200,
     address_informal: "Ville",
     address_city: "Yaoundé",
-    popularity_score: 94,
+    popularity_score: 94, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=800"],
   },
   {
@@ -306,7 +306,7 @@ export const POI_DATA: POI[] = [
     review_count: 1400,
     address_informal: "Bastos / Hippodrome",
     address_city: "Yaoundé",
-    popularity_score: 89,
+    popularity_score: 89, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1517433670267-08bbd4be890f?q=80&w=800"],
   },
   {
@@ -320,7 +320,7 @@ export const POI_DATA: POI[] = [
     review_count: 1000,
     address_informal: "Quartier Mvan",
     address_city: "Yaoundé",
-    popularity_score: 90,
+    popularity_score: 90, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?q=80&w=800"],
   },
 
@@ -336,7 +336,7 @@ export const POI_DATA: POI[] = [
     review_count: 800,
     address_informal: "Bastos",
     address_city: "Yaoundé",
-    popularity_score: 91,
+    popularity_score: 91, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1561758033-d89a9ad46330?q=80&w=800"],
   },
   {
@@ -350,7 +350,7 @@ export const POI_DATA: POI[] = [
     review_count: 350,
     address_informal: "Golf",
     address_city: "Yaoundé",
-    popularity_score: 88,
+    popularity_score: 88, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1550966871-3ed3c6227741?q=80&w=800"],
   },
   {
@@ -364,7 +364,7 @@ export const POI_DATA: POI[] = [
     review_count: 500,
     address_informal: "Bastos",
     address_city: "Yaoundé",
-    popularity_score: 84,
+    popularity_score: 84, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1512058564366-18510be2db19?q=80&w=800"],
   },
 
@@ -380,7 +380,7 @@ export const POI_DATA: POI[] = [
     review_count: 150,
     address_informal: "Nsam",
     address_city: "Yaoundé",
-    popularity_score: 60,
+    popularity_score: 60, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1517457373958-b7bdd4587205?q=80&w=800"],
   },
   {
@@ -394,7 +394,7 @@ export const POI_DATA: POI[] = [
     review_count: 300,
     address_informal: "Sortie sud (Ahala)",
     address_city: "Yaoundé",
-    popularity_score: 83,
+    popularity_score: 83, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1502016399999-555e51dbf8d4?q=80&w=800"],
   },
   {
@@ -408,7 +408,7 @@ export const POI_DATA: POI[] = [
     review_count: 400,
     address_informal: "Etoudi / Tongolo",
     address_city: "Yaoundé",
-    popularity_score: 91,
+    popularity_score: 91, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?q=80&w=800"],
   },
   {
@@ -422,7 +422,7 @@ export const POI_DATA: POI[] = [
     review_count: 200,
     address_informal: "Hippodrome",
     address_city: "Yaoundé",
-    popularity_score: 70,
+    popularity_score: 70, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1519225427186-68686957b6ed?q=80&w=800"],
   },
   {
@@ -436,7 +436,7 @@ export const POI_DATA: POI[] = [
     review_count: 1500,
     address_informal: "Rond-point Poste",
     address_city: "Yaoundé",
-    popularity_score: 94,
+    popularity_score: 94, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1548625361-bd86be3a4e93?q=80&w=800"],
   },
   {
@@ -450,7 +450,7 @@ export const POI_DATA: POI[] = [
     review_count: 950,
     address_informal: "Route de Meiganga, à 15km de Ngaoundéré",
     address_city: "Ngaoundéré",
-    popularity_score: 98,
+    popularity_score: 98, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?q=80&w=800&auto=format&fit=crop"], // Image cascade
   },
   {
@@ -464,7 +464,7 @@ export const POI_DATA: POI[] = [
     review_count: 320,
     address_informal: "Village Ngaoundaba",
     address_city: "Ngaoundéré",
-    popularity_score: 92,
+    popularity_score: 92, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1589139268798-316239129df8?q=80&w=800&auto=format&fit=crop"], // Lac de cratère
   },
   {
@@ -478,7 +478,7 @@ export const POI_DATA: POI[] = [
     review_count: 510,
     address_informal: "Quartier périphérique",
     address_city: "Ngaoundéré",
-    popularity_score: 85,
+    popularity_score: 85, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1506540131481-e2da4d2fb1b8?q=80&w=800"],
   },
   {
@@ -492,7 +492,7 @@ export const POI_DATA: POI[] = [
     review_count: 230,
     address_informal: "Nord de la ville",
     address_city: "Ngaoundéré",
-    popularity_score: 80,
+    popularity_score: 80, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1533414969399-6e3e1dfb33df?q=80&w=800"], // Savane montagneuse
   },
   {
@@ -506,7 +506,7 @@ export const POI_DATA: POI[] = [
     review_count: 400,
     address_informal: "Route nationale N1 vers Garoua",
     address_city: "Mbé",
-    popularity_score: 88,
+    popularity_score: 88, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1463160417978-aa86202cc33e?q=80&w=800"], // Paysage falaise
   },
 
@@ -522,7 +522,7 @@ export const POI_DATA: POI[] = [
     review_count: 1200,
     address_informal: "Quartier Centre Ville",
     address_city: "Ngaoundéré",
-    popularity_score: 95,
+    popularity_score: 95, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1580974511210-6644d6d67838?q=80&w=800"], // Architecture style sahélien
     operation_time_plan: { friday: { open: "08:00", close: "16:00" } }
   },
@@ -537,7 +537,7 @@ export const POI_DATA: POI[] = [
     review_count: 150,
     address_informal: "Centre ville",
     address_city: "Tibati",
-    popularity_score: 75,
+    popularity_score: 75, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1568284422204-c3dd57f20256?q=80&w=800"],
   },
   {
@@ -551,7 +551,7 @@ export const POI_DATA: POI[] = [
     review_count: 80,
     address_informal: "Galim-Tignère",
     address_city: "Tignère",
-    popularity_score: 70,
+    popularity_score: 70, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1499540027782-64f5ebeb1df8?q=80&w=800"], // Montagne rocher
   },
   {
@@ -565,7 +565,7 @@ export const POI_DATA: POI[] = [
     review_count: 600,
     address_informal: "Proche du Lamidat",
     address_city: "Ngaoundéré",
-    popularity_score: 90,
+    popularity_score: 90, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1564121211835-e88c852648ab?q=80&w=800"], // Mosquée
   },
   {
@@ -579,7 +579,7 @@ export const POI_DATA: POI[] = [
     review_count: 2000,
     address_informal: "Parvis de la Gare Ferroviaire",
     address_city: "Ngaoundéré",
-    popularity_score: 100,
+    popularity_score: 100, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1543888764-1cb42750e271?q=80&w=800"], // Brochettes
   },
   {
@@ -593,7 +593,7 @@ export const POI_DATA: POI[] = [
     review_count: 350,
     address_informal: "Quartier Administratif",
     address_city: "Ngaoundéré",
-    popularity_score: 82,
+    popularity_score: 82, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1606850246029-dd00bd5d0d67?q=80&w=800"],
   },
   {
@@ -607,7 +607,7 @@ export const POI_DATA: POI[] = [
     review_count: 500,
     address_informal: "Centre commercial",
     address_city: "Ngaoundéré",
-    popularity_score: 88,
+    popularity_score: 88, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1582260273760-23a563ec6df4?q=80&w=800"],
   },
   {
@@ -621,7 +621,7 @@ export const POI_DATA: POI[] = [
     review_count: 120,
     address_informal: "Derrière la délégation",
     address_city: "Ngaoundéré",
-    popularity_score: 78,
+    popularity_score: 78, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1601625463687-258a7be78393?q=80&w=800"], // Repas local
   },
   {
@@ -635,7 +635,7 @@ export const POI_DATA: POI[] = [
     review_count: 1500,
     address_informal: "Village Dang, Entrée Campus",
     address_city: "Dang / Ngaoundéré",
-    popularity_score: 93,
+    popularity_score: 93, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1493612276216-ee3925520721?q=80&w=800"],
   },
 
@@ -651,7 +651,7 @@ export const POI_DATA: POI[] = [
     review_count: 2200,
     address_informal: "Plateau Gare",
     address_city: "Ngaoundéré",
-    popularity_score: 96,
+    popularity_score: 96, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1474487548417-781cb714c223?q=80&w=800"], // Train/Gare
   },
   {
@@ -665,7 +665,7 @@ export const POI_DATA: POI[] = [
     review_count: 850,
     address_informal: "Centre Ville",
     address_city: "Ngaoundéré",
-    popularity_score: 91,
+    popularity_score: 91, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1606733224795-02196ce21852?q=80&w=800"], // Épices et marché
   },
   {
@@ -679,7 +679,7 @@ export const POI_DATA: POI[] = [
     review_count: 150,
     address_informal: "Sortie ville",
     address_city: "Meiganga",
-    popularity_score: 75,
+    popularity_score: 75, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1549416551-8e0c6cbdbd67?q=80&w=800"], // Vaches / Bétail
   },
   {
@@ -693,7 +693,7 @@ export const POI_DATA: POI[] = [
     review_count: 90,
     address_informal: "Proximité Tibati",
     address_city: "Mbakaou",
-    popularity_score: 80,
+    popularity_score: 80, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1516216628259-222a7a390eb1?q=80&w=800"], // Lac et pêche
   },
 
@@ -709,7 +709,7 @@ export const POI_DATA: POI[] = [
     review_count: 600,
     address_informal: "Proche Cinéma le Rio",
     address_city: "Ngaoundéré",
-    popularity_score: 87,
+    popularity_score: 87, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?q=80&w=800"],
   },
   {
@@ -723,7 +723,7 @@ export const POI_DATA: POI[] = [
     review_count: 300,
     address_informal: "Boulevard principal",
     address_city: "Ngaoundéré",
-    popularity_score: 83,
+    popularity_score: 83, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1582255757912-87034f5df734?q=80&w=800"],
   },
   {
@@ -737,7 +737,7 @@ export const POI_DATA: POI[] = [
     review_count: 110,
     address_informal: "Zone Industrielle",
     address_city: "Ngaoundéré",
-    popularity_score: 79,
+    popularity_score: 79, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1628151608678-ceda676c8c45?q=80&w=800"], // Produits laitiers
   },
   {
@@ -751,7 +751,7 @@ export const POI_DATA: POI[] = [
     review_count: 1400,
     address_informal: "Centre Ville",
     address_city: "Ngaoundéré",
-    popularity_score: 94,
+    popularity_score: 94, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1470487771761-00f727c9b0cb?q=80&w=800"], // Marché animé
   },
   {
@@ -765,7 +765,7 @@ export const POI_DATA: POI[] = [
     review_count: 250,
     address_informal: "Centre",
     address_city: "Ngaoundéré",
-    popularity_score: 85,
+    popularity_score: 85, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1574169208538-4f4fd309ee2e?q=80&w=800"],
   },
   {
@@ -779,7 +779,7 @@ export const POI_DATA: POI[] = [
     review_count: 90,
     address_informal: "Route Ngaoundaba",
     address_city: "Ngaoundaba",
-    popularity_score: 72,
+    popularity_score: 72, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=800"],
   },
   {
@@ -793,7 +793,7 @@ export const POI_DATA: POI[] = [
     review_count: 65,
     address_informal: "Piste rurale (4x4)",
     address_city: "Belel",
-    popularity_score: 70,
+    popularity_score: 70, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1513222883020-f42c10b42918?q=80&w=800"], // Cascade
   },
   {
@@ -807,7 +807,7 @@ export const POI_DATA: POI[] = [
     review_count: 200,
     address_informal: "Gare Voyageur",
     address_city: "Ngaoundéré",
-    popularity_score: 78,
+    popularity_score: 78, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1555854743-e3cf9163df8e?q=80&w=800"],
   },
   {
@@ -821,7 +821,7 @@ export const POI_DATA: POI[] = [
     review_count: 50,
     address_informal: "Carrefour Plateau",
     address_city: "Ngaoundéré",
-    popularity_score: 80,
+    popularity_score: 80, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1587854692152-cbe660dbde88?q=80&w=800"],
   },
   {
@@ -835,7 +835,7 @@ export const POI_DATA: POI[] = [
     review_count: 600,
     address_informal: "Campus Dang",
     address_city: "Ngaoundéré",
-    popularity_score: 89,
+    popularity_score: 89, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1560963689-1fc71cc16239?q=80&w=800"],
   },
   {
@@ -849,7 +849,7 @@ export const POI_DATA: POI[] = [
     review_count: 150,
     address_informal: "Quartier Protestant",
     address_city: "Ngaoundéré",
-    popularity_score: 74,
+    popularity_score: 74, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1562790351-d273a961e0e9?q=80&w=800"],
   },
   {
@@ -863,7 +863,7 @@ export const POI_DATA: POI[] = [
     review_count: 180,
     address_informal: "Quartier Mardock",
     address_city: "Ngaoundéré",
-    popularity_score: 78,
+    popularity_score: 78, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1513689125086-6c43317bd1f2?q=80&w=800"], // Forêt eucalyptus
   },
   // Suite du tableau POI_DATA pour la Région Ouest...
@@ -880,7 +880,7 @@ export const POI_DATA: POI[] = [
     review_count: 2100,
     address_informal: "Centre ville Foumban",
     address_city: "Foumban",
-    popularity_score: 98,
+    popularity_score: 98, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1623345826620-6f027063d891?q=80&w=800"], // Architecture style Bamoun
   },
   {
@@ -894,7 +894,7 @@ export const POI_DATA: POI[] = [
     review_count: 1500,
     address_informal: "Route nationale Bafoussam-Yaoundé",
     address_city: "Bandjoun",
-    popularity_score: 95,
+    popularity_score: 95, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1549615214-e40df527e089?q=80&w=800"], // Case traditionnelle toit conique
   },
   {
@@ -908,7 +908,7 @@ export const POI_DATA: POI[] = [
     review_count: 850,
     address_informal: "Bord du Lac Municipal",
     address_city: "Dschang",
-    popularity_score: 90,
+    popularity_score: 90, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1518998053901-5348d3961a04?q=80&w=800"],
   },
   {
@@ -922,7 +922,7 @@ export const POI_DATA: POI[] = [
     review_count: 600,
     address_informal: "Quartier Chefferie",
     address_city: "Bafoussam",
-    popularity_score: 88,
+    popularity_score: 88, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1628795551249-16c8794c4897?q=80&w=800"],
   },
   {
@@ -936,7 +936,7 @@ export const POI_DATA: POI[] = [
     review_count: 320,
     address_informal: "Bangoulap",
     address_city: "Bangangté",
-    popularity_score: 85,
+    popularity_score: 85, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1614264629471-f9260c608298?q=80&w=800"], // Vue sur collines verdoyantes
   },
 
@@ -952,7 +952,7 @@ export const POI_DATA: POI[] = [
     review_count: 1100,
     address_informal: "Route Bafoussam-Dschang",
     address_city: "Bafoussam / Mbouda",
-    popularity_score: 94,
+    popularity_score: 94, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1434316664920-5342c5b3699c?q=80&w=800"], // Grande Cascade
   },
   {
@@ -966,7 +966,7 @@ export const POI_DATA: POI[] = [
     review_count: 450,
     address_informal: "Village Baleng",
     address_city: "Bafoussam",
-    popularity_score: 80,
+    popularity_score: 80, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1543719875-9e6e8c750b37?q=80&w=800"], // Lac cratère vert
   },
   {
@@ -980,7 +980,7 @@ export const POI_DATA: POI[] = [
     review_count: 300,
     address_informal: "Fongo-Tongo",
     address_city: "Dschang",
-    popularity_score: 87,
+    popularity_score: 87, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1447752875253-b7e1ad40e34c?q=80&w=800"], // Haute chute d'eau
   },
   {
@@ -994,7 +994,7 @@ export const POI_DATA: POI[] = [
     review_count: 1800,
     address_informal: "Vallée de la ville",
     address_city: "Dschang",
-    popularity_score: 92,
+    popularity_score: 92, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1599863261231-18e3848b8941?q=80&w=800"],
   },
   {
@@ -1008,7 +1008,7 @@ export const POI_DATA: POI[] = [
     review_count: 250,
     address_informal: "Kouoptamo",
     address_city: "Foumbot",
-    popularity_score: 91,
+    popularity_score: 91, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1533283294372-8812c49b4c48?q=80&w=800"], // Paysage lac et golf
   },
 
@@ -1024,7 +1024,7 @@ export const POI_DATA: POI[] = [
     review_count: 800,
     address_informal: "Route Nationale 4",
     address_city: "Bangangté",
-    popularity_score: 96,
+    popularity_score: 96, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=800"], // Hotel jardin luxe
     poi_contacts: { phone: "6 99 99 99 99" }
   },
@@ -1039,7 +1039,7 @@ export const POI_DATA: POI[] = [
     review_count: 950,
     address_informal: "Plateau",
     address_city: "Dschang",
-    popularity_score: 89,
+    popularity_score: 89, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1554188365-d41c88825c7b?q=80&w=800"], // Bungalows pierre
   },
   {
@@ -1053,7 +1053,7 @@ export const POI_DATA: POI[] = [
     review_count: 300,
     address_informal: "Entrée ville",
     address_city: "Dschang",
-    popularity_score: 80,
+    popularity_score: 80, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1566665797739-1674de7a421a?q=80&w=800"],
   },
   {
@@ -1067,7 +1067,7 @@ export const POI_DATA: POI[] = [
     review_count: 220,
     address_informal: "Quartier Hausa",
     address_city: "Bafoussam",
-    popularity_score: 78,
+    popularity_score: 78, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1565451296680-e3a1f4967a54?q=80&w=800"],
   },
 
@@ -1083,7 +1083,7 @@ export const POI_DATA: POI[] = [
     review_count: 560,
     address_informal: "Face Marché A",
     address_city: "Bafoussam",
-    popularity_score: 93,
+    popularity_score: 93, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1629864228965-680076a47a11?q=80&w=800"],
   },
   {
@@ -1097,7 +1097,7 @@ export const POI_DATA: POI[] = [
     review_count: 3200,
     address_informal: "Centre Ville",
     address_city: "Bafoussam",
-    popularity_score: 99,
+    popularity_score: 99, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=800"], // Marché africain dense
   },
   {
@@ -1111,7 +1111,7 @@ export const POI_DATA: POI[] = [
     review_count: 1500,
     address_informal: "Bas de la colline",
     address_city: "Dschang",
-    popularity_score: 88,
+    popularity_score: 88, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1588636413233-0dc2380549c4?q=80&w=800"], // Tomates et légumes
   },
   {
@@ -1125,7 +1125,7 @@ export const POI_DATA: POI[] = [
     review_count: 400,
     address_informal: "Carrefour le Maire",
     address_city: "Foumban",
-    popularity_score: 90,
+    popularity_score: 90, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1533158307525-455799c7d455?q=80&w=800"],
   },
   {
@@ -1139,7 +1139,7 @@ export const POI_DATA: POI[] = [
     review_count: 180,
     address_informal: "Rue des Artisans",
     address_city: "Foumban",
-    popularity_score: 82,
+    popularity_score: 82, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1627993074092-26f634cf8df5?q=80&w=800"],
   },
   {
@@ -1153,7 +1153,7 @@ export const POI_DATA: POI[] = [
     review_count: 650,
     address_informal: "Gare routière",
     address_city: "Dschang",
-    popularity_score: 89,
+    popularity_score: 89, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1550953684-257a070f8064?q=80&w=800"], // Omelette sandwich
   },
 
@@ -1169,7 +1169,7 @@ export const POI_DATA: POI[] = [
     review_count: 350,
     address_informal: "Akwa Bafoussam",
     address_city: "Bafoussam",
-    popularity_score: 84,
+    popularity_score: 84, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1574391884720-2bbc378b6f10?q=80&w=800"],
   },
   {
@@ -1183,7 +1183,7 @@ export const POI_DATA: POI[] = [
     review_count: 700,
     address_informal: "Lac",
     address_city: "Dschang",
-    popularity_score: 91,
+    popularity_score: 91, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1621532588107-1d8f72535091?q=80&w=800"], // Pirogue lac
   },
   {
@@ -1197,7 +1197,7 @@ export const POI_DATA: POI[] = [
     review_count: 1200,
     address_informal: "Kouekong",
     address_city: "Bafoussam",
-    popularity_score: 95,
+    popularity_score: 95, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1521731674483-e1bd501a3eb2?q=80&w=800"],
   },
   {
@@ -1211,7 +1211,7 @@ export const POI_DATA: POI[] = [
     review_count: 200,
     address_informal: "Bandjoun",
     address_city: "Bandjoun",
-    popularity_score: 75,
+    popularity_score: 75, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1582555172866-2a792e35a14d?q=80&w=800"], // Art moderne
   },
   {
@@ -1225,7 +1225,7 @@ export const POI_DATA: POI[] = [
     review_count: 400,
     address_informal: "Centre",
     address_city: "Bafoussam",
-    popularity_score: 85,
+    popularity_score: 85, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1605333144866-e3d8f8be0f96?q=80&w=800"],
   },
   
@@ -1241,7 +1241,7 @@ export const POI_DATA: POI[] = [
     review_count: 1500,
     address_informal: "Rue des Artisans",
     address_city: "Foumban",
-    popularity_score: 97,
+    popularity_score: 97, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1506540131481-e2da4d2fb1b8?q=80&w=800"], // Artisanat bronze
   },
   {
@@ -1255,7 +1255,7 @@ export const POI_DATA: POI[] = [
     review_count: 800,
     address_informal: "Axe lourd",
     address_city: "Bafoussam",
-    popularity_score: 92,
+    popularity_score: 92, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1583592881333-e9d64f1d436a?q=80&w=800"],
   },
   {
@@ -1269,7 +1269,7 @@ export const POI_DATA: POI[] = [
     review_count: 210,
     address_informal: "Centre ville",
     address_city: "Bangangté",
-    popularity_score: 79,
+    popularity_score: 79, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1534346473663-e847c94514ba?q=80&w=800"],
   },
   {
@@ -1283,7 +1283,7 @@ export const POI_DATA: POI[] = [
     review_count: 150,
     address_informal: "Route Dschang-Bafoussam",
     address_city: "Dschang",
-    popularity_score: 83,
+    popularity_score: 83, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1596707328734-b295cb0bc64e?q=80&w=800"], // Champs de thé
   },
   {
@@ -1297,7 +1297,7 @@ export const POI_DATA: POI[] = [
     review_count: 500,
     address_informal: "Route Nationale",
     address_city: "Batié",
-    popularity_score: 86,
+    popularity_score: 86, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?q=80&w=800"], // Montagnes brume
   },
 // Suite du tableau POI_DATA pour la Région du Littoral...
@@ -1314,7 +1314,7 @@ export const POI_DATA: POI[] = [
     review_count: 2200,
     address_informal: "Route de Melong, après Nkongsamba",
     address_city: "Melong / Nkongsamba",
-    popularity_score: 98,
+    popularity_score: 98, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1546484396-fb3fc6f95f98?q=80&w=800"], // Cascade jungle puissante
   },
   {
@@ -1328,7 +1328,7 @@ export const POI_DATA: POI[] = [
     review_count: 950,
     address_informal: "Sommet Mont Manengouba",
     address_city: "Nkongsamba",
-    popularity_score: 95,
+    popularity_score: 95, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1472214103451-9374bd1c798e?q=80&w=800"], // Paysage cratère vert
   },
   {
@@ -1342,7 +1342,7 @@ export const POI_DATA: POI[] = [
     review_count: 400,
     address_informal: "Village Dizangué",
     address_city: "Dizangué / Édéa",
-    popularity_score: 88,
+    popularity_score: 88, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1596525737525-4c09eb264968?q=80&w=800"], // Lac paisible avec végétation
   },
   {
@@ -1356,7 +1356,7 @@ export const POI_DATA: POI[] = [
     review_count: 180,
     address_informal: "Mouanko",
     address_city: "Mouanko",
-    popularity_score: 85,
+    popularity_score: 85, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=800"], // Plage sauvage
   },
   {
@@ -1370,7 +1370,7 @@ export const POI_DATA: POI[] = [
     review_count: 320,
     address_informal: "Penja Centre",
     address_city: "Penja",
-    popularity_score: 92,
+    popularity_score: 92, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1563829037803-a3d8b5eb6623?q=80&w=800"], // Vignes/Plantations
   },
 
@@ -1386,7 +1386,7 @@ export const POI_DATA: POI[] = [
     review_count: 5000,
     address_informal: "Quartier Youpwé",
     address_city: "Douala",
-    popularity_score: 100,
+    popularity_score: 100, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1596796916538-4e4277b9d799?q=80&w=800"], // Poisson braisé fumée
   },
   {
@@ -1400,7 +1400,7 @@ export const POI_DATA: POI[] = [
     review_count: 3000,
     address_informal: "Pont sur la Sanaga",
     address_city: "Édéa",
-    popularity_score: 99,
+    popularity_score: 99, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1596706606000-01c0c9780517?q=80&w=800"], // Street food
   },
   {
@@ -1414,7 +1414,7 @@ export const POI_DATA: POI[] = [
     review_count: 4000,
     address_informal: "Deido",
     address_city: "Douala",
-    popularity_score: 96,
+    popularity_score: 96, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1582239474751-0aa02521dfb8?q=80&w=800"], // Ambiance nuit rue
   },
   {
@@ -1428,7 +1428,7 @@ export const POI_DATA: POI[] = [
     review_count: 3500,
     address_informal: "Akwa",
     address_city: "Douala",
-    popularity_score: 95,
+    popularity_score: 95, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=800"],
   },
   {
@@ -1442,7 +1442,7 @@ export const POI_DATA: POI[] = [
     review_count: 600,
     address_informal: "Bonanjo",
     address_city: "Douala",
-    popularity_score: 89,
+    popularity_score: 89, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1514362545857-3bc16549766b?q=80&w=800"],
   },
   {
@@ -1456,7 +1456,7 @@ export const POI_DATA: POI[] = [
     review_count: 400,
     address_informal: "Akwa, Boulevard de la Liberté",
     address_city: "Douala",
-    popularity_score: 85,
+    popularity_score: 85, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1498804103079-a6351b050096?q=80&w=800"], // Vue sur fleuve/port
   },
 
@@ -1472,7 +1472,7 @@ export const POI_DATA: POI[] = [
     review_count: 1500,
     address_informal: "Rond-point Deido",
     address_city: "Douala",
-    popularity_score: 94,
+    popularity_score: 94, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1627993074092-26f634cf8df5?q=80&w=800"], // Statue urbaine
   },
   {
@@ -1486,7 +1486,7 @@ export const POI_DATA: POI[] = [
     review_count: 800,
     address_informal: "Bonanjo",
     address_city: "Douala",
-    popularity_score: 90,
+    popularity_score: 90, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1576404289801-b3b342082260?q=80&w=800"], // Architecture coloniale
   },
   {
@@ -1500,7 +1500,7 @@ export const POI_DATA: POI[] = [
     review_count: 500,
     address_informal: "Bonapriso",
     address_city: "Douala",
-    popularity_score: 86,
+    popularity_score: 86, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1522039789182-5df5a676c8ba?q=80&w=800"],
   },
   {
@@ -1514,7 +1514,7 @@ export const POI_DATA: POI[] = [
     review_count: 1200,
     address_informal: "Bonadibong",
     address_city: "Douala",
-    popularity_score: 91,
+    popularity_score: 91, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1548625361-bd86be3a4e93?q=80&w=800"],
   },
   {
@@ -1528,7 +1528,7 @@ export const POI_DATA: POI[] = [
     review_count: 5000,
     address_informal: "Bonabéri / Deido",
     address_city: "Douala",
-    popularity_score: 98,
+    popularity_score: 98, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1494522855154-9297ac14b55f?q=80&w=800"], // Pont sur eau
   },
 
@@ -1544,7 +1544,7 @@ export const POI_DATA: POI[] = [
     review_count: 210,
     address_informal: "Melong",
     address_city: "Nkongsamba",
-    popularity_score: 82,
+    popularity_score: 82, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1510798831971-661eb04b3739?q=80&w=800"], // Maison de campagne
   },
   {
@@ -1558,7 +1558,7 @@ export const POI_DATA: POI[] = [
     review_count: 1100,
     address_informal: "Bonanjo",
     address_city: "Douala",
-    popularity_score: 88,
+    popularity_score: 88, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=800"],
   },
   {
@@ -1572,7 +1572,7 @@ export const POI_DATA: POI[] = [
     review_count: 180,
     address_informal: "Bord fleuve",
     address_city: "Édéa",
-    popularity_score: 75,
+    popularity_score: 75, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1589139268798-316239129df8?q=80&w=800"],
   },
 
@@ -1588,7 +1588,7 @@ export const POI_DATA: POI[] = [
     review_count: 1000,
     address_informal: "Maképé",
     address_city: "Douala",
-    popularity_score: 90,
+    popularity_score: 90, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=800"], // Piste sport nature
   },
   {
@@ -1602,7 +1602,7 @@ export const POI_DATA: POI[] = [
     review_count: 5500,
     address_informal: "New Bell",
     address_city: "Douala",
-    popularity_score: 97,
+    popularity_score: 97, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1488459716781-31db52582fe9?q=80&w=800"],
   },
   {
@@ -1616,7 +1616,7 @@ export const POI_DATA: POI[] = [
     review_count: 200,
     address_informal: "Village Marienberg",
     address_city: "Mouanko / Dizangué",
-    popularity_score: 70,
+    popularity_score: 70, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1543666632-4d2f65a12d1b?q=80&w=800"], // Vieille église brique
   },
   {
@@ -1630,7 +1630,7 @@ export const POI_DATA: POI[] = [
     review_count: 150,
     address_informal: "Large de Douala",
     address_city: "Manoka",
-    popularity_score: 75,
+    popularity_score: 75, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1518386444053-9f17a950a7c6?q=80&w=800"], // Pirogues et eau
   },
   {
@@ -1644,7 +1644,7 @@ export const POI_DATA: POI[] = [
     review_count: 320,
     address_informal: "New-Bell",
     address_city: "Douala",
-    popularity_score: 84,
+    popularity_score: 84, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1604503468506-a8da13d82791?q=80&w=800"],
   },
   {
@@ -1658,7 +1658,7 @@ export const POI_DATA: POI[] = [
     review_count: 400,
     address_informal: "Rue de la joie Akwa",
     address_city: "Douala",
-    popularity_score: 87,
+    popularity_score: 87, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1574391884720-2bbc378b6f10?q=80&w=800"],
   },
   {
@@ -1672,7 +1672,7 @@ export const POI_DATA: POI[] = [
     review_count: 1200,
     address_informal: "Zone portuaire",
     address_city: "Douala",
-    popularity_score: 93,
+    popularity_score: 93, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1596707328734-b295cb0bc64e?q=80&w=800"],
   },
   {
@@ -1686,7 +1686,7 @@ export const POI_DATA: POI[] = [
     review_count: 5000,
     address_informal: "Ndokoti",
     address_city: "Douala",
-    popularity_score: 99,
+    popularity_score: 99, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1473210332824-7bd0679f291a?q=80&w=800"], // Foule et bus
   },
   {
@@ -1700,7 +1700,7 @@ export const POI_DATA: POI[] = [
     review_count: 300,
     address_informal: "Bonanjo",
     address_city: "Douala",
-    popularity_score: 80,
+    popularity_score: 80, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1627993074092-26f634cf8df5?q=80&w=800"],
   },
   {
@@ -1714,7 +1714,7 @@ export const POI_DATA: POI[] = [
     review_count: 900,
     address_informal: "Bonapriso",
     address_city: "Douala",
-    popularity_score: 92,
+    popularity_score: 92, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1580237072617-771c3ecc4a24?q=80&w=800"],
   },
   {
@@ -1728,7 +1728,7 @@ export const POI_DATA: POI[] = [
     review_count: 40,
     address_informal: "Piste Yabassi",
     address_city: "Yabassi",
-    popularity_score: 60,
+    popularity_score: 60, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1554907400-f9a74c76b976?q=80&w=800"], // Rivière sauvage
   },
   // Suite du tableau POI_DATA pour la Région du SUD (Kribi, Ebolowa, Sangmélima, Campo)...
@@ -1745,7 +1745,7 @@ export const POI_DATA: POI[] = [
     review_count: 5500,
     address_informal: "7km au sud de Kribi",
     address_city: "Kribi",
-    popularity_score: 100,
+    popularity_score: 100, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?q=80&w=800"], // Cascade
   },
   {
@@ -1759,7 +1759,7 @@ export const POI_DATA: POI[] = [
     review_count: 900,
     address_informal: "Village Grand Batanga",
     address_city: "Kribi",
-    popularity_score: 95,
+    popularity_score: 95, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=800"],
   },
   {
@@ -1773,7 +1773,7 @@ export const POI_DATA: POI[] = [
     review_count: 2200,
     address_informal: "Port de pêche",
     address_city: "Kribi",
-    popularity_score: 98,
+    popularity_score: 98, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1534017688537-4638a202d6b3?q=80&w=800"], // Pêcheurs
   },
   {
@@ -1787,7 +1787,7 @@ export const POI_DATA: POI[] = [
     review_count: 1500,
     address_informal: "Front de mer",
     address_city: "Kribi",
-    popularity_score: 94,
+    popularity_score: 94, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1562688846-59178cc02081?q=80&w=800"], // Phare
   },
   {
@@ -1801,7 +1801,7 @@ export const POI_DATA: POI[] = [
     review_count: 300,
     address_informal: "Route de Campo (piste)",
     address_city: "Ebodjé",
-    popularity_score: 88,
+    popularity_score: 88, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1437622368342-7a3d73a34c8f?q=80&w=800"], // Tortue sur plage
   },
   {
@@ -1815,7 +1815,7 @@ export const POI_DATA: POI[] = [
     review_count: 850,
     address_informal: "Plage de la Lobé",
     address_city: "Kribi",
-    popularity_score: 96,
+    popularity_score: 96, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1596796916538-4e4277b9d799?q=80&w=800"], // Plat crevettes
   },
   {
@@ -1829,7 +1829,7 @@ export const POI_DATA: POI[] = [
     review_count: 600,
     address_informal: "Route des chutes",
     address_city: "Kribi",
-    popularity_score: 90,
+    popularity_score: 90, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1540541338287-41700206dee6?q=80&w=800"], // Hôtel plage
   },
   {
@@ -1843,7 +1843,7 @@ export const POI_DATA: POI[] = [
     review_count: 1200,
     address_informal: "Carrefour Bouée Base",
     address_city: "Kribi",
-    popularity_score: 93,
+    popularity_score: 93, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1596707328734-b295cb0bc64e?q=80&w=800"],
   },
   {
@@ -1857,7 +1857,7 @@ export const POI_DATA: POI[] = [
     review_count: 150,
     address_informal: "Zone Campo",
     address_city: "Campo",
-    popularity_score: 85,
+    popularity_score: 85, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1516426122078-c23e76319801?q=80&w=800"], // Jungle
   },
   {
@@ -1871,7 +1871,7 @@ export const POI_DATA: POI[] = [
     review_count: 500,
     address_informal: "Route du phare",
     address_city: "Kribi",
-    popularity_score: 89,
+    popularity_score: 89, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1449156493391-d2cfa28e468b?q=80&w=800"],
   },
   {
@@ -1885,7 +1885,7 @@ export const POI_DATA: POI[] = [
     review_count: 1000,
     address_informal: "Vers la Lobé",
     address_city: "Kribi",
-    popularity_score: 88,
+    popularity_score: 88, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1545128485-c400e7702796?q=80&w=800"],
   },
   {
@@ -1899,7 +1899,7 @@ export const POI_DATA: POI[] = [
     review_count: 200,
     address_informal: "Route Campo",
     address_city: "Grand Batanga",
-    popularity_score: 80,
+    popularity_score: 80, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1518182170546-07fa6ad7be50?q=80&w=800"], // Rocher mer
   },
   {
@@ -1913,7 +1913,7 @@ export const POI_DATA: POI[] = [
     review_count: 100,
     address_informal: "Bipindi / Lolodorf",
     address_city: "Lolodorf",
-    popularity_score: 75,
+    popularity_score: 75, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1490510619213-33dfcb63c329?q=80&w=800"], // Forêt
   },
   {
@@ -1927,7 +1927,7 @@ export const POI_DATA: POI[] = [
     review_count: 400,
     address_informal: "Nziou",
     address_city: "Kribi",
-    popularity_score: 85,
+    popularity_score: 85, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1566737236500-c8ac43014a67?q=80&w=800"],
   },
   {
@@ -1941,7 +1941,7 @@ export const POI_DATA: POI[] = [
     review_count: 800,
     address_informal: "Centre Ville",
     address_city: "Kribi",
-    popularity_score: 90,
+    popularity_score: 90, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1470487771761-00f727c9b0cb?q=80&w=800"],
   },
 
@@ -1957,7 +1957,7 @@ export const POI_DATA: POI[] = [
     review_count: 800,
     address_informal: "Village Nkolandom (Mont d'élégance)",
     address_city: "Nkolandom / Ebolowa",
-    popularity_score: 97,
+    popularity_score: 97, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=800"],
   },
   {
@@ -1971,7 +1971,7 @@ export const POI_DATA: POI[] = [
     review_count: 650,
     address_informal: "Centre Ville",
     address_city: "Ebolowa",
-    popularity_score: 92,
+    popularity_score: 92, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1589139268798-316239129df8?q=80&w=800"],
   },
   {
@@ -1985,7 +1985,7 @@ export const POI_DATA: POI[] = [
     review_count: 500,
     address_informal: "Entrée ville",
     address_city: "Ebolowa",
-    popularity_score: 90,
+    popularity_score: 90, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?q=80&w=800"],
   },
   {
@@ -1999,7 +1999,7 @@ export const POI_DATA: POI[] = [
     review_count: 400,
     address_informal: "Carrefour An 2000",
     address_city: "Ebolowa",
-    popularity_score: 88,
+    popularity_score: 88, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1627993074092-26f634cf8df5?q=80&w=800"],
   },
   {
@@ -2013,7 +2013,7 @@ export const POI_DATA: POI[] = [
     review_count: 350,
     address_informal: "Abang",
     address_city: "Ebolowa",
-    popularity_score: 85,
+    popularity_score: 85, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1548625361-bd86be3a4e93?q=80&w=800"],
   },
   {
@@ -2027,7 +2027,7 @@ export const POI_DATA: POI[] = [
     review_count: 600,
     address_informal: "Quartier Oyenga",
     address_city: "Ebolowa",
-    popularity_score: 87,
+    popularity_score: 87, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1549416551-8e0c6cbdbd67?q=80&w=800"],
   },
   {
@@ -2041,7 +2041,7 @@ export const POI_DATA: POI[] = [
     review_count: 200,
     address_informal: "Derrière la Poste",
     address_city: "Ebolowa",
-    popularity_score: 82,
+    popularity_score: 82, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1604503468506-a8da13d82791?q=80&w=800"],
   },
   {
@@ -2055,7 +2055,7 @@ export const POI_DATA: POI[] = [
     review_count: 120,
     address_informal: "Village Ako'akas",
     address_city: "Ebolowa",
-    popularity_score: 80,
+    popularity_score: 80, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1499540027782-64f5ebeb1df8?q=80&w=800"],
   },
   {
@@ -2069,7 +2069,7 @@ export const POI_DATA: POI[] = [
     review_count: 150,
     address_informal: "Quartier résidentiel",
     address_city: "Ebolowa",
-    popularity_score: 75,
+    popularity_score: 75, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1589531535497-6a56e29729df?q=80&w=800"],
   },
   {
@@ -2083,7 +2083,7 @@ export const POI_DATA: POI[] = [
     review_count: 300,
     address_informal: "Axe principal",
     address_city: "Ebolowa",
-    popularity_score: 84,
+    popularity_score: 84, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1574391884720-2bbc378b6f10?q=80&w=800"],
   },
 
@@ -2099,7 +2099,7 @@ export const POI_DATA: POI[] = [
     review_count: 200,
     address_informal: "Centre Ville",
     address_city: "Sangmélima",
-    popularity_score: 88,
+    popularity_score: 88, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1627993074092-26f634cf8df5?q=80&w=800"],
   },
   {
@@ -2113,7 +2113,7 @@ export const POI_DATA: POI[] = [
     review_count: 100,
     address_informal: "Sortie Est",
     address_city: "Sangmélima / Meyomessala",
-    popularity_score: 80,
+    popularity_score: 80, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1437482078695-73f5ca6c96e2?q=80&w=800"], // Rivière jungle
   },
   {
@@ -2127,7 +2127,7 @@ export const POI_DATA: POI[] = [
     review_count: 550,
     address_informal: "Centre",
     address_city: "Sangmélima",
-    popularity_score: 86,
+    popularity_score: 86, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1606733224795-02196ce21852?q=80&w=800"],
   },
   {
@@ -2141,7 +2141,7 @@ export const POI_DATA: POI[] = [
     review_count: 80,
     address_informal: "Meyomessala",
     address_city: "Meyomessala",
-    popularity_score: 75,
+    popularity_score: 75, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1568284422204-c3dd57f20256?q=80&w=800"],
   },
   {
@@ -2155,7 +2155,7 @@ export const POI_DATA: POI[] = [
     review_count: 90,
     address_informal: "Périphérie",
     address_city: "Sangmélima",
-    popularity_score: 70,
+    popularity_score: 70, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?q=80&w=800"],
   },
 
@@ -2171,7 +2171,7 @@ export const POI_DATA: POI[] = [
     review_count: 1200,
     address_informal: "Frontière",
     address_city: "Kyé-Ossi",
-    popularity_score: 95,
+    popularity_score: 95, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1488459716781-31db52582fe9?q=80&w=800"],
   },
   {
@@ -2185,7 +2185,7 @@ export const POI_DATA: POI[] = [
     review_count: 150,
     address_informal: "Pont sur le Ntem",
     address_city: "Ambam / Kyé-Ossi",
-    popularity_score: 80,
+    popularity_score: 80, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1447752875253-b7e1ad40e34c?q=80&w=800"],
   },
   {
@@ -2199,7 +2199,7 @@ export const POI_DATA: POI[] = [
     review_count: 300,
     address_informal: "Axe Principal",
     address_city: "Kyé-Ossi",
-    popularity_score: 88,
+    popularity_score: 88, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1555854743-e3cf9163df8e?q=80&w=800"],
   },
   {
@@ -2213,7 +2213,7 @@ export const POI_DATA: POI[] = [
     review_count: 400,
     address_informal: "Frontière Gabon",
     address_city: "Abang-Minko'o",
-    popularity_score: 90,
+    popularity_score: 90, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1463797221720-6b07e6426c24?q=80&w=800"], // Barrière/Route
   },
 
@@ -2229,7 +2229,7 @@ export const POI_DATA: POI[] = [
     review_count: 200,
     address_informal: "Nyabizan",
     address_city: "Ma'an",
-    popularity_score: 85,
+    popularity_score: 85, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1574347209737-088714eb6c78?q=80&w=800"], // Barrage
   },
   {
@@ -2243,7 +2243,7 @@ export const POI_DATA: POI[] = [
     review_count: 80,
     address_informal: "Village Ebolowa-Si",
     address_city: "Ebolowa",
-    popularity_score: 75,
+    popularity_score: 75, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1550970344-998d89e0839c?q=80&w=800"], // Cacao
   },
   {
@@ -2257,7 +2257,7 @@ export const POI_DATA: POI[] = [
     review_count: 150,
     address_informal: "Route d'Ambam",
     address_city: "Ebolowa",
-    popularity_score: 80,
+    popularity_score: 80, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1517457373958-b7bdd4587205?q=80&w=800"],
   },
   {
@@ -2271,7 +2271,7 @@ export const POI_DATA: POI[] = [
     review_count: 100,
     address_informal: "Edéa/Marienberg (Limite zone)",
     address_city: "Mouanko",
-    popularity_score: 82,
+    popularity_score: 82, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1564654876615-188849b39864?q=80&w=800"], // Singe
   },
   {
@@ -2285,7 +2285,7 @@ export const POI_DATA: POI[] = [
     review_count: 250,
     address_informal: "Colline Elat",
     address_city: "Ebolowa",
-    popularity_score: 83,
+    popularity_score: 83, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1577907572624-b1523455eb45?q=80&w=800"],
   },
   {
@@ -2299,7 +2299,7 @@ export const POI_DATA: POI[] = [
     review_count: 400,
     address_informal: "Carrefour Bipindi",
     address_city: "Bipindi",
-    popularity_score: 89,
+    popularity_score: 89, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1596706606000-01c0c9780517?q=80&w=800"], // Grillade rue
   },
   {
@@ -2313,7 +2313,7 @@ export const POI_DATA: POI[] = [
     review_count: 800,
     address_informal: "Zone hôtelière",
     address_city: "Kribi",
-    popularity_score: 85,
+    popularity_score: 85, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=800"],
   },
   {
@@ -2327,7 +2327,7 @@ export const POI_DATA: POI[] = [
     review_count: 320,
     address_informal: "Dombe",
     address_city: "Kribi",
-    popularity_score: 91,
+    popularity_score: 91, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1627308595133-c2152bd6e4f3?q=80&w=800"],
   },
   {
@@ -2341,7 +2341,7 @@ export const POI_DATA: POI[] = [
     review_count: 180,
     address_informal: "Centre",
     address_city: "Sangmélima",
-    popularity_score: 78,
+    popularity_score: 78, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1582239474751-0aa02521dfb8?q=80&w=800"],
   },
   {
@@ -2355,7 +2355,7 @@ export const POI_DATA: POI[] = [
     review_count: 50,
     address_informal: "Akom II",
     address_city: "Akom II",
-    popularity_score: 65,
+    popularity_score: 65, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1463160417978-aa86202cc33e?q=80&w=800"], // Route terre
   },
   {
@@ -2369,7 +2369,7 @@ export const POI_DATA: POI[] = [
     review_count: 60,
     address_informal: "Proche mission catholique",
     address_city: "Bipindi",
-    popularity_score: 70,
+    popularity_score: 70, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1506540131481-e2da4d2fb1b8?q=80&w=800"],
   },
   {
@@ -2383,7 +2383,7 @@ export const POI_DATA: POI[] = [
     review_count: 220,
     address_informal: "Rue des banques",
     address_city: "Kribi",
-    popularity_score: 84,
+    popularity_score: 84, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1560185007-cde436f6a4d0?q=80&w=800"],
   },
   {
@@ -2397,7 +2397,7 @@ export const POI_DATA: POI[] = [
     review_count: 500,
     address_informal: "Centre Kribi",
     address_city: "Kribi",
-    popularity_score: 90,
+    popularity_score: 90, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1583592881333-e9d64f1d436a?q=80&w=800"],
   },
   {
@@ -2411,7 +2411,7 @@ export const POI_DATA: POI[] = [
     review_count: 300,
     address_informal: "Carrefour Régional",
     address_city: "Ebolowa",
-    popularity_score: 86,
+    popularity_score: 86, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1563829037803-a3d8b5eb6623?q=80&w=800"],
   },
   {
@@ -2425,7 +2425,7 @@ export const POI_DATA: POI[] = [
     review_count: 90,
     address_informal: "Chutes Lobé Rive gauche",
     address_city: "Kribi",
-    popularity_score: 79,
+    popularity_score: 79, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1510798831971-661eb04b3739?q=80&w=800"],
   },
   {
@@ -2439,7 +2439,7 @@ export const POI_DATA: POI[] = [
     review_count: 700,
     address_informal: "Boulevard Kribi",
     address_city: "Kribi",
-    popularity_score: 94,
+    popularity_score: 94, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=800"],
   },
   // Suite du tableau POI_DATA pour l'Arrière-pays du CENTRE (Hors Yaoundé)...
@@ -2456,7 +2456,7 @@ export const POI_DATA: POI[] = [
     review_count: 950,
     address_informal: "Village Ebogo (So'o)",
     address_city: "Mbalmayo",
-    popularity_score: 95,
+    popularity_score: 95, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1596707328734-b295cb0bc64e?q=80&w=800"], // Rivière/Pirogue
   },
   {
@@ -2470,7 +2470,7 @@ export const POI_DATA: POI[] = [
     review_count: 1200,
     address_informal: "Village Mfou",
     address_city: "Mfou",
-    popularity_score: 98,
+    popularity_score: 98, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1544222044-65f57398103c?q=80&w=800"], // Gorille
   },
   {
@@ -2484,7 +2484,7 @@ export const POI_DATA: POI[] = [
     review_count: 150,
     address_informal: "Route de Sangmélima",
     address_city: "Mbalmayo",
-    popularity_score: 80,
+    popularity_score: 80, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1516560965380-0a2d219db80e?q=80&w=800"], // Sculpture bois
   },
   {
@@ -2498,7 +2498,7 @@ export const POI_DATA: POI[] = [
     review_count: 320,
     address_informal: "Bord du fleuve Nyong",
     address_city: "Mbalmayo",
-    popularity_score: 88,
+    popularity_score: 88, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1596796916538-4e4277b9d799?q=80&w=800"],
   },
   {
@@ -2512,7 +2512,7 @@ export const POI_DATA: POI[] = [
     review_count: 500,
     address_informal: "Mission Catholique",
     address_city: "Akono",
-    popularity_score: 85,
+    popularity_score: 85, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1543666632-4d2f65a12d1b?q=80&w=800"], // Eglise brique
   },
 
@@ -2528,7 +2528,7 @@ export const POI_DATA: POI[] = [
     review_count: 1500,
     address_informal: "Entrée Obala",
     address_city: "Obala",
-    popularity_score: 96,
+    popularity_score: 96, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1563829037803-a3d8b5eb6623?q=80&w=800"], // Parc aquatique/Piscine
   },
   {
@@ -2542,7 +2542,7 @@ export const POI_DATA: POI[] = [
     review_count: 800,
     address_informal: "Carrefour Batchenga",
     address_city: "Batchenga",
-    popularity_score: 90,
+    popularity_score: 90, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1589133469850-934c9c0cb77d?q=80&w=800"], // Ananas
   },
   {
@@ -2556,7 +2556,7 @@ export const POI_DATA: POI[] = [
     review_count: 300,
     address_informal: "Batchenga / Ntui",
     address_city: "Batchenga",
-    popularity_score: 75,
+    popularity_score: 75, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?q=80&w=800"], // Chutes eau
   },
   {
@@ -2570,7 +2570,7 @@ export const POI_DATA: POI[] = [
     review_count: 100,
     address_informal: "Zone rurale",
     address_city: "Obala",
-    popularity_score: 70,
+    popularity_score: 70, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1548544149-48bc7a61d8da?q=80&w=800"],
   },
   {
@@ -2584,7 +2584,7 @@ export const POI_DATA: POI[] = [
     review_count: 2000,
     address_informal: "Centre",
     address_city: "Obala",
-    popularity_score: 94,
+    popularity_score: 94, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1568284422204-c3dd57f20256?q=80&w=800"],
   },
 
@@ -2600,7 +2600,7 @@ export const POI_DATA: POI[] = [
     review_count: 1200,
     address_informal: "Gare routière",
     address_city: "Bafia",
-    popularity_score: 99,
+    popularity_score: 99, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1628151608678-ceda676c8c45?q=80&w=800"], // Koki / Nourriture
   },
   {
@@ -2614,7 +2614,7 @@ export const POI_DATA: POI[] = [
     review_count: 500,
     address_informal: "Sur la Sanaga",
     address_city: "Ebebda",
-    popularity_score: 88,
+    popularity_score: 88, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1494522855154-9297ac14b55f?q=80&w=800"],
   },
   {
@@ -2628,7 +2628,7 @@ export const POI_DATA: POI[] = [
     review_count: 200,
     address_informal: "Quartier administratif",
     address_city: "Bafia",
-    popularity_score: 75,
+    popularity_score: 75, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1628795551249-16c8794c4897?q=80&w=800"],
   },
   {
@@ -2642,7 +2642,7 @@ export const POI_DATA: POI[] = [
     review_count: 150,
     address_informal: "Nkoteng / Mbandjock",
     address_city: "Mbandjock",
-    popularity_score: 80,
+    popularity_score: 80, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1596707328734-b295cb0bc64e?q=80&w=800"], // Champs canne
   },
   {
@@ -2656,7 +2656,7 @@ export const POI_DATA: POI[] = [
     review_count: 120,
     address_informal: "Centre Ville",
     address_city: "Bafia",
-    popularity_score: 72,
+    popularity_score: 72, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1566737236500-c8ac43014a67?q=80&w=800"],
   },
 
@@ -2672,7 +2672,7 @@ export const POI_DATA: POI[] = [
     review_count: 400,
     address_informal: "Bord du Nyong",
     address_city: "Akonolinga",
-    popularity_score: 84,
+    popularity_score: 84, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1549416551-8e0c6cbdbd67?q=80&w=800"],
   },
   {
@@ -2686,7 +2686,7 @@ export const POI_DATA: POI[] = [
     review_count: 80,
     address_informal: "Centre",
     address_city: "Akonolinga",
-    popularity_score: 65,
+    popularity_score: 65, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1555854743-e3cf9163df8e?q=80&w=800"],
   },
   {
@@ -2700,7 +2700,7 @@ export const POI_DATA: POI[] = [
     review_count: 500,
     address_informal: "Carrefour Ayos",
     address_city: "Ayos",
-    popularity_score: 87,
+    popularity_score: 87, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1473210332824-7bd0679f291a?q=80&w=800"],
   },
   {
@@ -2714,7 +2714,7 @@ export const POI_DATA: POI[] = [
     review_count: 100,
     address_informal: "Colline Ayos",
     address_city: "Ayos",
-    popularity_score: 75,
+    popularity_score: 75, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1519494376483-bc2a297c11f6?q=80&w=800"], // Ancien batiment
   },
   {
@@ -2728,7 +2728,7 @@ export const POI_DATA: POI[] = [
     review_count: 60,
     address_informal: "Sortie ville",
     address_city: "Akonolinga",
-    popularity_score: 70,
+    popularity_score: 70, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1563829037803-a3d8b5eb6623?q=80&w=800"],
   },
 
@@ -2744,7 +2744,7 @@ export const POI_DATA: POI[] = [
     review_count: 350,
     address_informal: "Bas-fond",
     address_city: "Éséka",
-    popularity_score: 82,
+    popularity_score: 82, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1474487548417-781cb714c223?q=80&w=800"], // Train
   },
   {
@@ -2758,7 +2758,7 @@ export const POI_DATA: POI[] = [
     review_count: 200,
     address_informal: "Colline",
     address_city: "Éséka",
-    popularity_score: 78,
+    popularity_score: 78, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1548625361-bd86be3a4e93?q=80&w=800"],
   },
   {
@@ -2772,7 +2772,7 @@ export const POI_DATA: POI[] = [
     review_count: 150,
     address_informal: "Gare Makak",
     address_city: "Makak",
-    popularity_score: 70,
+    popularity_score: 70, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1606733224795-02196ce21852?q=80&w=800"],
   },
   {
@@ -2786,7 +2786,7 @@ export const POI_DATA: POI[] = [
     review_count: 40,
     address_informal: "Piste rurale",
     address_city: "Makak",
-    popularity_score: 60,
+    popularity_score: 60, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1518182170546-07fa6ad7be50?q=80&w=800"], // Cascade forêt
   },
   {
@@ -2800,7 +2800,7 @@ export const POI_DATA: POI[] = [
     review_count: 100,
     address_informal: "Sortie Éséka",
     address_city: "Éséka",
-    popularity_score: 75,
+    popularity_score: 75, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1628151608678-ceda676c8c45?q=80&w=800"], // Palmiers
   },
 
@@ -2816,7 +2816,7 @@ export const POI_DATA: POI[] = [
     review_count: 50,
     address_informal: "Quartier administratif",
     address_city: "Nanga-Eboko",
-    popularity_score: 65,
+    popularity_score: 65, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1596796916538-4e4277b9d799?q=80&w=800"],
   },
   {
@@ -2830,7 +2830,7 @@ export const POI_DATA: POI[] = [
     review_count: 100,
     address_informal: "Pont",
     address_city: "Nanga-Eboko",
-    popularity_score: 72,
+    popularity_score: 72, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1563725586-4f49495b5976?q=80&w=800"], // Rivière large
   },
   {
@@ -2844,7 +2844,7 @@ export const POI_DATA: POI[] = [
     review_count: 120,
     address_informal: "Centre",
     address_city: "Nanga-Eboko",
-    popularity_score: 78,
+    popularity_score: 78, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?q=80&w=800"],
   },
   {
@@ -2858,7 +2858,7 @@ export const POI_DATA: POI[] = [
     review_count: 200,
     address_informal: "Rive Sanaga",
     address_city: "Monatélé",
-    popularity_score: 70,
+    popularity_score: 70, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1549605333-e9d64f1d436a?q=80&w=800"],
   },
   {
@@ -2872,7 +2872,7 @@ export const POI_DATA: POI[] = [
     review_count: 90,
     address_informal: "Carrefour Ngoumou",
     address_city: "Ngoumou",
-    popularity_score: 68,
+    popularity_score: 68, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1506540131481-e2da4d2fb1b8?q=80&w=800"],
   },
 
@@ -2888,7 +2888,7 @@ export const POI_DATA: POI[] = [
     review_count: 100,
     address_informal: "Centre commercial",
     address_city: "Mbalmayo",
-    popularity_score: 74,
+    popularity_score: 74, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1554907400-f9a74c76b976?q=80&w=800"],
   },
   {
@@ -2902,7 +2902,7 @@ export const POI_DATA: POI[] = [
     review_count: 300,
     address_informal: "Proche marché",
     address_city: "Obala",
-    popularity_score: 86,
+    popularity_score: 86, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1533230693504-8b6348624128?q=80&w=800"],
   },
   {
@@ -2916,7 +2916,7 @@ export const POI_DATA: POI[] = [
     review_count: 2000,
     address_informal: "Sortie Sud",
     address_city: "Mbalmayo",
-    popularity_score: 97,
+    popularity_score: 97, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=800"],
   },
   {
@@ -2930,7 +2930,7 @@ export const POI_DATA: POI[] = [
     review_count: 60,
     address_informal: "Piste Akono",
     address_city: "Bikok",
-    popularity_score: 72,
+    popularity_score: 72, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1499540027782-64f5ebeb1df8?q=80&w=800"], // Rochers
   },
   {
@@ -2944,7 +2944,7 @@ export const POI_DATA: POI[] = [
     review_count: 30,
     address_informal: "Piste rurale",
     address_city: "Akonolinga",
-    popularity_score: 55,
+    popularity_score: 55, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1517457373958-b7bdd4587205?q=80&w=800"],
   },
   {
@@ -2958,7 +2958,7 @@ export const POI_DATA: POI[] = [
     review_count: 200,
     address_informal: "Quartier Haoussa",
     address_city: "Mbalmayo",
-    popularity_score: 83,
+    popularity_score: 83, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1628151608678-ceda676c8c45?q=80&w=800"],
   },
   {
@@ -2972,7 +2972,7 @@ export const POI_DATA: POI[] = [
     review_count: 80,
     address_informal: "Mfou",
     address_city: "Mfou",
-    popularity_score: 60,
+    popularity_score: 60, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1447752875253-b7e1ad40e34c?q=80&w=800"],
   },
   {
@@ -2986,7 +2986,7 @@ export const POI_DATA: POI[] = [
     review_count: 300,
     address_informal: "Centre Sa'a",
     address_city: "Sa'a",
-    popularity_score: 81,
+    popularity_score: 81, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1549416551-8e0c6cbdbd67?q=80&w=800"],
   },
   {
@@ -3000,7 +3000,7 @@ export const POI_DATA: POI[] = [
     review_count: 90,
     address_informal: "Gare",
     address_city: "Éséka",
-    popularity_score: 70,
+    popularity_score: 70, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1566737236500-c8ac43014a67?q=80&w=800"],
   },
   {
@@ -3014,7 +3014,7 @@ export const POI_DATA: POI[] = [
     review_count: 120,
     address_informal: "Akono",
     address_city: "Akono",
-    popularity_score: 78,
+    popularity_score: 78, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1521731674483-e1bd501a3eb2?q=80&w=800"],
   },
   // Suite du tableau POI_DATA pour la Région de l'OUEST (Approfondissement)...
@@ -3031,7 +3031,7 @@ export const POI_DATA: POI[] = [
     review_count: 350,
     address_informal: "Quartier Mouankeu",
     address_city: "Bafang",
-    popularity_score: 92,
+    popularity_score: 92, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?q=80&w=800"], // Cascade
   },
   {
@@ -3045,7 +3045,7 @@ export const POI_DATA: POI[] = [
     review_count: 500,
     address_informal: "Route de Mbouda",
     address_city: "Mbouda / Galim",
-    popularity_score: 95,
+    popularity_score: 95, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1589133469850-934c9c0cb77d?q=80&w=800"], // Paysage montagneux vert
   },
   {
@@ -3059,7 +3059,7 @@ export const POI_DATA: POI[] = [
     review_count: 400,
     address_informal: "Route Bafang-Bangangté",
     address_city: "Bana",
-    popularity_score: 88,
+    popularity_score: 88, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?q=80&w=800"], // Route de montagne
   },
   {
@@ -3073,7 +3073,7 @@ export const POI_DATA: POI[] = [
     review_count: 150,
     address_informal: "Baham",
     address_city: "Baham",
-    popularity_score: 75,
+    popularity_score: 75, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1499540027782-64f5ebeb1df8?q=80&w=800"], // Gros rochers
   },
   {
@@ -3087,7 +3087,7 @@ export const POI_DATA: POI[] = [
     review_count: 2000,
     address_informal: "Route Nationale 5",
     address_city: "Dschang",
-    popularity_score: 97,
+    popularity_score: 97, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1463160417978-aa86202cc33e?q=80&w=800"],
   },
 
@@ -3103,7 +3103,7 @@ export const POI_DATA: POI[] = [
     review_count: 300,
     address_informal: "Centre Bamendjou",
     address_city: "Bamendjou",
-    popularity_score: 85,
+    popularity_score: 85, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1628795551249-16c8794c4897?q=80&w=800"],
   },
   {
@@ -3117,7 +3117,7 @@ export const POI_DATA: POI[] = [
     review_count: 450,
     address_informal: "Batoufam",
     address_city: "Bayangam",
-    popularity_score: 82,
+    popularity_score: 82, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1549615214-e40df527e089?q=80&w=800"],
   },
   {
@@ -3131,7 +3131,7 @@ export const POI_DATA: POI[] = [
     review_count: 800,
     address_informal: "Proche Palais",
     address_city: "Foumban",
-    popularity_score: 90,
+    popularity_score: 90, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1564121211835-e88c852648ab?q=80&w=800"], // Mosquée
   },
   {
@@ -3145,7 +3145,7 @@ export const POI_DATA: POI[] = [
     review_count: 200,
     address_informal: "Bafou",
     address_city: "Dschang",
-    popularity_score: 80,
+    popularity_score: 80, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1582555172866-2a792e35a14d?q=80&w=800"],
   },
   {
@@ -3159,7 +3159,7 @@ export const POI_DATA: POI[] = [
     review_count: 120,
     address_informal: "Koutaba",
     address_city: "Foumbot",
-    popularity_score: 75,
+    popularity_score: 75, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1517685352821-92cf88a85a8d?q=80&w=800"], // Monastere/Ferme
   },
 
@@ -3175,7 +3175,7 @@ export const POI_DATA: POI[] = [
     review_count: 2000,
     address_informal: "Centre Foumbot",
     address_city: "Foumbot",
-    popularity_score: 96,
+    popularity_score: 96, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1606733224795-02196ce21852?q=80&w=800"], // Marché légumes
   },
   {
@@ -3189,7 +3189,7 @@ export const POI_DATA: POI[] = [
     review_count: 600,
     address_informal: "Carrefour Mbouda",
     address_city: "Mbouda",
-    popularity_score: 88,
+    popularity_score: 88, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1589133469850-934c9c0cb77d?q=80&w=800"],
   },
   {
@@ -3203,7 +3203,7 @@ export const POI_DATA: POI[] = [
     review_count: 90,
     address_informal: "Zone rurale",
     address_city: "Foumbot",
-    popularity_score: 70,
+    popularity_score: 70, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1550970344-998d89e0839c?q=80&w=800"], // Café
   },
 
@@ -3219,7 +3219,7 @@ export const POI_DATA: POI[] = [
     review_count: 350,
     address_informal: "Bana",
     address_city: "Bana",
-    popularity_score: 93,
+    popularity_score: 93, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1566665797739-1674de7a421a?q=80&w=800"], // Resort
   },
   {
@@ -3233,7 +3233,7 @@ export const POI_DATA: POI[] = [
     review_count: 150,
     address_informal: "Derrière PMUC",
     address_city: "Bafoussam",
-    popularity_score: 84,
+    popularity_score: 84, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1628151608678-ceda676c8c45?q=80&w=800"], // Repas gluant
   },
   {
@@ -3247,7 +3247,7 @@ export const POI_DATA: POI[] = [
     review_count: 400,
     address_informal: "Quartier Haoussa",
     address_city: "Bafoussam",
-    popularity_score: 89,
+    popularity_score: 89, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1554907400-f9a74c76b976?q=80&w=800"],
   },
   {
@@ -3261,7 +3261,7 @@ export const POI_DATA: POI[] = [
     review_count: 220,
     address_informal: "Route Université",
     address_city: "Bangangté",
-    popularity_score: 81,
+    popularity_score: 81, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1596796916538-4e4277b9d799?q=80&w=800"],
   },
   {
@@ -3275,7 +3275,7 @@ export const POI_DATA: POI[] = [
     review_count: 600,
     address_informal: "Falaise",
     address_city: "Santchou",
-    popularity_score: 86,
+    popularity_score: 86, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?q=80&w=800"],
   },
 
@@ -3291,7 +3291,7 @@ export const POI_DATA: POI[] = [
     review_count: 500,
     address_informal: "Banekane",
     address_city: "Bangangté",
-    popularity_score: 80,
+    popularity_score: 80, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1492538368677-f6e0afe31dcc?q=80&w=800"],
   },
   {
@@ -3305,7 +3305,7 @@ export const POI_DATA: POI[] = [
     review_count: 200,
     address_informal: "Centre",
     address_city: "Bafang",
-    popularity_score: 75,
+    popularity_score: 75, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1548625361-bd86be3a4e93?q=80&w=800"],
   },
   {
@@ -3319,7 +3319,7 @@ export const POI_DATA: POI[] = [
     review_count: 1500,
     address_informal: "Bilongue",
     address_city: "Bafoussam",
-    popularity_score: 91,
+    popularity_score: 91, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1473210332824-7bd0679f291a?q=80&w=800"],
   },
   {
@@ -3333,7 +3333,7 @@ export const POI_DATA: POI[] = [
     review_count: 80,
     address_informal: "Route de Foumban",
     address_city: "Foumban",
-    popularity_score: 65,
+    popularity_score: 65, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1596525737525-4c09eb264968?q=80&w=800"],
   },
   {
@@ -3347,7 +3347,7 @@ export const POI_DATA: POI[] = [
     review_count: 300,
     address_informal: "Bandjoun village",
     address_city: "Bandjoun",
-    popularity_score: 79,
+    popularity_score: 79, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1563829037803-a3d8b5eb6623?q=80&w=800"], // Vin blanc/calebasse
   },
   {
@@ -3361,7 +3361,7 @@ export const POI_DATA: POI[] = [
     review_count: 300,
     address_informal: "Pont du Noun",
     address_city: "Koutaba",
-    popularity_score: 82,
+    popularity_score: 82, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1546484396-fb3fc6f95f98?q=80&w=800"], // Rivière
   },
   {
@@ -3375,7 +3375,7 @@ export const POI_DATA: POI[] = [
     review_count: 200,
     address_informal: "Mbouo",
     address_city: "Bandjoun",
-    popularity_score: 70,
+    popularity_score: 70, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1519494376483-bc2a297c11f6?q=80&w=800"],
   },
   {
@@ -3389,7 +3389,7 @@ export const POI_DATA: POI[] = [
     review_count: 400,
     address_informal: "Montée de l'Alliance",
     address_city: "Dschang",
-    popularity_score: 87,
+    popularity_score: 87, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1505373877841-8d25f7d46678?q=80&w=800"],
   },
   {
@@ -3403,7 +3403,7 @@ export const POI_DATA: POI[] = [
     review_count: 100,
     address_informal: "Kekem",
     address_city: "Kekem",
-    popularity_score: 78,
+    popularity_score: 78, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1560963689-1fc71cc16239?q=80&w=800"],
   },
   {
@@ -3417,7 +3417,7 @@ export const POI_DATA: POI[] = [
     review_count: 150,
     address_informal: "Centre ville",
     address_city: "Bafoussam",
-    popularity_score: 74,
+    popularity_score: 74, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1623345826620-6f027063d891?q=80&w=800"],
   },
   {
@@ -3431,7 +3431,7 @@ export const POI_DATA: POI[] = [
     review_count: 50,
     address_informal: "Foumbot",
     address_city: "Foumbot",
-    popularity_score: 65,
+    popularity_score: 65, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1502016399999-555e51dbf8d4?q=80&w=800"],
   },
   {
@@ -3445,7 +3445,7 @@ export const POI_DATA: POI[] = [
     review_count: 900,
     address_informal: "Quartier Djemoum",
     address_city: "Bafoussam",
-    popularity_score: 90,
+    popularity_score: 90, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1488459716781-31db52582fe9?q=80&w=800"],
   },
   // Suite du tableau POI_DATA pour la Région de l'EST (Bertoua, Batouri, Yokadouma)...
@@ -3462,7 +3462,7 @@ export const POI_DATA: POI[] = [
     review_count: 520,
     address_informal: "Quartier Mokolo",
     address_city: "Bertoua",
-    popularity_score: 95,
+    popularity_score: 95, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1604503468506-a8da13d82791?q=80&w=800"], // Plat en sauce
   },
   {
@@ -3476,7 +3476,7 @@ export const POI_DATA: POI[] = [
     review_count: 1200,
     address_informal: "Nkolbikon",
     address_city: "Bertoua",
-    popularity_score: 92,
+    popularity_score: 92, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1519999482648-25049ddd37b1?q=80&w=800"], // Marché
   },
   {
@@ -3490,7 +3490,7 @@ export const POI_DATA: POI[] = [
     review_count: 450,
     address_informal: "Entrée ville",
     address_city: "Bertoua",
-    popularity_score: 88,
+    popularity_score: 88, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=800"],
   },
   {
@@ -3504,7 +3504,7 @@ export const POI_DATA: POI[] = [
     review_count: 800,
     address_informal: "Teinturerie",
     address_city: "Bertoua",
-    popularity_score: 94,
+    popularity_score: 94, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=800"], // Braise nocturne
   },
   {
@@ -3518,7 +3518,7 @@ export const POI_DATA: POI[] = [
     review_count: 300,
     address_informal: "Avenue Paul Biya",
     address_city: "Bertoua",
-    popularity_score: 85,
+    popularity_score: 85, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1574391884720-2bbc378b6f10?q=80&w=800"],
   },
   {
@@ -3532,7 +3532,7 @@ export const POI_DATA: POI[] = [
     review_count: 600,
     address_informal: "Centre ville",
     address_city: "Bertoua",
-    popularity_score: 89,
+    popularity_score: 89, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=800"],
   },
   {
@@ -3546,7 +3546,7 @@ export const POI_DATA: POI[] = [
     review_count: 150,
     address_informal: "Quartier Kano",
     address_city: "Bertoua",
-    popularity_score: 80,
+    popularity_score: 80, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1628151608678-ceda676c8c45?q=80&w=800"],
   },
   {
@@ -3560,7 +3560,7 @@ export const POI_DATA: POI[] = [
     review_count: 200,
     address_informal: "Tigaza",
     address_city: "Bertoua",
-    popularity_score: 75,
+    popularity_score: 75, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1563829037803-a3d8b5eb6623?q=80&w=800"],
   },
   {
@@ -3574,7 +3574,7 @@ export const POI_DATA: POI[] = [
     review_count: 900,
     address_informal: "Centre",
     address_city: "Bertoua",
-    popularity_score: 86,
+    popularity_score: 86, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1488459716781-31db52582fe9?q=80&w=800"],
   },
   {
@@ -3588,7 +3588,7 @@ export const POI_DATA: POI[] = [
     review_count: 100,
     address_informal: "Quartier Administratif",
     address_city: "Bertoua",
-    popularity_score: 70,
+    popularity_score: 70, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1577907572624-b1523455eb45?q=80&w=800"],
   },
 
@@ -3604,7 +3604,7 @@ export const POI_DATA: POI[] = [
     review_count: 200,
     address_informal: "Route Kambélé",
     address_city: "Batouri",
-    popularity_score: 85,
+    popularity_score: 85, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1518182170546-07fa6ad7be50?q=80&w=800"], // Sol rouge/creusé
   },
   {
@@ -3618,7 +3618,7 @@ export const POI_DATA: POI[] = [
     review_count: 80,
     address_informal: "Plateau administratif",
     address_city: "Batouri",
-    popularity_score: 72,
+    popularity_score: 72, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1564507592333-c60657eea523?q=80&w=800"],
   },
   {
@@ -3632,7 +3632,7 @@ export const POI_DATA: POI[] = [
     review_count: 120,
     address_informal: "Mission",
     address_city: "Bétaré-Oya",
-    popularity_score: 78,
+    popularity_score: 78, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1548544149-48bc7a61d8da?q=80&w=800"],
   },
   {
@@ -3646,7 +3646,7 @@ export const POI_DATA: POI[] = [
     review_count: 150,
     address_informal: "Centre Batouri",
     address_city: "Batouri",
-    popularity_score: 75,
+    popularity_score: 75, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1555854743-e3cf9163df8e?q=80&w=800"],
   },
   {
@@ -3660,7 +3660,7 @@ export const POI_DATA: POI[] = [
     review_count: 350,
     address_informal: "Place du marché",
     address_city: "Bétaré-Oya",
-    popularity_score: 82,
+    popularity_score: 82, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1519999482648-25049ddd37b1?q=80&w=800"],
   },
 
@@ -3676,7 +3676,7 @@ export const POI_DATA: POI[] = [
     review_count: 200,
     address_informal: "Via Mambélé",
     address_city: "Mambélé / Moloundou",
-    popularity_score: 80,
+    popularity_score: 80, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1516426122078-c23e76319801?q=80&w=800"], // Jungle/Gorille
   },
   {
@@ -3690,7 +3690,7 @@ export const POI_DATA: POI[] = [
     review_count: 80,
     address_informal: "Village Mambélé",
     address_city: "Mambélé",
-    popularity_score: 70,
+    popularity_score: 70, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1582260273760-23a563ec6df4?q=80&w=800"], // Bungalow forêt
   },
   {
@@ -3704,7 +3704,7 @@ export const POI_DATA: POI[] = [
     review_count: 90,
     address_informal: "Pont de la Kadéï",
     address_city: "Batouri",
-    popularity_score: 65,
+    popularity_score: 65, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1437482078695-73f5ca6c96e2?q=80&w=800"],
   },
   {
@@ -3718,7 +3718,7 @@ export const POI_DATA: POI[] = [
     review_count: 150,
     address_informal: "Somalomo",
     address_city: "Somalomo / Abong-Mbang",
-    popularity_score: 75,
+    popularity_score: 75, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1447752875253-b7e1ad40e34c?q=80&w=800"],
   },
   {
@@ -3732,7 +3732,7 @@ export const POI_DATA: POI[] = [
     review_count: 40,
     address_informal: "Piste Ndélélé",
     address_city: "Ndélélé",
-    popularity_score: 60,
+    popularity_score: 60, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1513222883020-f42c10b42918?q=80&w=800"],
   },
 
@@ -3748,7 +3748,7 @@ export const POI_DATA: POI[] = [
     review_count: 800,
     address_informal: "Douane / Frontière",
     address_city: "Garoua-Boulaï",
-    popularity_score: 91,
+    popularity_score: 91, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1463797221720-6b07e6426c24?q=80&w=800"], // Camions/Route
   },
   {
@@ -3762,7 +3762,7 @@ export const POI_DATA: POI[] = [
     review_count: 100,
     address_informal: "Axe Principal",
     address_city: "Garoua-Boulaï",
-    popularity_score: 75,
+    popularity_score: 75, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1590490359858-a4773d2a70cb?q=80&w=800"],
   },
   {
@@ -3776,7 +3776,7 @@ export const POI_DATA: POI[] = [
     review_count: 250,
     address_informal: "Parking camions",
     address_city: "Garoua-Boulaï",
-    popularity_score: 82,
+    popularity_score: 82, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1596706606000-01c0c9780517?q=80&w=800"],
   },
   {
@@ -3790,7 +3790,7 @@ export const POI_DATA: POI[] = [
     review_count: 30,
     address_informal: "Piste rurale",
     address_city: "Garoua-Boulaï",
-    popularity_score: 55,
+    popularity_score: 55, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?q=80&w=800"],
   },
   {
@@ -3804,7 +3804,7 @@ export const POI_DATA: POI[] = [
     review_count: 200,
     address_informal: "Village Gado-Badzéré",
     address_city: "Gado / Garoua-Boulaï",
-    popularity_score: 80,
+    popularity_score: 80, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1506461973059-e9352e80064f?q=80&w=800"], // Troupeau
   },
 
@@ -3820,7 +3820,7 @@ export const POI_DATA: POI[] = [
     review_count: 2500,
     address_informal: "Centre ville",
     address_city: "Abong-Mbang",
-    popularity_score: 97,
+    popularity_score: 97, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1628151608678-ceda676c8c45?q=80&w=800"],
   },
   {
@@ -3834,7 +3834,7 @@ export const POI_DATA: POI[] = [
     review_count: 150,
     address_informal: "Colline de Doumé",
     address_city: "Doumé",
-    popularity_score: 75,
+    popularity_score: 75, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1616592231267-33a4c52f2038?q=80&w=800"], // Vieux fort/Batiment brique
   },
   {
@@ -3848,7 +3848,7 @@ export const POI_DATA: POI[] = [
     review_count: 90,
     address_informal: "Yokadouma Centre",
     address_city: "Yokadouma",
-    popularity_score: 78,
+    popularity_score: 78, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=800"],
   },
   {
@@ -3862,7 +3862,7 @@ export const POI_DATA: POI[] = [
     review_count: 110,
     address_informal: "Bord de piste",
     address_city: "Mindourou",
-    popularity_score: 70,
+    popularity_score: 70, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1563829037803-a3d8b5eb6623?q=80&w=800"],
   },
   {
@@ -3876,7 +3876,7 @@ export const POI_DATA: POI[] = [
     review_count: 80,
     address_informal: "Mayos",
     address_city: "Dimako",
-    popularity_score: 76,
+    popularity_score: 76, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1506461973059-e9352e80064f?q=80&w=800"], // Huttes
   },
 
@@ -3892,7 +3892,7 @@ export const POI_DATA: POI[] = [
     review_count: 1500,
     address_informal: "Bonis",
     address_city: "Bertoua",
-    popularity_score: 93,
+    popularity_score: 93, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?q=80&w=800"],
   },
   {
@@ -3906,7 +3906,7 @@ export const POI_DATA: POI[] = [
     review_count: 300,
     address_informal: "Bord de route",
     address_city: "Dimako",
-    popularity_score: 84,
+    popularity_score: 84, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1604503468506-a8da13d82791?q=80&w=800"],
   },
   {
@@ -3920,7 +3920,7 @@ export const POI_DATA: POI[] = [
     review_count: 400,
     address_informal: "Centre",
     address_city: "Bertoua",
-    popularity_score: 81,
+    popularity_score: 81, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1521731674483-e1bd501a3eb2?q=80&w=800"],
   },
   {
@@ -3934,7 +3934,7 @@ export const POI_DATA: POI[] = [
     review_count: 50,
     address_informal: "Bord du Nyong",
     address_city: "Atok / Abong-Mbang",
-    popularity_score: 65,
+    popularity_score: 65, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1599863261231-18e3848b8941?q=80&w=800"],
   },
   {
@@ -3948,7 +3948,7 @@ export const POI_DATA: POI[] = [
     review_count: 80,
     address_informal: "Mission",
     address_city: "Garoua-Boulaï",
-    popularity_score: 70,
+    popularity_score: 70, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1519494376483-bc2a297c11f6?q=80&w=800"],
   },
   {
@@ -3962,7 +3962,7 @@ export const POI_DATA: POI[] = [
     review_count: 40,
     address_informal: "Village Ngouté",
     address_city: "Bertoua",
-    popularity_score: 60,
+    popularity_score: 60, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1499540027782-64f5ebeb1df8?q=80&w=800"],
   },
   {
@@ -3976,7 +3976,7 @@ export const POI_DATA: POI[] = [
     review_count: 60,
     address_informal: "Kadey",
     address_city: "Ouli",
-    popularity_score: 68,
+    popularity_score: 68, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1506540131481-e2da4d2fb1b8?q=80&w=800"],
   },
   {
@@ -3990,7 +3990,7 @@ export const POI_DATA: POI[] = [
     review_count: 180,
     address_informal: "Gare ferroviaire",
     address_city: "Belabo",
-    popularity_score: 75,
+    popularity_score: 75, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1596706606000-01c0c9780517?q=80&w=800"],
   },
   {
@@ -4004,7 +4004,7 @@ export const POI_DATA: POI[] = [
     review_count: 50,
     address_informal: "Messamena",
     address_city: "Messamena",
-    popularity_score: 62,
+    popularity_score: 62, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=800"],
   },
   {
@@ -4018,7 +4018,7 @@ export const POI_DATA: POI[] = [
     review_count: 220,
     address_informal: "Centre",
     address_city: "Bertoua",
-    popularity_score: 83,
+    popularity_score: 83, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1574391884720-2bbc378b6f10?q=80&w=800"],
   },
 
@@ -4034,7 +4034,7 @@ export const POI_DATA: POI[] = [
     review_count: 20,
     address_informal: "Piste Yokadouma",
     address_city: "Yokadouma",
-    popularity_score: 60,
+    popularity_score: 60, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1494522855154-9297ac14b55f?q=80&w=800"],
   },
   {
@@ -4048,7 +4048,7 @@ export const POI_DATA: POI[] = [
     review_count: 80,
     address_informal: "Place centrale",
     address_city: "Ndélélé",
-    popularity_score: 65,
+    popularity_score: 65, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1506540131481-e2da4d2fb1b8?q=80&w=800"],
   },
   {
@@ -4062,7 +4062,7 @@ export const POI_DATA: POI[] = [
     review_count: 150,
     address_informal: "Quartier Eglise",
     address_city: "Bertoua",
-    popularity_score: 78,
+    popularity_score: 78, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1589531535497-6a56e29729df?q=80&w=800"],
   },
   {
@@ -4076,7 +4076,7 @@ export const POI_DATA: POI[] = [
     review_count: 60,
     address_informal: "Centre",
     address_city: "Batouri",
-    popularity_score: 72,
+    popularity_score: 72, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1614264629471-f9260c608298?q=80&w=800"],
   },
   {
@@ -4090,7 +4090,7 @@ export const POI_DATA: POI[] = [
     review_count: 300,
     address_informal: "Lycée Scientifique",
     address_city: "Bertoua",
-    popularity_score: 87,
+    popularity_score: 87, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1550953684-257a070f8064?q=80&w=800"],
   },
   {
@@ -4104,7 +4104,7 @@ export const POI_DATA: POI[] = [
     review_count: 50,
     address_informal: "Bord Kadéï",
     address_city: "Kadey",
-    popularity_score: 60,
+    popularity_score: 60, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1596707328734-b295cb0bc64e?q=80&w=800"],
   },
   {
@@ -4118,7 +4118,7 @@ export const POI_DATA: POI[] = [
     review_count: 100,
     address_informal: "Cité des cadres",
     address_city: "Lom Pangar",
-    popularity_score: 74,
+    popularity_score: 74, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1533230693504-8b6348624128?q=80&w=800"],
   },
   {
@@ -4132,7 +4132,7 @@ export const POI_DATA: POI[] = [
     review_count: 80,
     address_informal: "Kentzou",
     address_city: "Kentzou",
-    popularity_score: 68,
+    popularity_score: 68, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1463797221720-6b07e6426c24?q=80&w=800"],
   },
   {
@@ -4146,7 +4146,7 @@ export const POI_DATA: POI[] = [
     review_count: 200,
     address_informal: "Parking douane",
     address_city: "Garoua-Boulaï",
-    popularity_score: 82,
+    popularity_score: 82, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1628151608678-ceda676c8c45?q=80&w=800"],
   },
   {
@@ -4160,7 +4160,7 @@ export const POI_DATA: POI[] = [
     review_count: 70,
     address_informal: "Zone industrielle",
     address_city: "Mindourou",
-    popularity_score: 65,
+    popularity_score: 65, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1560185007-cde436f6a4d0?q=80&w=800"],
   },
   // Suite du tableau POI_DATA pour la Région du NORD (Garoua, Guider, Lagdo)...
@@ -4177,7 +4177,7 @@ export const POI_DATA: POI[] = [
     review_count: 3500,
     address_informal: "Quartier Poumpoumré",
     address_city: "Garoua",
-    popularity_score: 100,
+    popularity_score: 100, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1549615214-e40df527e089?q=80&w=800"], // Viande séchée (Kilishi)
   },
   {
@@ -4191,7 +4191,7 @@ export const POI_DATA: POI[] = [
     review_count: 800,
     address_informal: "Plateau",
     address_city: "Garoua",
-    popularity_score: 92,
+    popularity_score: 92, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=800"],
   },
   {
@@ -4205,7 +4205,7 @@ export const POI_DATA: POI[] = [
     review_count: 600,
     address_informal: "Poumpoumré",
     address_city: "Garoua",
-    popularity_score: 95,
+    popularity_score: 95, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1564121211835-e88c852648ab?q=80&w=800"], // Mosquée
   },
   {
@@ -4219,7 +4219,7 @@ export const POI_DATA: POI[] = [
     review_count: 400,
     address_informal: "Jardin Cenaje",
     address_city: "Garoua",
-    popularity_score: 88,
+    popularity_score: 88, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1596796916538-4e4277b9d799?q=80&w=800"],
   },
   {
@@ -4233,7 +4233,7 @@ export const POI_DATA: POI[] = [
     review_count: 150,
     address_informal: "Bord Bénoué",
     address_city: "Garoua",
-    popularity_score: 75,
+    popularity_score: 75, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?q=80&w=800"],
   },
 
@@ -4249,7 +4249,7 @@ export const POI_DATA: POI[] = [
     review_count: 400,
     address_informal: "Centre Rey-Bouba",
     address_city: "Rey-Bouba",
-    popularity_score: 96,
+    popularity_score: 96, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?q=80&w=800"], // Murs terre
   },
   {
@@ -4263,7 +4263,7 @@ export const POI_DATA: POI[] = [
     review_count: 650,
     address_informal: "Sortie Guider",
     address_city: "Guider",
-    popularity_score: 93,
+    popularity_score: 93, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1533519803887-25e36ebdf22f?q=80&w=800"], // Canyon rocheux
   },
   {
@@ -4277,7 +4277,7 @@ export const POI_DATA: POI[] = [
     review_count: 300,
     address_informal: "Route Ngaoundéré-Garoua",
     address_city: "Banda / Mayo-Rey",
-    popularity_score: 90,
+    popularity_score: 90, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1549320257-2c676442e947?q=80&w=800"], // Girafe savane
   },
   {
@@ -4291,7 +4291,7 @@ export const POI_DATA: POI[] = [
     review_count: 100,
     address_informal: "Frontière Tchad",
     address_city: "Guidjiba",
-    popularity_score: 82,
+    popularity_score: 82, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1534960680480-16fa675402a7?q=80&w=800"], // Antilope géante
   },
   {
@@ -4305,7 +4305,7 @@ export const POI_DATA: POI[] = [
     review_count: 250,
     address_informal: "Barrage",
     address_city: "Lagdo",
-    popularity_score: 87,
+    popularity_score: 87, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1555546221-d41933618683?q=80&w=800"], // Grand Lac
   },
 
@@ -4321,7 +4321,7 @@ export const POI_DATA: POI[] = [
     review_count: 2000,
     address_informal: "Carrefour Pitoa",
     address_city: "Pitoa",
-    popularity_score: 98,
+    popularity_score: 98, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1542845681-3729e28325ce?q=80&w=800"], // Marché coloré
   },
   {
@@ -4335,7 +4335,7 @@ export const POI_DATA: POI[] = [
     review_count: 320,
     address_informal: "Quartier Yelwa",
     address_city: "Garoua",
-    popularity_score: 85,
+    popularity_score: 85, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1627993074092-26f634cf8df5?q=80&w=800"], // Bière artisanale
   },
   {
@@ -4349,7 +4349,7 @@ export const POI_DATA: POI[] = [
     review_count: 250,
     address_informal: "Centre Ville",
     address_city: "Garoua",
-    popularity_score: 80,
+    popularity_score: 80, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1606850246029-dd00bd5d0d67?q=80&w=800"],
   },
   {
@@ -4363,7 +4363,7 @@ export const POI_DATA: POI[] = [
     review_count: 1500,
     address_informal: "Centre",
     address_city: "Garoua",
-    popularity_score: 94,
+    popularity_score: 94, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1606733224795-02196ce21852?q=80&w=800"],
   },
   {
@@ -4377,7 +4377,7 @@ export const POI_DATA: POI[] = [
     review_count: 1200,
     address_informal: "Route aéroport",
     address_city: "Garoua",
-    popularity_score: 96,
+    popularity_score: 96, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1521731674483-e1bd501a3eb2?q=80&w=800"],
   },
   {
@@ -4391,7 +4391,7 @@ export const POI_DATA: POI[] = [
     review_count: 200,
     address_informal: "Plateau",
     address_city: "Garoua",
-    popularity_score: 83,
+    popularity_score: 83, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1582650077864-7729f1b953a9?q=80&w=800"], // Bouillie
   },
 
@@ -4407,7 +4407,7 @@ export const POI_DATA: POI[] = [
     review_count: 120,
     address_informal: "Nord de Garoua",
     address_city: "Garoua",
-    popularity_score: 75,
+    popularity_score: 75, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?q=80&w=800"],
   },
   {
@@ -4421,7 +4421,7 @@ export const POI_DATA: POI[] = [
     review_count: 90,
     address_informal: "Parc Bénoué",
     address_city: "Mayo-Rey",
-    popularity_score: 81,
+    popularity_score: 81, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1544669041-3b52d9178656?q=80&w=800"],
   },
   {
@@ -4435,7 +4435,7 @@ export const POI_DATA: POI[] = [
     review_count: 300,
     address_informal: "Zone Industrielle",
     address_city: "Garoua",
-    popularity_score: 89,
+    popularity_score: 89, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1606708687000-84a86f9f5927?q=80&w=800"], // Coton
   },
   {
@@ -4449,7 +4449,7 @@ export const POI_DATA: POI[] = [
     review_count: 50,
     address_informal: "Centre Bibémi",
     address_city: "Bibémi",
-    popularity_score: 70,
+    popularity_score: 70, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1496934440361-bd8c909e73d3?q=80&w=800"],
   },
   {
@@ -4463,7 +4463,7 @@ export const POI_DATA: POI[] = [
     review_count: 500,
     address_informal: "Avenue Commerciale",
     address_city: "Garoua",
-    popularity_score: 84,
+    popularity_score: 84, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1517433670267-08bbd4be890f?q=80&w=800"],
   },
   {
@@ -4477,7 +4477,7 @@ export const POI_DATA: POI[] = [
     review_count: 180,
     address_informal: "Rive Barrage",
     address_city: "Lagdo",
-    popularity_score: 82,
+    popularity_score: 82, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1534017688537-4638a202d6b3?q=80&w=800"],
   },
   {
@@ -4491,7 +4491,7 @@ export const POI_DATA: POI[] = [
     review_count: 220,
     address_informal: "New Town",
     address_city: "Garoua",
-    popularity_score: 78,
+    popularity_score: 78, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1565451296680-e3a1f4967a54?q=80&w=800"],
   },
   {
@@ -4505,7 +4505,7 @@ export const POI_DATA: POI[] = [
     review_count: 60,
     address_informal: "Lit de rivière",
     address_city: "Mayo-Oulo",
-    popularity_score: 74,
+    popularity_score: 74, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1518182170546-07fa6ad7be50?q=80&w=800"], // Roche
   },
   {
@@ -4519,7 +4519,7 @@ export const POI_DATA: POI[] = [
     review_count: 90,
     address_informal: "Centre Guider",
     address_city: "Guider",
-    popularity_score: 70,
+    popularity_score: 70, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1628151608678-ceda676c8c45?q=80&w=800"], // Épices/Herbes
   },
   {
@@ -4533,7 +4533,7 @@ export const POI_DATA: POI[] = [
     review_count: 150,
     address_informal: "Route Principale",
     address_city: "Garoua",
-    popularity_score: 80,
+    popularity_score: 80, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1514362545857-3bc16549766b?q=80&w=800"],
   },
   {
@@ -4547,7 +4547,7 @@ export const POI_DATA: POI[] = [
     review_count: 800,
     address_informal: "Aéroport",
     address_city: "Garoua",
-    popularity_score: 88,
+    popularity_score: 88, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1463797221720-6b07e6426c24?q=80&w=800"],
   },
   {
@@ -4561,7 +4561,7 @@ export const POI_DATA: POI[] = [
     review_count: 80,
     address_informal: "Bord de route",
     address_city: "Djingliya",
-    popularity_score: 76,
+    popularity_score: 76, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1560185007-cde436f6a4d0?q=80&w=800"],
   },
   {
@@ -4575,7 +4575,7 @@ export const POI_DATA: POI[] = [
     review_count: 300,
     address_informal: "Garoua Centre",
     address_city: "Garoua",
-    popularity_score: 85,
+    popularity_score: 85, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?q=80&w=800"],
   },
   {
@@ -4589,7 +4589,7 @@ export const POI_DATA: POI[] = [
     review_count: 400,
     address_informal: "Avenue Lamido",
     address_city: "Garoua",
-    popularity_score: 86,
+    popularity_score: 86, status: "validated",
     poi_images_urls: ["https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=800"],
   }
 

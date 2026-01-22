@@ -60,6 +60,12 @@ export const useUserData = () => {
     localStorage.setItem("navigoo_my_pois", JSON.stringify(newPois));
   };
 
+  const validatePoi = (poiId: string) => {
+    const newPois = myPois.map(p => p.poi_id === poiId ? { ...p, status: "validated" as const } : p);
+    setMyPois(newPois);
+    localStorage.setItem("navigoo_my_pois", JSON.stringify(newPois));
+  };
+
   // Modification d'un POI existant
   const updateMyPoi = (updatedPoi: POI) => {
     const newPois = myPois.map(p => p.poi_id === updatedPoi.poi_id ? updatedPoi : p);
@@ -91,6 +97,7 @@ export const useUserData = () => {
     addTrip,
     addMyPoi,
     updateMyPoi,
+    validatePoi,
     deleteMyPoi,
     toggleMapStyle,
     isSaved: (id: string) => savedPois.some(p => p.poi_id === id)
