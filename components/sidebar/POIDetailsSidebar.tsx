@@ -114,6 +114,22 @@ export const PoiDetailsSidebar = ({ poi, onClose, isOpen, onOpenDirections }: Po
           <p>{poi.poi_description || "Aucune description disponible."}</p>
         </div>
 
+        {/* SUBMITTER INFO */}
+        {(poi.submitted_by_name || poi.organization) && (
+          <div className="bg-zinc-50 dark:bg-zinc-800/50 p-4 rounded-2xl border border-zinc-100 dark:border-zinc-800">
+             <h4 className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-2">Soumis par</h4>
+             <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-xs">
+                   {poi.submitted_by_name?.charAt(0) || "O"}
+                </div>
+                <div>
+                   <p className="text-sm font-bold text-zinc-700 dark:text-zinc-200">{poi.submitted_by_name || "Explorateur anonyme"}</p>
+                   {poi.organization && <p className="text-[11px] text-zinc-500">{poi.organization}</p>}
+                </div>
+             </div>
+          </div>
+        )}
+
         {/* AMENITIES */}
         {poi.poi_amenities && poi.poi_amenities.length > 0 && (
             <div className="flex flex-wrap gap-2">

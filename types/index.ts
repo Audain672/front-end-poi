@@ -48,6 +48,8 @@ export interface POI {
   // New fields
   status: POIStatus;
   submitted_by?: string; // User ID
+  submitted_by_name?: string;
+  organization?: string;
 }
 
 export type UserRole = "client" | "admin";

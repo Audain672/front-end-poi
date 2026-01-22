@@ -169,7 +169,9 @@ function AddPoiContent() {
         review_count: formData.review_count || 0,
         popularity_score: 10,
         status: editId ? (formData.status || "submitted") : "submitted",
-        submitted_by: editId ? formData.submitted_by : user?.id
+        submitted_by: editId ? formData.submitted_by : user?.id,
+        submitted_by_name: editId ? formData.submitted_by_name : user?.name,
+        organization: editId ? formData.organization : user?.organization
     };
 
     if (editId) updateMyPoi(finalPoi);
