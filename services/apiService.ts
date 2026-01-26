@@ -52,7 +52,8 @@ const mapBackendToFrontendPoi = (backendPoi: any): POI => {
       phone: backendPoi.phoneNumber,
       website: backendPoi.websiteUrl,
     },
-    operation_time_plan: backendPoi.operationTimePlan ? JSON.parse(backendPoi.operationTimePlan) : undefined
+    operation_time_plan: backendPoi.operationTimePlan ? JSON.parse(backendPoi.operationTimePlan) : undefined,
+    status: backendPoi.status,
   };
 };
 

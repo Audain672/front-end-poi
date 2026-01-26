@@ -5,12 +5,11 @@ import {
   Bookmark, Clock, Share2, Printer, MapPin, 
   Settings, HelpCircle, Shield, Globe, 
   Building, UserSearch, PanelLeftClose, MapPinHouse,
-  User, LogIn, Mic, Layout
+  User, LogIn, Mic, Layout, BookOpen
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { clsx } from "clsx";
 import { useAuth } from "@/hooks/useAuth";
-import { useRouter } from "next/navigation";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -36,7 +35,6 @@ export const Sidebar = ({
   const { user, isAuthenticated } = useAuth();
   const router = useRouter();
   const isExpanded = isHovered || isOpen;
-  const router = useRouter();
 
   const handleAction = (action: () => void) => {
     action();    // 1. Exécute l'action demandée (ex: ouvrir panneau favoris)
