@@ -1,14 +1,16 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { SidebarItem } from "./SidebarItem";
-import {
-  Bookmark, Clock, Share2, Printer, MapPin,
-  Settings, HelpCircle, Shield, Globe,
+import { 
+  Bookmark, Clock, Share2, Printer, MapPin, 
+  Settings, HelpCircle, Shield, Globe, 
   Building, UserSearch, PanelLeftClose, MapPinHouse,
-  BookOpen, Mic
+  User, LogIn, Mic, Layout
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { clsx } from "clsx";
+import { useAuth } from "@/hooks/useAuth";
+import { useRouter } from "next/navigation";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -31,6 +33,8 @@ export const Sidebar = ({
     onToggleSettings
 }: SidebarProps) => {
   const [isHovered, setIsHovered] = useState(false);
+  const { user, isAuthenticated } = useAuth();
+  const router = useRouter();
   const isExpanded = isHovered || isOpen;
   const router = useRouter();
 
@@ -76,7 +80,9 @@ export const Sidebar = ({
         <div className="flex-1 overflow-y-auto overflow-x-hidden scrollbar-thin px-2 py-4 space-y-1">
           <SidebarItem isExpanded={isExpanded} icon={<Bookmark size={22} />} label="Enregistrés" onClick={() => handleAction(() => onViewChange("saved"))} />
           <SidebarItem isExpanded={isExpanded} icon={<Clock size={22} />} label="Récents" onClick={() => handleAction(() => onViewChange("recent"))} />
-          <SidebarItem isExpanded={isExpanded} icon={<Building size={22} />} label="Creer un point d'interet" onClick={() => handleAction(() => onViewChange("mypois"))} />
+          <SidebarItem isExpanded={isExpanded} icon={<Building size={22} />} label="Creer un point d'interet" onClick={() => handleAction(() => isAuthenticated ? onViewChange("mypois") : router.push("/login"))} />
+          <SidebarItem isExpanded={isExpanded} icon={<Mic size={22} />} label="Podcasts" onClick={() => handleAction(() => isAuthenticated ? alert("Bientôt disponible") : router.push("/login"))} />
+          <SidebarItem isExpanded={isExpanded} icon={<Layout size={22} />} label="Blocs" onClick={() => handleAction(() => isAuthenticated ? alert("Bientôt disponible") : router.push("/login"))} />
           <SidebarItem isExpanded={isExpanded} icon={<UserSearch size={22} />} label="Trouver ma position" onClick={() => handleAction(onLocateMe)} />
           <SidebarItem isExpanded={isExpanded} icon={<MapPin size={22} />} label="Mes trajets" onClick={() => handleAction(() => onViewChange("trips"))} />
 
@@ -94,6 +100,24 @@ export const Sidebar = ({
 
           <SidebarItem isExpanded={isExpanded} icon={<Settings size={22} />} label="Paramètres & Style" onClick={() => handleAction(onToggleSettings)} />
           <SidebarItem isExpanded={isExpanded} icon={<Shield size={22} />} label="Confidentialité" />
+
+          <div className="h-px bg-zinc-100 dark:bg-zinc-800 my-2 mx-2" />
+
+          {isAuthenticated ? (
+            <SidebarItem
+              isExpanded={isExpanded}
+              icon={<User size={22} className="text-primary" />}
+              label="Mon Profil"
+              onClick={() => handleAction(() => router.push("/profile"))}
+            />
+          ) : (
+            <SidebarItem
+              isExpanded={isExpanded}
+              icon={<LogIn size={22} />}
+              label="Connexion / Inscription"
+              onClick={() => handleAction(() => router.push("/login"))}
+            />
+          )}
         </div>
 
         {/* Footer */}

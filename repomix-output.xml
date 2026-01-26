@@ -1,3 +1,3699 @@
+This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+5. Multiple file entries, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+</file_summary>
+
+<directory_structure>
+app/
+  add-poi/
+    page.tsx
+  login/
+    page.tsx
+  profile/
+    page.tsx
+  signup/
+    page.tsx
+  favicon.ico
+  globals.css
+  layout.tsx
+  page.tsx
+components/
+  map/
+    Map.tsx
+  navigation/
+    AuthButtons.tsx
+    CategoryBar.tsx
+    MobileNavbar.tsx
+    SearchInput.tsx
+    TopLayout.tsx
+  poi/
+    POIStatusBadge.tsx
+  sidebar/
+    DirectionSidebar.tsx
+    POIDetailsSidebar.tsx
+    SecondarySidebar.tsx
+    Sidebar.tsx
+    SidebarItem.tsx
+  ui/
+    form/
+      FormInput.tsx
+      FormSection.tsx
+      FormSelect.tsx
+      ImageUpload.tsx
+    Button.tsx
+    CategoryChip.tsx
+    Loader.tsx
+constants/
+  poiConstants.ts
+context/
+  AuthContext.tsx
+data/
+  categories.tsx
+  mockData.ts
+hooks/
+  useAuth.ts
+  usePOIActions.ts
+  useUserData.ts
+public/
+  file.svg
+  globe.svg
+  next.svg
+  vercel.svg
+  window.svg
+services/
+  authService.ts
+  routingService.ts
+types/
+  index.ts
+.gitignore
+eslint.config.mjs
+next.config.ts
+package.json
+postcss.config.mjs
+README.md
+tsconfig.json
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path="components/navigation/AuthButtons.tsx">
+"use client";
+
+import { useState, useRef, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useAuthContext } from "@/context/AuthContext";
+import { Button } from "@/components/ui/Button";
+import { LogIn, UserPlus, User, LogOut, Settings, ChevronDown } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import clsx from "clsx";
+
+export const AuthButtons = () => {
+  const { user, isAuthenticated, isLoading, logout } = useAuthContext();
+  const router = useRouter();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  /**
+   * Fermeture dropdown au clic extérieur
+   */
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    if (isDropdownOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isDropdownOpen]);
+
+  /**
+   * Gestion déconnexion
+   */
+  const handleLogout = async () => {
+    try {
+      await logout();
+      router.push("/");
+      setIsDropdownOpen(false);
+    } catch (error) {
+      console.error("Erreur déconnexion:", error);
+    }
+  };
+
+  /**
+   * État de chargement
+   */
+  if (isLoading) {
+    return (
+      <div className="flex items-center gap-2">
+        <div className="w-8 h-8 rounded-full bg-zinc-200 dark:bg-zinc-800 animate-pulse" />
+      </div>
+    );
+  }
+
+  /**
+   * Utilisateur NON connecté
+   */
+  if (!isAuthenticated || !user) {
+    return (
+      <div className="flex items-center gap-2">
+        {/* Desktop */}
+        <div className="hidden md:flex items-center gap-2">
+          <Button
+            variant="ghost"
+            onClick={() => router.push("/login")}
+            className="h-9 px-4 text-sm font-medium hover:bg-zinc-100 dark:hover:bg-zinc-800"
+          >
+            <LogIn size={16} className="mr-2" />
+            Connexion
+          </Button>
+          <Button
+            variant="primary"
+            onClick={() => router.push("/signup")}
+            className="h-9 px-4 text-sm font-semibold shadow-md"
+          >
+            <UserPlus size={16} className="mr-2" />
+            S'inscrire
+          </Button>
+        </div>
+
+        {/* Mobile - Bouton unique */}
+        <div className="md:hidden">
+          <Button
+            variant="primary"
+            onClick={() => router.push("/login")}
+            size="sm"
+            className="h-9 px-3"
+          >
+            <LogIn size={18} />
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  /**
+   * Utilisateur CONNECTÉ - Avatar + Dropdown
+   */
+  return (
+    <div className="relative" ref={dropdownRef}>
+      {/* Avatar Button */}
+      <button
+        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+        className={clsx(
+          "flex items-center gap-2 h-10 px-3 rounded-full transition-all",
+          "hover:bg-zinc-100 dark:hover:bg-zinc-800",
+          "border border-transparent hover:border-zinc-200 dark:hover:border-zinc-700",
+          isDropdownOpen && "bg-zinc-100 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700"
+        )}
+      >
+        {/* Avatar */}
+        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-primary to-primary-dark text-white font-bold text-sm shadow-sm">
+          {user.name.charAt(0).toUpperCase()}
+        </div>
+
+        {/* Nom (Desktop uniquement) */}
+        <span className="hidden md:block text-sm font-semibold text-zinc-800 dark:text-zinc-100 max-w-[120px] truncate">
+          {user.name.split(" ")[0]}
+        </span>
+
+        {/* Chevron */}
+        <ChevronDown
+          size={16}
+          className={clsx(
+            "hidden md:block text-zinc-400 transition-transform",
+            isDropdownOpen && "rotate-180"
+          )}
+        />
+      </button>
+
+      {/* Dropdown Menu */}
+      <AnimatePresence>
+        {isDropdownOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -10, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -10, scale: 0.95 }}
+            transition={{ duration: 0.15 }}
+            className="absolute right-0 mt-2 w-64 bg-white dark:bg-zinc-900 rounded-2xl shadow-xl border border-zinc-200 dark:border-zinc-800 overflow-hidden z-50"
+          >
+            {/* Header */}
+            <div className="p-4 border-b border-zinc-100 dark:border-zinc-800 bg-gradient-to-br from-primary/5 to-transparent">
+              <div className="flex items-center gap-3">
+                <div className="flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-primary to-primary-dark text-white font-bold text-lg shadow-md">
+                  {user.name.charAt(0).toUpperCase()}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="font-bold text-zinc-900 dark:text-white truncate">
+                    {user.name}
+                  </p>
+                  <p className="text-xs text-zinc-500 dark:text-zinc-400 truncate">
+                    {user.email}
+                  </p>
+                  {user.role === "admin" && (
+                    <span className="inline-block mt-1 px-2 py-0.5 bg-primary/10 text-primary text-[10px] font-bold rounded-full uppercase">
+                      Administrateur
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Menu Items */}
+            <div className="py-2">
+              <DropdownItem
+                icon={<User size={18} />}
+                label="Mon Profil"
+                onClick={() => {
+                  router.push("/profile");
+                  setIsDropdownOpen(false);
+                }}
+              />
+              <DropdownItem
+                icon={<Settings size={18} />}
+                label="Paramètres"
+                onClick={() => {
+                  router.push("/profile#settings");
+                  setIsDropdownOpen(false);
+                }}
+              />
+            </div>
+
+            {/* Logout */}
+            <div className="border-t border-zinc-100 dark:border-zinc-800 p-2">
+              <DropdownItem
+                icon={<LogOut size={18} />}
+                label="Déconnexion"
+                onClick={handleLogout}
+                variant="danger"
+              />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
+// ============================================================================
+// DROPDOWN ITEM COMPONENT
+// ============================================================================
+
+interface DropdownItemProps {
+  icon: React.ReactNode;
+  label: string;
+  onClick: () => void;
+  variant?: "default" | "danger";
+}
+
+const DropdownItem = ({ icon, label, onClick, variant = "default" }: DropdownItemProps) => {
+  return (
+    <button
+      onClick={onClick}
+      className={clsx(
+        "w-full flex items-center gap-3 px-4 py-2.5 text-sm font-medium transition-colors",
+        variant === "default" && "text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800",
+        variant === "danger" && "text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20"
+      )}
+    >
+      <span className="opacity-70">{icon}</span>
+      <span>{label}</span>
+    </button>
+  );
+};
+</file>
+
+<file path="components/poi/POIStatusBadge.tsx">
+// components/poi/POIStatusBadge.tsx
+
+import { POIStatus } from "@/types";
+import { POI_STATUS_CONFIG } from "@/constants/poiConstants";
+import { Clock, CheckCircle2, XCircle } from "lucide-react";
+import clsx from "clsx";
+
+interface POIStatusBadgeProps {
+  status: POIStatus;
+  showIcon?: boolean;
+  showDescription?: boolean;
+  size?: "sm" | "md" | "lg";
+  className?: string;
+}
+
+const STATUS_ICONS = {
+  submitted: Clock,
+  validated: CheckCircle2,
+  rejected: XCircle,
+};
+
+const SIZE_CLASSES = {
+  sm: {
+    badge: "px-2 py-0.5 text-[10px]",
+    icon: 10,
+  },
+  md: {
+    badge: "px-3 py-1 text-xs",
+    icon: 12,
+  },
+  lg: {
+    badge: "px-4 py-1.5 text-sm",
+    icon: 14,
+  },
+};
+
+export const POIStatusBadge = ({
+  status,
+  showIcon = true,
+  showDescription = false,
+  size = "md",
+  className,
+}: POIStatusBadgeProps) => {
+  const config = POI_STATUS_CONFIG[status];
+  const Icon = STATUS_ICONS[status];
+  const sizeConfig = SIZE_CLASSES[size];
+
+  return (
+    <div className={clsx("inline-flex flex-col gap-1", className)}>
+      <div
+        className={clsx(
+          "inline-flex items-center gap-1.5 rounded-full font-bold w-fit",
+          sizeConfig.badge
+        )}
+        style={{
+          color: config.color,
+          backgroundColor: config.bgColor,
+        }}
+      >
+        {showIcon && <Icon size={sizeConfig.icon} />}
+        <span>{config.label}</span>
+      </div>
+
+      {showDescription && (
+        <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
+          {config.description}
+        </p>
+      )}
+    </div>
+  );
+};
+</file>
+
+<file path="constants/poiConstants.ts">
+// constants/poiConstants.ts
+
+import { POIStatus } from "@/types";
+
+/**
+ * Configuration des badges de statut POI
+ */
+export const POI_STATUS_CONFIG: Record<
+  POIStatus,
+  {
+    label: string;
+    color: string;
+    bgColor: string;
+    darkBgColor: string;
+    icon: string;
+    description: string;
+  }
+> = {
+  submitted: {
+    label: "En attente",
+    color: "#D97706", // text-amber-600
+    bgColor: "#FEF3C7", // bg-amber-100
+    darkBgColor: "#78350F33", // dark:bg-amber-900/20
+    icon: "⏳",
+    description: "Ce POI est en attente de validation par un administrateur",
+  },
+  validated: {
+    label: "Validé",
+    color: "#16A34A", // text-green-600
+    bgColor: "#DCFCE7", // bg-green-100
+    darkBgColor: "#14532D33", // dark:bg-green-900/20
+    icon: "✓",
+    description: "Ce POI a été validé et est visible par tous",
+  },
+  rejected: {
+    label: "Refusé",
+    color: "#DC2626", // text-red-600
+    bgColor: "#FEE2E2", // bg-red-100
+    darkBgColor: "#7F1D1D33", // dark:bg-red-900/20
+    icon: "✗",
+    description: "Ce POI a été refusé",
+  },
+};
+
+/**
+ * Messages de confirmation pour les actions admin
+ */
+export const POI_ACTION_MESSAGES = {
+  validate: {
+    confirm: "Êtes-vous sûr de vouloir valider ce point d'intérêt ?",
+    success: "Point d'intérêt validé avec succès !",
+    error: "Erreur lors de la validation du point d'intérêt",
+  },
+  reject: {
+    confirm: "Êtes-vous sûr de vouloir rejeter ce point d'intérêt ?",
+    success: "Point d'intérêt rejeté",
+    error: "Erreur lors du rejet du point d'intérêt",
+  },
+  delete: {
+    confirm: "Êtes-vous sûr de vouloir supprimer ce point d'intérêt ?",
+    success: "Point d'intérêt supprimé",
+    error: "Erreur lors de la suppression du point d'intérêt",
+  },
+};
+
+/**
+ * Délais de soumission (anti-spam)
+ */
+export const POI_SUBMISSION_LIMITS = {
+  minTimeBetweenSubmissions: 5 * 60 * 1000, // 5 minutes en ms
+  maxSubmissionsPerDay: 10,
+  maxSubmissionsPerHour: 3,
+};
+
+/**
+ * Règles de validation des données POI
+ */
+export const POI_VALIDATION_RULES = {
+  name: {
+    minLength: 3,
+    maxLength: 100,
+    pattern: /^[a-zA-ZÀ-ÿ0-9\s\-',.()]+$/,
+  },
+  description: {
+    minLength: 10,
+    maxLength: 500,
+  },
+  amenities: {
+    max: 15,
+  },
+  images: {
+    max: 5,
+    maxSize: 5 * 1024 * 1024, // 5MB
+    allowedTypes: ["image/jpeg", "image/png", "image/webp"],
+  },
+  keywords: {
+    max: 10,
+    minLength: 2,
+    maxLength: 30,
+  },
+};
+
+/**
+ * Priorités d'affichage selon le statut
+ */
+export const POI_STATUS_PRIORITY: Record<POIStatus, number> = {
+  validated: 3, // Priorité haute (affichage en premier)
+  submitted: 2, // Priorité moyenne
+  rejected: 1, // Priorité basse
+};
+</file>
+
+<file path="hooks/usePOIActions.ts">
+// hooks/usePOIActions.ts
+
+import { useState, useCallback } from "react";
+import { POI, POIValidationData, POIRejectionData } from "@/types";
+import { useAuthContext } from "@/context/AuthContext";
+
+interface UsePOIActionsOptions {
+  onSuccess?: (message: string) => void;
+  onError?: (error: string) => void;
+}
+
+/**
+ * Hook pour gérer les actions sur les POI (validation, rejet, suppression)
+ */
+export const usePOIActions = (options: UsePOIActionsOptions = {}) => {
+  const { user } = useAuthContext();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  /**
+   * Valider un POI (Admin uniquement)
+   */
+  const validatePOI = useCallback(
+    async (poi: POI): Promise<boolean> => {
+      if (!user || user.role !== "admin") {
+        const errorMsg = "Seuls les administrateurs peuvent valider des POI";
+        setError(errorMsg);
+        options.onError?.(errorMsg);
+        return false;
+      }
+
+      if (poi.status !== "submitted") {
+        const errorMsg = "Ce POI n'est pas en attente de validation";
+        setError(errorMsg);
+        options.onError?.(errorMsg);
+        return false;
+      }
+
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        const validationData: POIValidationData = {
+          poi_id: poi.poi_id,
+          validated_by: user.id,
+          validated_by_name: user.name,
+          validated_at: new Date().toISOString(),
+        };
+
+        // TODO: Appel API réel
+        const response = await fetch(`/api/pois/${poi.poi_id}/validate`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(validationData),
+        });
+
+        if (!response.ok) {
+          throw new Error("Erreur lors de la validation");
+        }
+
+        options.onSuccess?.("Point d'intérêt validé avec succès !");
+        return true;
+      } catch (err) {
+        const errorMsg = err instanceof Error ? err.message : "Erreur inconnue";
+        setError(errorMsg);
+        options.onError?.(errorMsg);
+        return false;
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [user, options]
+  );
+
+  /**
+   * Rejeter un POI (Admin uniquement)
+   */
+  const rejectPOI = useCallback(
+    async (poi: POI, reason?: string): Promise<boolean> => {
+      if (!user || user.role !== "admin") {
+        const errorMsg = "Seuls les administrateurs peuvent rejeter des POI";
+        setError(errorMsg);
+        options.onError?.(errorMsg);
+        return false;
+      }
+
+      if (poi.status !== "submitted") {
+        const errorMsg = "Ce POI n'est pas en attente de validation";
+        setError(errorMsg);
+        options.onError?.(errorMsg);
+        return false;
+      }
+
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        const rejectionData: POIRejectionData = {
+          poi_id: poi.poi_id,
+          rejected_by: user.id,
+          rejected_at: new Date().toISOString(),
+          rejection_reason: reason,
+        };
+
+        // TODO: Appel API réel
+        const response = await fetch(`/api/pois/${poi.poi_id}/reject`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(rejectionData),
+        });
+
+        if (!response.ok) {
+          throw new Error("Erreur lors du rejet");
+        }
+
+        options.onSuccess?.("Point d'intérêt rejeté");
+        return true;
+      } catch (err) {
+        const errorMsg = err instanceof Error ? err.message : "Erreur inconnue";
+        setError(errorMsg);
+        options.onError?.(errorMsg);
+        return false;
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [user, options]
+  );
+
+  /**
+   * Supprimer un POI
+   */
+  const deletePOI = useCallback(
+    async (poi: POI): Promise<boolean> => {
+      if (!user) {
+        const errorMsg = "Vous devez être connecté pour supprimer un POI";
+        setError(errorMsg);
+        options.onError?.(errorMsg);
+        return false;
+      }
+
+      // Vérifier les permissions
+      const canDelete =
+        user.role === "admin" ||
+        (poi.submitted_by === user.id && poi.status === "submitted");
+
+      if (!canDelete) {
+        const errorMsg = "Vous n'avez pas les permissions pour supprimer ce POI";
+        setError(errorMsg);
+        options.onError?.(errorMsg);
+        return false;
+      }
+
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        // TODO: Appel API réel
+        const response = await fetch(`/api/pois/${poi.poi_id}`, {
+          method: "DELETE",
+        });
+
+        if (!response.ok) {
+          throw new Error("Erreur lors de la suppression");
+        }
+
+        options.onSuccess?.("Point d'intérêt supprimé");
+        return true;
+      } catch (err) {
+        const errorMsg = err instanceof Error ? err.message : "Erreur inconnue";
+        setError(errorMsg);
+        options.onError?.(errorMsg);
+        return false;
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [user, options]
+  );
+
+  return {
+    validatePOI,
+    rejectPOI,
+    deletePOI,
+    isLoading,
+    error,
+  };
+};
+</file>
+
+<file path="services/authService.ts">
+import { User, UserRole } from "@/types";
+
+// ============================================================================
+// 1. CONFIGURATION & CONSTANTES
+// ============================================================================
+
+// Basculez ceci via .env.local : NEXT_PUBLIC_USE_MOCK=true
+const USE_MOCK_API = process.env.NEXT_PUBLIC_USE_MOCK === "true";
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api";
+const TOKEN_KEY = "navigoo_auth_token";
+const REFRESH_TOKEN_KEY = "navigoo_refresh_token";
+const USER_KEY = "navigoo_user";
+const MOCK_DELAY = 800; // Latence simulée pour l'UX
+
+// ============================================================================
+// 2. TYPES & INTERFACES
+// ============================================================================
+
+export interface LoginCredentials {
+  email: string;
+  password: string;
+}
+
+export interface SignupData {
+  name: string;
+  email: string;
+  password: string;
+  organization?: string;
+  role?: UserRole;
+}
+
+export interface AuthResponse {
+  user: User;
+  token: string;
+  refreshToken?: string;
+  expiresIn?: number;
+}
+
+export interface RefreshTokenResponse {
+  token: string;
+  expiresIn?: number;
+}
+
+// ============================================================================
+// 3. MOCK DATA (Pour le développement)
+// ============================================================================
+
+const MOCK_USERS: User[] = [
+  { id: "admin-1", name: "Super Admin", email: "admin@navigoo.com", role: "admin", organization: "Navigoo HQ", avatar: "https://i.pravatar.cc/150?u=admin" },
+  { id: "client-1", name: "Jean Client", email: "jean@test.com", role: "client", organization: "Freelance", avatar: "https://i.pravatar.cc/150?u=jean" }
+];
+
+// ============================================================================
+// 4. HELPERS INTERNES
+// ============================================================================
+
+/**
+ * Gestionnaire d'erreurs API centralisé
+ */
+export class AuthError extends Error {
+  constructor(
+    message: string,
+    public statusCode?: number,
+    public code?: string
+  ) {
+    super(message);
+    this.name = "AuthError";
+  }
+}
+
+/**
+ * Helper pour simuler une requête asynchrone (Mock)
+ */
+async function mockRequest<T>(callback: () => T): Promise<T> {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      try {
+        const result = callback();
+        resolve(result);
+      } catch (error) {
+        reject(error);
+      }
+    }, MOCK_DELAY);
+  });
+}
+
+/**
+ * Wrapper fetch réel avec gestion d'erreurs
+ */
+async function apiRequest<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
+  const token = localStorage.getItem(TOKEN_KEY);
+  
+  const config: RequestInit = {
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...(token && { Authorization: `Bearer ${token}` }),
+      ...options.headers,
+    },
+  };
+
+  try {
+    const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new AuthError(
+        errorData.message || "Une erreur est survenue",
+        response.status,
+        errorData.code
+      );
+    }
+    return response.json();
+  } catch (error) {
+    if (error instanceof AuthError) throw error;
+    throw new AuthError("Impossible de contacter le serveur.", 0, "NETWORK_ERROR");
+  }
+}
+
+/**
+ * Gestion du stockage local
+ */
+function storeAuthData(data: AuthResponse): void {
+  localStorage.setItem(TOKEN_KEY, data.token);
+  localStorage.setItem(USER_KEY, JSON.stringify(data.user));
+  if (data.refreshToken) localStorage.setItem(REFRESH_TOKEN_KEY, data.refreshToken);
+
+  // Auto-refresh logic (simplifiée pour la démo)
+  if (data.expiresIn && !USE_MOCK_API) {
+    const refreshTime = (data.expiresIn - 300) * 1000;
+    setTimeout(() => authService.refreshToken().catch(console.error), refreshTime);
+  }
+}
+
+function clearAuthData(): void {
+  localStorage.removeItem(TOKEN_KEY);
+  localStorage.removeItem(REFRESH_TOKEN_KEY);
+  localStorage.removeItem(USER_KEY);
+}
+
+// ============================================================================
+// 5. SERVICE D'AUTHENTIFICATION (HYBRIDE)
+// ============================================================================
+
+export const authService = {
+  
+  /**
+   * Login : Hybride Mock/Réel
+   */
+  async login(credentials: LoginCredentials): Promise<AuthResponse> {
+    // --- MODE MOCK ---
+    if (USE_MOCK_API) {
+      return mockRequest(() => {
+        if (credentials.password.length < 4) {
+          throw new AuthError("Mot de passe trop court (min 4 caractères)", 400);
+        }
+
+        let user = MOCK_USERS.find(u => u.email === credentials.email);
+        
+        // Auto-creation pour faciliter les tests si l'user n'existe pas dans le mock
+        if (!user) {
+          const role = credentials.email.includes("admin") ? "admin" : "client";
+          user = {
+            id: `mock-${Date.now()}`,
+            name: credentials.email.split('@')[0],
+            email: credentials.email,
+            role: role as UserRole,
+            organization: "Nouvel Utilisateur Mock"
+          };
+          MOCK_USERS.push(user); // On l'ajoute temporairement en mémoire
+        }
+
+        const response: AuthResponse = {
+          user,
+          token: `mock-jwt-token-${user.id}`,
+          refreshToken: `mock-refresh-${user.id}`,
+          expiresIn: 3600
+        };
+        
+        storeAuthData(response);
+        return response;
+      });
+    }
+
+    // --- MODE RÉEL ---
+    const response = await apiRequest<AuthResponse>("/auth/login", {
+      method: "POST",
+      body: JSON.stringify(credentials),
+    });
+    storeAuthData(response);
+    return response;
+  },
+
+  /**
+   * Inscription : Hybride Mock/Réel
+   */
+  async signup(userData: SignupData): Promise<AuthResponse> {
+    // --- MODE MOCK ---
+    if (USE_MOCK_API) {
+      return mockRequest(() => {
+        if (MOCK_USERS.some(u => u.email === userData.email)) {
+          throw new AuthError("Cet email est déjà utilisé", 409);
+        }
+
+        const newUser: User = {
+          id: `mock-${Date.now()}`,
+          name: userData.name,
+          email: userData.email,
+          role: userData.role || "client",
+          organization: userData.organization || "Ma Société",
+        };
+        
+        MOCK_USERS.push(newUser);
+
+        const response: AuthResponse = {
+          user: newUser,
+          token: `mock-jwt-token-${newUser.id}`,
+          refreshToken: `mock-refresh-${newUser.id}`,
+          expiresIn: 3600
+        };
+
+        storeAuthData(response);
+        return response;
+      });
+    }
+
+    // --- MODE RÉEL ---
+    const response = await apiRequest<AuthResponse>("/auth/signup", {
+      method: "POST",
+      body: JSON.stringify(userData),
+    });
+    storeAuthData(response);
+    return response;
+  },
+
+  /**
+   * Déconnexion
+   */
+  async logout(): Promise<void> {
+    try {
+      if (!USE_MOCK_API) {
+        await apiRequest("/auth/logout", { method: "POST" });
+      }
+      // En mock, on ne fait rien côté serveur, juste le cleanup local
+    } catch (error) {
+      console.error("Logout error", error);
+    } finally {
+      clearAuthData();
+    }
+  },
+
+  /**
+   * Mise à jour du profil utilisateur
+   */
+  async updateProfile(data: Partial<Omit<User, "id" | "email" | "role">>): Promise<User> {
+    // 1. MODE MOCK
+    if (USE_MOCK_API) {
+      return mockRequest(() => {
+        const storedString = localStorage.getItem(USER_KEY);
+        if (!storedString) throw new AuthError("Utilisateur non connecté", 401);
+
+        const currentUser = JSON.parse(storedString) as User;
+        
+        // Fusion des données
+        const updatedUser = { ...currentUser, ...data };
+        
+        // Mise à jour du Mock Array (pour persistance session mock)
+        const index = MOCK_USERS.findIndex(u => u.id === currentUser.id);
+        if (index !== -1) {
+            MOCK_USERS[index] = { ...MOCK_USERS[index], ...data };
+        }
+
+        // Mise à jour du stockage local
+        localStorage.setItem(USER_KEY, JSON.stringify(updatedUser));
+        
+        return updatedUser;
+      });
+    }
+
+    // 2. MODE API RÉEL
+    const updatedUser = await apiRequest<User>("/auth/profile", {
+      method: "PATCH",
+      body: JSON.stringify(data),
+    });
+
+    // Mise à jour du cache local avec la réponse 'fraîche' du serveur
+    localStorage.setItem(USER_KEY, JSON.stringify(updatedUser));
+    
+    return updatedUser;
+  },
+
+  /**
+   * Rafraîchir le token
+   */
+  async refreshToken(): Promise<string> {
+    const refreshToken = localStorage.getItem(REFRESH_TOKEN_KEY);
+    if (!refreshToken) throw new AuthError("No refresh token", 401);
+
+    // --- MODE MOCK ---
+    if (USE_MOCK_API) {
+      return mockRequest(() => {
+        const newToken = `mock-new-token-${Date.now()}`;
+        localStorage.setItem(TOKEN_KEY, newToken);
+        return newToken;
+      });
+    }
+
+    // --- MODE RÉEL ---
+    const response = await apiRequest<RefreshTokenResponse>("/auth/refresh", {
+      method: "POST",
+      body: JSON.stringify({ refreshToken }),
+    });
+    localStorage.setItem(TOKEN_KEY, response.token);
+    return response.token;
+  },
+
+  /**
+   * Récupérer l'utilisateur courant (Persistance au refresh)
+   */
+  async getCurrentUser(): Promise<User | null> {
+    const cachedUser = localStorage.getItem(USER_KEY);
+    const token = localStorage.getItem(TOKEN_KEY);
+
+    if (!token) return null;
+
+    // Stratégie "Cache First" pour performance immédiate
+    if (cachedUser) {
+      // Optionnel: Background validation si nécessaire
+      return JSON.parse(cachedUser);
+    }
+
+    try {
+      // Si pas de cache mais un token, on tente de récupérer le profil
+      
+      // --- MODE MOCK ---
+      if (USE_MOCK_API) {
+        // En mock, on "décode" faussement le token ou on renvoie le premier mock
+        return mockRequest(() => MOCK_USERS[0]); 
+      }
+
+      // --- MODE RÉEL ---
+      const user = await apiRequest<User>("/auth/me");
+      localStorage.setItem(USER_KEY, JSON.stringify(user));
+      return user;
+    } catch (error) {
+      clearAuthData();
+      return null;
+    }
+  },
+
+  isAuthenticated(): boolean {
+    return !!localStorage.getItem(TOKEN_KEY);
+  },
+
+  getToken(): string | null {
+    return localStorage.getItem(TOKEN_KEY);
+  }
+};
+</file>
+
+<file path="app/login/page.tsx">
+"use client";
+
+import { useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/Button";
+import { FormInput } from "@/components/ui/form/FormInput";
+import { MapPinHouse, Mail, Lock, ArrowRight } from "lucide-react";
+import Link from "next/link";
+
+export default function LoginPage() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { login, isLoading } = useAuth();
+  const router = useRouter();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await login({email, password});
+      router.push("/");
+    } catch (error) {
+      alert("Erreur de connexion");
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-zinc-50 dark:bg-black flex items-center justify-center p-4">
+      <div className="w-full max-w-md bg-white dark:bg-zinc-900 rounded-3xl shadow-xl p-8 border border-zinc-200 dark:border-zinc-800">
+        <div className="flex flex-col items-center mb-8">
+          <div className="bg-primary/10 p-4 rounded-2xl mb-4">
+            <MapPinHouse className="text-primary" size={40} />
+          </div>
+          <h1 className="text-2xl font-bold text-zinc-900 dark:text-white">Bon retour !</h1>
+          <p className="text-zinc-500 dark:text-zinc-400 text-sm mt-2 text-center">
+            Connectez-vous pour accéder à vos points d&apos;intérêt et partager vos découvertes.
+          </p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <FormInput
+            label="Email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="votre@email.com"
+            icon={<Mail size={18} />}
+            required
+          />
+          <FormInput
+            label="Mot de passe"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="••••••••"
+            icon={<Lock size={18} />}
+            required
+          />
+
+          <Button
+            type="submit"
+            variant="primary"
+            className="w-full h-12 text-base font-bold"
+            disabled={isLoading}
+          >
+            {isLoading ? "Connexion..." : "Se connecter"}
+            {!isLoading && <ArrowRight size={18} className="ml-2" />}
+          </Button>
+        </form>
+
+        <div className="mt-8 pt-6 border-t border-zinc-100 dark:border-zinc-800 text-center text-sm">
+          <span className="text-zinc-500">Pas encore de compte ?</span>{" "}
+          <Link href="/signup" className="text-primary font-bold hover:underline">
+            S'inscrire
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="app/profile/page.tsx">
+"use client";
+
+import { useState, useEffect } from "react";
+import { useAuth } from "@/hooks/useAuth";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/Button";
+import { FormInput } from "@/components/ui/form/FormInput";
+import { User, Mail, Building, ArrowLeft, Save, LogOut, Shield } from "lucide-react";
+
+export default function ProfilePage() {
+  const { user, isAuthenticated, isLoading, updateProfile, logout } = useAuth();
+  const router = useRouter();
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [organization, setOrganization] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
+
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      router.push("/login");
+    }
+  }, [isAuthenticated, isLoading, router]);
+
+  useEffect(() => {
+    if (user) {
+      setName(user.name);
+      setEmail(user.email);
+      setOrganization(user.organization || "");
+    }
+  }, [user]);
+
+  const handleSave = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSaving(true);
+    try {
+      await updateProfile({ name, organization, avatar });
+      alert("Profil mis à jour !");
+    } catch (error) {
+      alert("Erreur lors de la mise à jour");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleLogout = () => {
+    logout();
+    router.push("/");
+  };
+
+  if (isLoading || !isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-zinc-50 dark:bg-black flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-zinc-50 dark:bg-black p-4 md:p-8">
+      <div className="max-w-2xl mx-auto">
+        <div className="mb-8 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => router.push("/")}
+              className="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-xl transition-colors"
+            >
+              <ArrowLeft size={24} className="text-zinc-600 dark:text-zinc-400" />
+            </button>
+            <h1 className="text-2xl font-bold text-zinc-900 dark:text-white">Mon Profil</h1>
+          </div>
+          <Button variant="secondary" onClick={handleLogout} className="text-red-500 hover:text-red-600 border-red-200 hover:bg-red-50">
+            <LogOut size={18} className="mr-2" /> Déconnexion
+          </Button>
+        </div>
+
+        <div className="bg-white dark:bg-zinc-900 rounded-3xl shadow-sm border border-zinc-200 dark:border-zinc-800 overflow-hidden">
+          <div className="p-8 bg-primary/5 border-b border-zinc-200 dark:border-zinc-800 flex items-center gap-6">
+            <div className="w-20 h-20 rounded-full bg-primary/20 flex items-center justify-center text-primary text-3xl font-bold border-4 border-white dark:border-zinc-900 shadow-sm">
+              {user?.name.charAt(0).toUpperCase()}
+            </div>
+            <div>
+              <h2 className="text-xl font-bold text-zinc-900 dark:text-white">{user?.name}</h2>
+              <p className="text-zinc-500 flex items-center gap-2 mt-1">
+                <Shield size={14} className="text-primary" />
+                Rôle : <span className="font-semibold uppercase text-xs tracking-wider">{user?.role}</span>
+              </p>
+            </div>
+          </div>
+
+          <form onSubmit={handleSave} className="p-8 space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <FormInput
+                label="Nom complet"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                icon={<User size={18} />}
+                required
+              />
+              <FormInput
+                label="Email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                icon={<Mail size={18} />}
+                required
+              />
+              <FormInput
+                label="Organisation"
+                value={organization}
+                onChange={(e) => setOrganization(e.target.value)}
+                icon={<Building size={18} />}
+              />
+            </div>
+
+            <div className="pt-4 flex justify-end">
+              <Button
+                type="submit"
+                variant="primary"
+                className="px-8 h-12 font-bold shadow-lg shadow-primary/20"
+                disabled={isSaving}
+              >
+                {isSaving ? "Enregistrement..." : (
+                  <>
+                    <Save size={18} className="mr-2" /> Enregistrer les modifications
+                  </>
+                )}
+              </Button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="app/signup/page.tsx">
+"use client";
+
+import { useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/Button";
+import { FormInput } from "@/components/ui/form/FormInput";
+import { FormSelect } from "@/components/ui/form/FormSelect";
+import { MapPinHouse, User, Mail, Lock, Building, ArrowRight } from "lucide-react";
+import Link from "next/link";
+
+export default function SignupPage() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [organization, setOrganization] = useState("");
+  const { signup, isLoading } = useAuth();
+  const router = useRouter();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await signup({
+        name,
+        email,
+        role: "client",
+        organization,
+        password,
+      });
+      router.push("/");
+    } catch (error) {
+      alert("Erreur lors de l'inscription");
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-zinc-50 dark:bg-black flex items-center justify-center p-4">
+      <div className="w-full max-w-md bg-white dark:bg-zinc-900 rounded-3xl shadow-xl p-8 border border-zinc-200 dark:border-zinc-800">
+        <div className="flex flex-col items-center mb-8">
+          <div className="bg-primary/10 p-4 rounded-2xl mb-4">
+            <MapPinHouse className="text-primary" size={40} />
+          </div>
+          <h1 className="text-2xl font-bold text-zinc-900 dark:text-white">Créer un compte</h1>
+          <p className="text-zinc-500 dark:text-zinc-400 text-sm mt-2 text-center">
+            Rejoignez la communauté Navigoo et commencez à explorer.
+          </p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <FormInput
+            label="Nom complet"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Jean Dupont"
+            icon={<User size={18} />}
+            required
+          />
+          <FormInput
+            label="Email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="votre@email.com"
+            icon={<Mail size={18} />}
+            required
+          />
+          <FormInput
+            label="Organisation"
+            value={organization}
+            onChange={(e) => setOrganization(e.target.value)}
+            placeholder="Nom de votre organisation"
+            icon={<Building size={18} />}
+            required
+          />
+          <FormInput
+            label="Mot de passe"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="••••••••"
+            icon={<Lock size={18} />}
+            required
+          />
+
+          <Button
+            type="submit"
+            variant="primary"
+            className="w-full h-12 text-base font-bold mt-4"
+            disabled={isLoading}
+          >
+            {isLoading ? "Création..." : "S'inscrire"}
+            {!isLoading && <ArrowRight size={18} className="ml-2" />}
+          </Button>
+        </form>
+
+        <div className="mt-8 pt-6 border-t border-zinc-100 dark:border-zinc-800 text-center text-sm">
+          <span className="text-zinc-500">Déjà un compte ?</span>{" "}
+          <Link href="/login" className="text-primary font-bold hover:underline">
+            Se connecter
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="app/globals.css">
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #9400D3;
+  --color-primary-dark: #7200a3;
+  --color-primary-light: #b64dff;
+  --color-background: #ffffff;
+  --color-foreground: #171717;
+  
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  overflow: hidden; /* Empêche le scroll global pour une expérience app map */
+}
+
+/* Custom Scrollbar pour le look moderne */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #9475aa;
+}
+
+@media print {
+  body {
+    background-color: white;
+  }
+  /* On cache tout sauf la carte */
+  .fixed, .absolute:not(.mapboxgl-map):not(.maplibregl-map), header, aside {
+    display: none !important;
+  }
+  
+  /* On s'assure que la carte prend tout */
+  main {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .maplibregl-map {
+      width: 100% !important;
+      height: 100% !important;
+  }
+}
+</file>
+
+<file path="components/navigation/CategoryBar.tsx">
+import { clsx } from "clsx";
+import { CATEGORIES } from "@/data/categories";
+
+interface CategoryBarProps {
+  onSelect: (cat: string) => void;
+  selected: string;
+}
+
+export const CategoryBar = ({ onSelect, selected }: CategoryBarProps) => {
+  return (
+    <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide py-2 px-1 h-full mask-gradient-right">
+      {CATEGORIES.map((cat) => (
+        <button
+          key={cat.id}
+          onClick={() => onSelect(cat.id)}
+          className={clsx(
+            "flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium transition-all shadow-sm border whitespace-nowrap bg-white dark:bg-zinc-800",
+            selected === cat.id
+              ? "bg-zinc-900 text-white dark:bg-white dark:text-purple-400 border-transparent shadow-md" // Style "actif" google noir/blanc
+              : "text-zinc-700 dark:text-zinc-200 border-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-700 dark:border-zinc-700"
+          )}
+        >
+          {cat.icon}
+          <span>{cat.label}</span>
+        </button>
+      ))}
+    </div>
+  );
+};
+</file>
+
+<file path="components/navigation/MobileNavbar.tsx">
+"use client";
+
+import { Map, Bookmark, Plus, Route, Menu } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { clsx } from "clsx";
+
+interface MobileNavBarProps {
+  currentView: "saved" | "recent" | "trips" | "mypois" | null;
+  onViewChange: (view: "saved" | "recent" | "trips" | "mypois") => void;
+  onOpenSidebar: () => void;
+  onResetView: () => void;
+}
+
+export const MobileNavBar = ({ 
+  currentView, 
+  onViewChange, 
+  onOpenSidebar,
+  onResetView 
+}: MobileNavBarProps) => {
+  const router = useRouter();
+
+  return (
+    <div className="md:hidden fixed bottom-0 left-0 w-full z-50 px-4 pb-4 pt-0">
+      {/* Container Flottant pour effet "Island" ou simple barre fixée */}
+      <nav className="bg-white/95 dark:bg-zinc-900/95 backdrop-blur-lg border border-zinc-200 dark:border-zinc-800 rounded-2xl shadow-xl shadow-zinc-200/50 dark:shadow-black/50 h-[72px] flex items-center justify-around px-2">
+        
+        {/* 1. ACCUEIL / CARTE */}
+        <NavItem 
+          label="Carte" 
+          icon={<Map size={24} />} 
+          isActive={currentView === null}
+          onClick={onResetView}
+        />
+
+        {/* 2. FAVORIS */}
+        <NavItem 
+          label="Favoris" 
+          icon={<Bookmark size={24} />} 
+          isActive={currentView === "saved"}
+          onClick={() => onViewChange("saved")}
+        />
+
+        {/* 3. AJOUTER (Bouton Central Highlight) */}
+        <button 
+          onClick={() => router.push("/add-poi")}
+          className="relative -top-6 flex flex-col items-center justify-center w-14 h-14 bg-primary text-white rounded-full shadow-lg shadow-primary/40 transform active:scale-95 transition-all border-4 border-zinc-50 dark:border-zinc-950"
+        >
+          <Plus size={32} />
+        </button>
+
+        {/* 4. TRAJETS */}
+        <NavItem 
+          label="Trajets" 
+          icon={<Route size={24} />} 
+          isActive={currentView === "trips"}
+          onClick={() => onViewChange("trips")}
+        />
+
+        {/* 5. MENU (Ouvre la Sidebar existante) */}
+        <NavItem 
+          label="Menu" 
+          icon={<Menu size={24} />} 
+          isActive={false} // Le menu est un tiroir, pas un état actif de la nav
+          onClick={onOpenSidebar}
+        />
+
+      </nav>
+    </div>
+  );
+};
+
+// Sous-composant pour les boutons classiques
+const NavItem = ({ label, icon, isActive, onClick }: any) => (
+  <button 
+    onClick={onClick}
+    className={clsx(
+      "flex flex-col items-center justify-center w-16 gap-1 transition-colors",
+      isActive 
+        ? "text-primary font-bold" 
+        : "text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200"
+    )}
+  >
+    <div className={clsx("transition-transform", isActive && "scale-110")}>
+      {icon}
+    </div>
+    <span className="text-[10px] font-medium">{label}</span>
+  </button>
+);
+</file>
+
+<file path="components/navigation/SearchInput.tsx">
+import { Search, Menu, X, ArrowRight, History, MapPin, Navigation2 } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import clsx from "clsx";
+import { POI } from "@/types";
+
+interface SearchInputProps {
+  onMenuClick: () => void;
+  className?: string;
+  pois: POI[]; // Tous les POIs pour l'autocomplete
+  onSearch: (query: string) => void;
+  onSelectResult: (poi: POI) => void;
+  onLocateMe: () => void; // Nouvelle prop
+  recentSearches: string[];
+  recentPois: POI[];
+}
+
+export const SearchInput = ({ 
+  onMenuClick, 
+  className, 
+  pois, 
+  onLocateMe,
+  onSearch, 
+  onSelectResult,
+  recentSearches, 
+  recentPois 
+}: SearchInputProps) => {
+  const [isFocused, setIsFocused] = useState(false);
+  const [query, setQuery] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // Filtrer les POIs pour l'autocomplétion (max 5 suggestions)
+  const suggestions = query.length > 0 
+    ? pois.filter(p => p.poi_name.toLowerCase().includes(query.toLowerCase())).slice(0, 5)
+    : [];
+
+  const handleSearchSubmit = (e?: React.FormEvent) => {
+    e?.preventDefault();
+    onSearch(query);
+    setIsFocused(false);
+    inputRef.current?.blur();
+  };
+
+  const handleSelectPoi = (poi: POI) => {
+    setQuery(poi.poi_name);
+    onSelectResult(poi); // Zoom sur la carte et ouvre details
+    setIsFocused(false);
+  };
+
+  return (
+    <div className={clsx("relative z-50", className)}>
+            <form 
+        onSubmit={handleSearchSubmit}
+        className={clsx(
+          "flex items-center bg-white dark:bg-zinc-800 h-11 border border-zinc-200 dark:border-zinc-700 transition-shadow",
+          isFocused ? "rounded-t-[24px] rounded-b-none shadow-lg border-b-0" : "rounded-full shadow-sm hover:shadow-md"
+        )}
+      >
+        <button 
+          type="button"
+          onClick={onMenuClick}
+          className="pl-3 pr-2 text-zinc-500 hover:text-black dark:text-zinc-400 dark:hover:text-white"
+        >
+          {isFocused ? <Search size={20} /> : <Menu size={20} />}
+        </button>
+
+        <input 
+          ref={inputRef}
+          type="text" 
+          placeholder="Rechercher ici..."
+          className="flex-1 bg-transparent border-none outline-none text-[15px] text-zinc-900 dark:text-zinc-100 px-2 truncate font-normal"
+          value={query}
+          onFocus={() => setIsFocused(true)}
+          onChange={(e) => {
+            setQuery(e.target.value);
+            if (e.target.value === "") onSearch("");
+          }}
+        />
+
+        <div className="flex items-center gap-1 pr-1.5">
+          {query && (
+            <button 
+              type="button" 
+              onClick={() => { setQuery(""); onSearch(""); }} 
+              className="p-2 text-zinc-500 hover:text-black"
+            >
+              <X size={18} />
+            </button>
+          )}
+          
+          <div className="h-6 w-px bg-zinc-300 dark:bg-zinc-600 mx-1"></div>
+          
+          {/* BOUTON LOCALISATION (Flèche Violette) */}
+          <button 
+            type="button" 
+            onClick={onLocateMe}
+            className="p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-700 rounded-full group transition-colors"
+            title="Me localiser"
+          >
+             <div className="w-7 h-7 bg-primary flex items-center justify-center rounded-full text-white shadow-sm group-hover:scale-105 transition-transform">
+                <Navigation2 size={14} className="-rotate-45" fill="currentColor" />
+             </div>
+          </button>
+        </div>
+      </form>
+
+      {/* --- MENU DÉROULANT --- */}
+      {isFocused && (
+        <>
+          <div 
+            className="fixed inset-0 bg-transparent z-[-1]" 
+            onClick={() => setIsFocused(false)} 
+          />
+          <div className="absolute top-full left-0 w-full bg-white dark:bg-zinc-800 rounded-b-[24px] shadow-lg border-t-0 border border-zinc-200 dark:border-zinc-700 pb-2 overflow-hidden">
+             
+             {/* CAS 1 : SUGGESTIONS AUTOCOMPLÉTION (Recherche active) */}
+             {query.length > 0 && (
+                <div className="pt-2">
+                  {suggestions.length > 0 ? (
+                    suggestions.map(poi => (
+                      <SuggestionItem 
+                        key={poi.poi_id}
+                        icon={<MapPin size={18} />} 
+                        title={poi.poi_name} 
+                        subtitle={poi.address_city} 
+                        onClick={() => handleSelectPoi(poi)}
+                        isLocation
+                      />
+                    ))
+                  ) : (
+                    <div className="px-4 py-3 text-sm text-zinc-500 italic">Aucun résultat trouvé</div>
+                  )}
+                </div>
+             )}
+
+             {/* CAS 2 : HISTORIQUE (Champ vide) */}
+             {query.length === 0 && (
+                <div className="pt-1">
+                  <div className="px-4 py-2 text-xs font-semibold text-zinc-400 uppercase tracking-wider">Récents</div>
+                  
+                  {/* 3 Dernières Recherches (String) */}
+                  {recentSearches.map((term, i) => (
+                    <SuggestionItem 
+                      key={`hist-${i}`}
+                      icon={<History size={18} />} 
+                      title={term} 
+                      onClick={() => { setQuery(term); onSearch(term); setIsFocused(false); }}
+                    />
+                  ))}
+
+                  {/* 2 Derniers POIs Vus (Objets) */}
+                  {recentPois.map((poi) => (
+                    <SuggestionItem 
+                      key={`recent-poi-${poi.poi_id}`}
+                      icon={<Navigation2 size={18} className="text-primary" />} 
+                      title={poi.poi_name} 
+                      subtitle={`${poi.poi_category} • Consulté récemment`}
+                      onClick={() => handleSelectPoi(poi)}
+                    />
+                  ))}
+                </div>
+             )}
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
+
+// Item générique de la liste
+const SuggestionItem = ({ icon, title, subtitle, onClick, isLocation }: any) => (
+  <div 
+    onClick={onClick}
+    className="flex items-center gap-4 py-3 px-4 hover:bg-zinc-50 dark:hover:bg-zinc-700 cursor-pointer transition-colors"
+  >
+    <div className={clsx(
+      "w-9 h-9 min-w-9 rounded-full flex items-center justify-center",
+      isLocation ? "bg-white border border-zinc-200" : "bg-zinc-100 dark:bg-zinc-900"
+    )}>
+      <span className="text-zinc-500 dark:text-zinc-400">{icon}</span>
+    </div>
+    <div className="flex flex-col overflow-hidden">
+      <span className={clsx("text-[15px] truncate font-medium text-zinc-800 dark:text-zinc-100")}>
+        {title}
+      </span>
+      {subtitle && <span className="text-zinc-500 text-xs truncate">{subtitle}</span>}
+    </div>
+  </div>
+);
+</file>
+
+<file path="components/navigation/TopLayout.tsx">
+"use client";
+
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { SearchInput } from "./SearchInput";
+import { CategoryBar } from "./CategoryBar";
+import { POI } from "@/types";
+// Import du hook auth existant
+import { useAuth } from "@/hooks/useAuth"; 
+// Icônes
+import { LogIn, User as UserIcon, Loader2, LayoutGrid } from "lucide-react";
+
+interface TopLayoutProps {
+  onToggleSidebar: () => void;
+  allPois: POI[];
+  selectedCategory: string;
+  onSelectCategory: (cat: string) => void;
+  onSearch: (query: string) => void;
+  onSelectResult: (poi: POI) => void;
+  onLocateMe: () => void;
+  recentSearches: string[];
+  recentPois: POI[];
+}
+
+export const TopLayout = ({ 
+  onToggleSidebar, 
+  allPois,
+  selectedCategory,
+  onSelectCategory,
+  onSearch,
+  onLocateMe,
+  onSelectResult,
+  recentSearches,
+  recentPois
+}: TopLayoutProps) => {
+
+  // Récupération de l'état global
+  const { user, isLoading } = useAuth();
+  const router = useRouter();
+
+  // Helper pour obtenir les initiales
+  const getInitials = (name: string) => {
+    return name ? name.charAt(0).toUpperCase() : "U";
+  };
+
+  return (
+    <div className="absolute top-0 left-0 w-full z-40 bg-transparent p-2 md:p-3 pointer-events-none flex items-start gap-2">
+      
+      {/* --- BLOC 1 : RECHERCHE --- */}
+      <div className="pointer-events-auto min-w-[300px] md:min-w-[340px] max-w-[420px] shrink-0 transition-all duration-300">
+        <SearchInput 
+          onMenuClick={onToggleSidebar}
+          pois={allPois}
+          onSearch={onSearch}
+          onSelectResult={onSelectResult}
+          onLocateMe={onLocateMe}
+          recentSearches={recentSearches}
+          recentPois={recentPois}
+        />
+      </div>
+
+      {/* --- BLOC 2 : CATÉGORIES + AUTH --- */}
+      <div className="flex-1 flex items-center gap-2 min-w-0 pointer-events-auto pl-2">
+        
+        {/* Catégories - Cachées sur mobile si l'écran est trop petit */}
+        <div className="flex-1 min-w-0 hidden md:block">
+           <CategoryBar 
+             selected={selectedCategory} 
+             onSelect={onSelectCategory} 
+           />
+        </div>
+
+        {/* --- ZONE D'ACTION UTILISATEUR --- */}
+        <div className="shrink-0 ml-auto flex items-center gap-2">
+          
+          {/* Optionnel: Bouton App Launcher (Style Google) */}
+          <button className="hidden lg:flex items-center justify-center w-10 h-10 bg-white dark:bg-zinc-800 rounded-full shadow-md text-zinc-600 dark:text-zinc-300 hover:bg-gray-50 transition-colors">
+            <LayoutGrid size={20} />
+          </button>
+
+          {/* LOGIQUE D'AFFICHAGE AUTH */}
+          {isLoading ? (
+            // CAS 1: CHARGEMENT (Skeleton pour éviter le layout shift)
+            <div className="h-10 w-10 md:w-28 bg-white dark:bg-zinc-800 rounded-full shadow-md flex items-center justify-center animate-pulse">
+               <Loader2 className="w-5 h-5 text-zinc-400 animate-spin" />
+            </div>
+          ) : user ? (
+            // CAS 2: CONNECTÉ -> AVATAR
+            <button 
+              onClick={() => router.push("/profile")}
+              className="group relative flex items-center gap-2 pl-1 pr-1 md:pr-3 h-10 bg-white dark:bg-zinc-800 rounded-full shadow-md border border-transparent hover:border-zinc-200 transition-all"
+            >
+              {/* Cercle Avatar */}
+              <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center text-blue-700 dark:text-blue-200 font-bold border-2 border-white dark:border-zinc-700 shadow-sm">
+                 {getInitials(user.name)}
+              </div>
+              
+              {/* Nom (visible sur Desktop uniquement) */}
+              <div className="hidden md:flex flex-col items-start mr-1">
+                <span className="text-sm font-semibold text-zinc-800 dark:text-zinc-100 leading-none max-w-[80px] truncate">
+                  {user.name}
+                </span>
+                <span className="text-[10px] text-zinc-500 font-medium capitalize">
+                  {user.role}
+                </span>
+              </div>
+            </button>
+          ) : (
+            // CAS 3: NON CONNECTÉ -> BOUTON D'ACTION (Call to Action)
+            <Link href="/login">
+              <div className="h-10 px-4 md:px-5 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-md flex items-center gap-2 transition-transform active:scale-95">
+                <LogIn size={18} strokeWidth={2.5} />
+                <span className="hidden md:inline font-semibold text-sm">
+                  Connexion
+                </span>
+              </div>
+            </Link>
+          )}
+
+        </div>
+      </div>
+    </div>
+  );
+};
+</file>
+
+<file path="components/sidebar/DirectionSidebar.tsx">
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { X, ArrowUpDown, Car, PersonStanding, Bike, Loader2, Navigation, CircleDot, MapPin, Clock } from "lucide-react";
+import { POI, Location, TransportMode } from "@/types";
+import { clsx } from "clsx";
+import { getCategoryConfig } from "@/data/categories";
+
+interface DirectionsSidebarProps {
+  originPoi: POI | null;      // Si null = "Votre position"
+  destinationPoi: POI;        // Le POI qu'on voulait visiter
+  userLocation: Location | null;
+  isOpen: boolean;
+  onClose: () => void;
+  onCalculateRoute: (mode: TransportMode) => void;
+  routeStats: { distance: number; duration: number } | null;
+  isLoadingRoute: boolean;
+  activeMode: TransportMode;
+}
+
+export const DirectionsSidebar = ({
+  originPoi,
+  destinationPoi,
+  userLocation,
+  isOpen,
+  onClose,
+  onCalculateRoute,
+  routeStats,
+  isLoadingRoute,
+  activeMode
+}: DirectionsSidebarProps) => {
+
+  const formatTime = (seconds: number) => {
+    if (seconds < 60) return "1 min";
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    if (hours > 0) return `${hours} h ${minutes % 60} min`;
+    return `${minutes} min`;
+  };
+
+  const formatDist = (meters: number) => {
+    if (meters < 1000) return `${Math.round(meters)} m`;
+    return `${(meters / 1000).toFixed(1)} km`;
+  };
+
+  return (
+    <motion.div
+      initial={{ x: "-100%" }}
+      animate={{ x: isOpen ? "0%" : "-100%" }}
+      exit={{ x: "-100%" }}
+      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+      className="fixed top-0 left-0 h-full w-[400px] bg-white dark:bg-zinc-900 shadow-2xl z-[60] flex flex-col border-r border-zinc-200 dark:border-zinc-800 font-sans"
+    >
+      {/* --- HEADER --- */}
+      <div className="bg-primary px-4 py-4 shadow-md text-white z-10">
+        
+        {/* Navigation Modes */}
+        <div className="flex justify-between items-center mb-4 px-2">
+            <ModeButton 
+              icon={<Car size={20} />} 
+              mode="driving" 
+              active={activeMode === "driving"} 
+              onClick={() => onCalculateRoute("driving")} 
+            />
+            {/* On ne montre Moto/Vélo que symboliquement pour le design Navigoo, API "cycling" utilisé */}
+            <ModeButton 
+              icon={<Bike size={20} />} 
+              mode="cycling" 
+              active={activeMode === "cycling"} 
+              onClick={() => onCalculateRoute("cycling")} 
+            />
+            
+            {/* Marche à pied (si dispo ou si active) */}
+            {(!routeStats || routeStats.distance < 5000 || activeMode === "walking") && (
+              <ModeButton 
+                icon={<PersonStanding size={20} />} 
+                mode="walking" 
+                active={activeMode === "walking"} 
+                onClick={() => onCalculateRoute("walking")} 
+              />
+            )}
+            
+            <button onClick={onClose} className="p-2 bg-white/20 hover:bg-white/30 rounded-full transition-colors ml-auto">
+                <X size={20} />
+            </button>
+        </div>
+
+        {/* Input Fields Box */}
+        <div className="bg-white dark:bg-zinc-800 rounded-lg p-3 shadow-inner flex gap-3 text-zinc-800 dark:text-zinc-200">
+           
+           {/* Visual Indicators (Dot Line) */}
+           <div className="flex flex-col items-center pt-2 gap-1 w-6">
+              <CircleDot size={14} className="text-blue-500" />
+              <div className="flex-1 w-0.5 border-l-2 border-dotted border-zinc-300 dark:border-zinc-600 my-1"></div>
+              <MapPin size={14} className="text-red-500 fill-red-500" />
+           </div>
+
+           {/* Text Inputs */}
+           <div className="flex-1 flex flex-col gap-3">
+              <div className="h-8 flex items-center border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-900 rounded px-3 text-sm truncate">
+                  {originPoi ? originPoi.poi_name : (userLocation ? "Votre position" : "Sélectionner un départ")}
+              </div>
+              <div className="h-8 flex items-center border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-900 rounded px-3 text-sm font-semibold truncate">
+                  {destinationPoi.poi_name}
+              </div>
+           </div>
+
+           {/* Swap Button */}
+           <div className="flex items-center">
+              <button className="p-1 hover:bg-zinc-100 dark:hover:bg-zinc-700 rounded text-zinc-400">
+                  <ArrowUpDown size={16} />
+              </button>
+           </div>
+        </div>
+      </div>
+
+      {/* --- RESULTS BODY --- */}
+      <div className="flex-1 overflow-y-auto bg-zinc-50 dark:bg-black p-2">
+        
+        {isLoadingRoute ? (
+           <div className="flex flex-col items-center justify-center h-40 gap-3 text-zinc-500">
+               <Loader2 size={32} className="animate-spin text-primary" />
+               <p className="text-sm">Calcul du meilleur itinéraire...</p>
+           </div>
+        ) : routeStats ? (
+            <div className="space-y-2 mt-2">
+                {/* Resultat Principal */}
+                <div className="bg-white dark:bg-zinc-900 p-4 rounded-xl shadow-sm border border-zinc-200 dark:border-zinc-800 hover:border-primary transition-colors cursor-pointer group">
+                   <div className="flex justify-between items-start">
+                      <div>
+                         <div className="text-2xl font-bold text-green-600 dark:text-green-500">
+                             {formatTime(routeStats.duration)}
+                         </div>
+                         <div className="flex items-center gap-2 text-zinc-500 dark:text-zinc-400 text-sm font-medium mt-1">
+                             <span>{formatDist(routeStats.distance)}</span>
+                             <span>•</span>
+                             <span>Sans embouteillage</span>
+                         </div>
+                      </div>
+                      <div className="text-zinc-300 group-hover:text-primary">
+                          {activeMode === "driving" && <Car size={24} />}
+                          {activeMode === "walking" && <PersonStanding size={24} />}
+                          {activeMode === "cycling" && <Bike size={24} />}
+                      </div>
+                   </div>
+                   
+                   <div className="mt-4 pt-3 border-t border-zinc-100 dark:border-zinc-800">
+                      <button className="w-full bg-primary text-white py-2 rounded-full font-bold flex items-center justify-center gap-2 shadow-lg shadow-primary/20 hover:bg-primary-hover active:scale-95 transition-all">
+                          <Navigation size={18} fill="currentColor" />
+                          Démarrer
+                      </button>
+                   </div>
+                </div>
+
+                {/* Steps Decoratifs */}
+                <div className="bg-white dark:bg-zinc-900 p-4 rounded-xl shadow-sm border border-zinc-200 dark:border-zinc-800">
+                   <h3 className="font-semibold mb-3 flex items-center gap-2">
+                       <Clock size={16} /> Étapes
+                   </h3>
+                   <Step text={`Partir de ${originPoi ? originPoi.poi_name : "Votre position"}`} />
+                   <Step text="Rejoindre la route principale" />
+                   <Step text="Continuer tout droit" />
+                   <Step text={`Arrivée à ${destinationPoi.poi_name}`} isLast />
+                </div>
+            </div>
+        ) : (
+            <div className="text-center p-8 text-zinc-400">
+                Cliquez sur un mode de transport pour voir l'itinéraire.
+            </div>
+        )}
+
+      </div>
+    </motion.div>
+  );
+};
+
+const ModeButton = ({ icon, active, onClick }: any) => (
+  <button 
+     onClick={onClick}
+     className={clsx(
+       "p-2 rounded-full transition-all flex flex-col items-center gap-1 min-w-[60px]",
+       active ? "bg-white text-primary font-bold shadow-sm scale-110" : "text-white/70 hover:bg-white/10"
+     )}
+  >
+     {icon}
+  </button>
+);
+
+const Step = ({ text, isLast }: any) => (
+   <div className="flex gap-4 min-h-[40px]">
+       <div className="flex flex-col items-center">
+           <div className="w-3 h-3 rounded-full border-2 border-zinc-400 bg-white dark:bg-black z-10"></div>
+           {!isLast && <div className="w-0.5 flex-1 bg-zinc-200 dark:bg-zinc-700 -mt-1 -mb-1"></div>}
+       </div>
+       <p className="text-sm text-zinc-600 dark:text-zinc-300 pb-4">{text}</p>
+   </div>
+);
+</file>
+
+<file path="components/sidebar/SidebarItem.tsx">
+import { ReactNode } from "react";
+import clsx from "clsx";
+import { motion, AnimatePresence } from "framer-motion";
+
+interface SidebarItemProps {
+  icon: ReactNode;
+  label: string;
+  isExpanded: boolean; // Nouvelle prop pour savoir si on affiche le texte
+  onClick?: () => void;
+  isActive?: boolean;
+}
+
+export const SidebarItem = ({ icon, label, isExpanded, onClick, isActive }: SidebarItemProps) => {
+  return (
+    <button
+      onClick={onClick}
+      className={clsx(
+        "flex items-center w-full p-3 transition-colors rounded-lg group relative",
+        // En mode fermé, on centre. En ouvert, aligné à gauche.
+        isExpanded ? "justify-start px-4 gap-4" : "justify-center px-0", 
+        isActive 
+          ? "bg-primary/10 text-primary" 
+          : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-primary"
+      )}
+    >
+      {/* Icone : taille fixe */}
+      <span className={clsx(
+        "shrink-0 transition-transform duration-200", 
+        isActive ? "scale-110" : "group-hover:scale-110"
+      )}>
+        {icon}
+      </span>
+
+      {/* Libellé : Animation d'apparition */}
+      <AnimatePresence>
+        {isExpanded && (
+          <motion.span
+            initial={{ opacity: 0, x: -10, width: 0 }}
+            animate={{ opacity: 1, x: 0, width: "auto" }}
+            exit={{ opacity: 0, x: -10, width: 0 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            className="text-sm font-medium whitespace-nowrap overflow-hidden"
+          >
+            {label}
+          </motion.span>
+        )}
+      </AnimatePresence>
+
+      {/* Tooltip si fermé (UX Bonus) : permet de savoir ce que c'est sans ouvrir */}
+      {!isExpanded && (
+        <div className="absolute left-full ml-2 px-2 py-1 bg-zinc-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 whitespace-nowrap">
+          {label}
+        </div>
+      )}
+    </button>
+  );
+};
+</file>
+
+<file path="components/ui/form/FormInput.tsx">
+import { ReactNode, InputHTMLAttributes, TextareaHTMLAttributes } from "react";
+import clsx from "clsx";
+
+interface BaseProps {
+  label: string;
+  icon: ReactNode;
+  className?: string;
+}
+
+interface InputProps extends InputHTMLAttributes<HTMLInputElement>, BaseProps {
+  as?: "input";
+}
+
+interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement>, BaseProps {
+  as: "textarea";
+}
+
+type FormInputProps = InputProps | TextareaProps;
+
+export const FormInput = (props: FormInputProps) => {
+  const { label, icon, className, ...rest } = props;
+  const isTextarea = props.as === "textarea";
+
+  const containerStyles = "relative flex items-center group";
+  const iconStyles = "absolute left-4 text-zinc-400 group-focus-within:text-primary transition-colors";
+  
+  const inputStyles = clsx(
+    "w-full pl-12 pr-4 py-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-black/50 text-zinc-900 dark:text-zinc-100",
+    "outline-none transition-all font-medium placeholder:text-zinc-400/70",
+    "focus:ring-2 focus:ring-primary/20 focus:border-primary",
+    isTextarea ? "min-h-[120px] resize-none py-4" : "h-14"
+  );
+
+  return (
+    <div className={className}>
+      <label className="text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2 ml-1 block">
+        {label}
+      </label>
+      <div className={containerStyles}>
+        <div className={iconStyles}>{icon}</div>
+        {isTextarea ? (
+          <textarea className={inputStyles} {...(rest as TextareaHTMLAttributes<HTMLTextAreaElement>)} />
+        ) : (
+          <input className={inputStyles} {...(rest as InputHTMLAttributes<HTMLInputElement>)} />
+        )}
+      </div>
+    </div>
+  );
+};
+</file>
+
+<file path="components/ui/form/FormSection.tsx">
+import { ReactNode } from "react";
+import { motion } from "framer-motion";
+
+interface FormSectionProps {
+  children: ReactNode;
+  title: string;
+  subtitle?: string;
+  delay?: number;
+}
+
+export const FormSection = ({ children, title, subtitle, delay = 0 }: FormSectionProps) => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay }}
+      className="bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm p-6 md:p-8 rounded-3xl border border-zinc-200/50 dark:border-zinc-800 shadow-xl dark:shadow-none h-full flex flex-col"
+    >
+      <div className="mb-6">
+        <h2 className="text-2xl font-bold text-zinc-800 dark:text-white">{title}</h2>
+        {subtitle && <p className="text-zinc-500 dark:text-zinc-400 text-sm mt-1">{subtitle}</p>}
+      </div>
+      <div className="space-y-3 flex-1">
+        {children}
+      </div>
+    </motion.div>
+  );
+};
+</file>
+
+<file path="components/ui/form/FormSelect.tsx">
+import { ReactNode } from "react";
+import { ChevronDown } from "lucide-react";
+
+interface Option {
+  id: string;
+  label: string;
+}
+
+interface FormSelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
+  label: string;
+  icon: ReactNode;
+  options: Option[];
+}
+
+export const FormSelect = ({ label, icon, options, ...props }: FormSelectProps) => {
+  return (
+    <div>
+      <label className="text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2 ml-1 block">
+        {label}
+      </label>
+      <div className="relative flex items-center group">
+        <div className="absolute left-4 text-zinc-400 group-focus-within:text-primary transition-colors">
+          {icon}
+        </div>
+        <select
+          {...props}
+          className="w-full pl-12 pr-10 h-14 appearance-none rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-black/50 text-zinc-900 dark:text-zinc-100 outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-medium cursor-pointer"
+        >
+          <option value="" disabled>Sélectionner...</option>
+          {options.map((opt) => (
+            <option key={opt.id} value={opt.id}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
+        <div className="absolute right-4 text-zinc-400 pointer-events-none">
+          <ChevronDown size={20} />
+        </div>
+      </div>
+    </div>
+  );
+};
+</file>
+
+<file path="components/ui/form/ImageUpload.tsx">
+import { ChangeEvent } from "react";
+import { ImagePlus, X } from "lucide-react";
+import Image from "next/image";
+
+interface ImageUploadProps {
+  imagePreview: string | null;
+  onImageChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  onRemove: () => void;
+}
+
+export const ImageUpload = ({ imagePreview, onImageChange, onRemove }: ImageUploadProps) => {
+  return (
+    <div>
+       <label className="text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2 ml-1 block">
+        Photo principale
+      </label>
+      {imagePreview ? (
+        <div className="relative w-full h-48 rounded-xl overflow-hidden shadow-md group">
+          <Image src={imagePreview} alt="Preview" fill className="object-cover" />
+          <button type="button" onClick={onRemove} className="absolute top-2 right-2 p-2 bg-black/50 text-white rounded-full hover:bg-red-500 transition-colors">
+            <X size={16} />
+          </button>
+        </div>
+      ) : (
+        <label className="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-zinc-300 dark:border-zinc-700 rounded-xl cursor-pointer hover:bg-violet-50 dark:hover:bg-zinc-800/50 hover:border-primary/50 transition-all group">
+          <div className="p-3 bg-white dark:bg-zinc-800 rounded-full shadow-sm mb-3 group-hover:scale-110 transition-transform">
+            <ImagePlus size={24} className="text-zinc-400 group-hover:text-primary" />
+          </div>
+          <span className="text-sm font-medium text-zinc-600 dark:text-zinc-400">Ajouter une photo</span>
+          <input type="file" className="hidden" accept="image/*" onChange={onImageChange} />
+        </label>
+      )}
+    </div>
+  );
+};
+</file>
+
+<file path="components/ui/Button.tsx">
+import { ButtonHTMLAttributes } from "react";
+import { clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: "primary" | "secondary" | "outline" | "ghost";
+  size?: "sm" | "md" | "lg";
+}
+
+export const Button = ({ className, variant = "primary", size = "md", ...props }: ButtonProps) => {
+  const baseStyles = "inline-flex items-center justify-center rounded-full font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50 disabled:cursor-not-allowed";
+  
+  const variants = {
+    primary: "bg-primary text-white hover:bg-primary-dark shadow-md",
+    secondary: "bg-zinc-100 text-zinc-900 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-100",
+    outline: "border-2 border-primary text-primary hover:bg-primary/10",
+    ghost: "text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800",
+  };
+
+  const sizes = {
+    sm: "h-8 px-4 text-xs",
+    md: "h-10 px-6 text-sm",
+    lg: "h-12 px-8 text-base",
+  };
+
+  return <button className={twMerge(clsx(baseStyles, variants[variant], sizes[size], className))} {...props} />;
+};
+</file>
+
+<file path="components/ui/CategoryChip.tsx">
+import { clsx } from "clsx";
+
+interface ChipProps {
+  label: string;
+  active: boolean;
+  onClick: () => void;
+  icon?: React.ReactNode;
+}
+
+export const CategoryChip = ({ label, active, onClick, icon }: ChipProps) => {
+  return (
+    <button
+      onClick={onClick}
+      className={clsx(
+        "flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all shadow-sm border whitespace-nowrap",
+        active
+          ? "bg-primary text-white border-primary"
+          : "bg-white text-zinc-700 border-zinc-200 hover:bg-zinc-50 dark:bg-zinc-900 dark:text-zinc-300 dark:border-zinc-800"
+      )}
+    >
+      {icon && <span className="w-4 h-4">{icon}</span>}
+      {label}
+    </button>
+  );
+};
+</file>
+
+<file path="context/AuthContext.tsx">
+"use client";
+
+import React, { createContext, useState, useEffect, useContext, useCallback } from "react";
+import { User } from "@/types";
+import { 
+  authService, 
+  LoginCredentials, 
+  SignupData, 
+  AuthError 
+} from "@/services/authService";
+
+// ============================================================================
+// TYPES
+// ============================================================================
+
+interface AuthContextType {
+  user: User | null;
+  isAuthenticated: boolean;
+  isLoading: boolean;
+  error: string | null;
+  login: (credentials: LoginCredentials) => Promise<void>;
+  signup: (userData: SignupData) => Promise<void>;
+  logout: () => Promise<void>;
+  updateProfile: (data: Partial<Omit<User, "id" | "email" | "role">>) => Promise<void>;
+  clearError: () => void;
+}
+
+// ============================================================================
+// CONTEXTE
+// ============================================================================
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+// ============================================================================
+// PROVIDER
+// ============================================================================
+
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  /**
+   * Initialisation - Récupérer l'utilisateur depuis le token
+   */
+  useEffect(() => {
+    const initAuth = async () => {
+      try {
+        if (authService.isAuthenticated()) {
+          const currentUser = await authService.getCurrentUser();
+          setUser(currentUser);
+        }
+      } catch (err) {
+        console.error("Erreur initialisation auth:", err);
+        // Token invalide/expiré, nettoyage
+        await authService.logout();
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    initAuth();
+  }, []);
+
+  /**
+   * Gestion des erreurs avec timeout auto-clear
+   */
+  const handleError = useCallback((err: unknown) => {
+    const message = err instanceof AuthError 
+      ? err.message 
+      : "Une erreur inattendue est survenue";
+    
+    setError(message);
+
+    // Auto-clear après 5 secondes
+    setTimeout(() => setError(null), 5000);
+  }, []);
+
+  /**
+   * Connexion
+   */
+  const login = useCallback(async (credentials: LoginCredentials) => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await authService.login(credentials);
+      setUser(response.user);
+    } catch (err) {
+      handleError(err);
+      throw err; // Re-throw pour gestion dans les composants
+    } finally {
+      setIsLoading(false);
+    }
+  }, [handleError]);
+
+  /**
+   * Inscription
+   */
+  const signup = useCallback(async (userData: SignupData) => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await authService.signup(userData);
+      setUser(response.user);
+    } catch (err) {
+      handleError(err);
+      throw err;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [handleError]);
+
+  /**
+   * Déconnexion
+   */
+  const logout = useCallback(async () => {
+    setIsLoading(true);
+    
+    try {
+      await authService.logout();
+      setUser(null);
+      setError(null);
+    } catch (err) {
+      console.error("Erreur déconnexion:", err);
+      // Force le nettoyage même en cas d'erreur
+      setUser(null);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  /**
+   * Mise à jour du profil
+   */
+  const updateProfile = useCallback(async (data: Partial<Omit<User, "id" | "email" | "role">>) => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const updatedUser = await authService.updateProfile(data);
+      setUser(updatedUser);
+    } catch (err) {
+      handleError(err);
+      throw err;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [handleError]);
+
+  /**
+   * Clear manuel de l'erreur
+   */
+  const clearError = useCallback(() => {
+    setError(null);
+  }, []);
+
+  // ============================================================================
+  // VALEUR DU CONTEXTE
+  // ============================================================================
+
+  const value: AuthContextType = {
+    user,
+    isAuthenticated: !!user,
+    isLoading,
+    error,
+    login,
+    signup,
+    logout,
+    updateProfile,
+    clearError,
+  };
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+};
+
+// ============================================================================
+// HOOK PERSONNALISÉ
+// ============================================================================
+
+export const useAuthContext = () => {
+  const context = useContext(AuthContext);
+  
+  if (context === undefined) {
+    throw new Error("useAuthContext must be used within an AuthProvider");
+  }
+  
+  return context;
+};
+</file>
+
+<file path="data/categories.tsx">
+import React from "react";
+import { 
+  UtensilsCrossed, BedDouble, Bus, Landmark, // Classiques
+  Soup, Coffee, Flame, Fish, Home, Beer, // Locaux 1
+  Music4, Mic2, Sandwich, Wine, Croissant, Users, Speaker, Waves, // Locaux 2
+  Church, Store, Tractor // Nouveaux (Eglise, Marché, Ferme)
+} from "lucide-react";
+
+export interface CategoryDef {
+  id: string;
+  label: string;
+  icon: React.ReactNode;
+  color: string;
+}
+
+export const CATEGORIES: CategoryDef[] = [
+  // --- Classiques Universels ---
+  { id: "Restaurant", label: "Restaurants", icon: <UtensilsCrossed size={16} />, color: "#FF8C00" }, // Orange Foncé
+  { id: "Hotel", label: "Hôtels", icon: <BedDouble size={16} />, color: "#1E90FF" }, // Bleu roi
+  { id: "Transport", label: "Transports", icon: <Bus size={16} />, color: "#00CED1" }, // Cyan
+  { id: "Culture", label: "Musées/Culture", icon: <Landmark size={16} />, color: "#8A2BE2" }, // Violet
+  { id: "Eglise", label: "Lieux de Culte", icon: <Church size={16} />, color: "#4B0082" }, // Indigo
+  { id: "Marche", label: "Marchés", icon: <Store size={16} />, color: "#2E8B57" }, // Vert Mer
+  { id: "Ferme", label: "Nature & Ferme", icon: <Tractor size={16} />, color: "#556B2F" }, // Olive
+
+  // --- Spécialités Camerounaises (Gastronomie & Vie) ---
+  { id: "Tourne-dos", label: "Tourne-dos", icon: <Soup size={16} />, color: "#DAA520" }, // Jaune Moutarde
+  { id: "Kiosque", label: "Kiosque BHB", icon: <Coffee size={16} />, color: "#8B4513" }, // Marron Café
+  { id: "Soya", label: "Point Soya", icon: <Flame size={16} />, color: "#FF0000" }, // Rouge Feu
+  { id: "Boukarou", label: "Boukarou", icon: <Fish size={16} />, color: "#20B2AA" }, // Vert Lagon
+  { id: "Circuit", label: "Circuit", icon: <Home size={16} />, color: "#32CD32" }, // Citron vert
+  { id: "Cave", label: "Vente Emportée", icon: <Beer size={16} />, color: "#FFD700" }, // Or (Bière)
+  { id: "Snack", label: "Snack-Bar", icon: <Music4 size={16} />, color: "#FF1493" }, // Rose Vif
+  { id: "Cabaret", label: "Cabaret Live", icon: <Mic2 size={16} />, color: "#C71585" }, // Violet Moyen
+  { id: "FastFood", label: "Chawarmerie", icon: <Sandwich size={16} />, color: "#FFA500" }, // Orange
+  { id: "Lounge", label: "Lounge/Rooftop", icon: <Wine size={16} />, color: "#800080" }, // Pourpre
+  { id: "Boulangerie", label: "Boulangerie", icon: <Croissant size={16} />, color: "#D2691E" }, // Chocolat
+  { id: "Foyer", label: "Foyer/Tontine", icon: <Users size={16} />, color: "#708090" }, // Gris Ardoise
+  { id: "Club", label: "Boîte de Nuit", icon: <Speaker size={16} />, color: "#000000" }, // Noir
+  { id: "Piscine", label: "Piscine/Détente", icon: <Waves size={16} />, color: "#00BFFF" }, // Bleu Clair
+];
+
+export const getCategoryConfig = (id: string) => CATEGORIES.find(c => c.id === id) || CATEGORIES[0];
+</file>
+
+<file path="hooks/useAuth.ts">
+"use client";
+
+import { useAuthContext } from "@/context/AuthContext";
+
+export const useAuth = () => {
+  return useAuthContext();
+};
+</file>
+
+<file path="public/file.svg">
+<svg fill="none" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M14.5 13.5V5.41a1 1 0 0 0-.3-.7L9.8.29A1 1 0 0 0 9.08 0H1.5v13.5A2.5 2.5 0 0 0 4 16h8a2.5 2.5 0 0 0 2.5-2.5m-1.5 0v-7H8v-5H3v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1M9.5 5V2.12L12.38 5zM5.13 5h-.62v1.25h2.12V5zm-.62 3h7.12v1.25H4.5zm.62 3h-.62v1.25h7.12V11z" clip-rule="evenodd" fill="#666" fill-rule="evenodd"/></svg>
+</file>
+
+<file path="public/globe.svg">
+<svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><g clip-path="url(#a)"><path fill-rule="evenodd" clip-rule="evenodd" d="M10.27 14.1a6.5 6.5 0 0 0 3.67-3.45q-1.24.21-2.7.34-.31 1.83-.97 3.1M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.48-1.52a7 7 0 0 1-.96 0H7.5a4 4 0 0 1-.84-1.32q-.38-.89-.63-2.08a40 40 0 0 0 3.92 0q-.25 1.2-.63 2.08a4 4 0 0 1-.84 1.31zm2.94-4.76q1.66-.15 2.95-.43a7 7 0 0 0 0-2.58q-1.3-.27-2.95-.43a18 18 0 0 1 0 3.44m-1.27-3.54a17 17 0 0 1 0 3.64 39 39 0 0 1-4.3 0 17 17 0 0 1 0-3.64 39 39 0 0 1 4.3 0m1.1-1.17q1.45.13 2.69.34a6.5 6.5 0 0 0-3.67-3.44q.65 1.26.98 3.1M8.48 1.5l.01.02q.41.37.84 1.31.38.89.63 2.08a40 40 0 0 0-3.92 0q.25-1.2.63-2.08a4 4 0 0 1 .85-1.32 7 7 0 0 1 .96 0m-2.75.4a6.5 6.5 0 0 0-3.67 3.44 29 29 0 0 1 2.7-.34q.31-1.83.97-3.1M4.58 6.28q-1.66.16-2.95.43a7 7 0 0 0 0 2.58q1.3.27 2.95.43a18 18 0 0 1 0-3.44m.17 4.71q-1.45-.12-2.69-.34a6.5 6.5 0 0 0 3.67 3.44q-.65-1.27-.98-3.1" fill="#666"/></g><defs><clipPath id="a"><path fill="#fff" d="M0 0h16v16H0z"/></clipPath></defs></svg>
+</file>
+
+<file path="public/next.svg">
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 394 80"><path fill="#000" d="M262 0h68.5v12.7h-27.2v66.6h-13.6V12.7H262V0ZM149 0v12.7H94v20.4h44.3v12.6H94v21h55v12.6H80.5V0h68.7zm34.3 0h-17.8l63.8 79.4h17.9l-32-39.7 32-39.6h-17.9l-23 28.6-23-28.6zm18.3 56.7-9-11-27.1 33.7h17.8l18.3-22.7z"/><path fill="#000" d="M81 79.3 17 0H0v79.3h13.6V17l50.2 62.3H81Zm252.6-.4c-1 0-1.8-.4-2.5-1s-1.1-1.6-1.1-2.6.3-1.8 1-2.5 1.6-1 2.6-1 1.8.3 2.5 1a3.4 3.4 0 0 1 .6 4.3 3.7 3.7 0 0 1-3 1.8zm23.2-33.5h6v23.3c0 2.1-.4 4-1.3 5.5a9.1 9.1 0 0 1-3.8 3.5c-1.6.8-3.5 1.3-5.7 1.3-2 0-3.7-.4-5.3-1s-2.8-1.8-3.7-3.2c-.9-1.3-1.4-3-1.4-5h6c.1.8.3 1.6.7 2.2s1 1.2 1.6 1.5c.7.4 1.5.5 2.4.5 1 0 1.8-.2 2.4-.6a4 4 0 0 0 1.6-1.8c.3-.8.5-1.8.5-3V45.5zm30.9 9.1a4.4 4.4 0 0 0-2-3.3 7.5 7.5 0 0 0-4.3-1.1c-1.3 0-2.4.2-3.3.5-.9.4-1.6 1-2 1.6a3.5 3.5 0 0 0-.3 4c.3.5.7.9 1.3 1.2l1.8 1 2 .5 3.2.8c1.3.3 2.5.7 3.7 1.2a13 13 0 0 1 3.2 1.8 8.1 8.1 0 0 1 3 6.5c0 2-.5 3.7-1.5 5.1a10 10 0 0 1-4.4 3.5c-1.8.8-4.1 1.2-6.8 1.2-2.6 0-4.9-.4-6.8-1.2-2-.8-3.4-2-4.5-3.5a10 10 0 0 1-1.7-5.6h6a5 5 0 0 0 3.5 4.6c1 .4 2.2.6 3.4.6 1.3 0 2.5-.2 3.5-.6 1-.4 1.8-1 2.4-1.7a4 4 0 0 0 .8-2.4c0-.9-.2-1.6-.7-2.2a11 11 0 0 0-2.1-1.4l-3.2-1-3.8-1c-2.8-.7-5-1.7-6.6-3.2a7.2 7.2 0 0 1-2.4-5.7 8 8 0 0 1 1.7-5 10 10 0 0 1 4.3-3.5c2-.8 4-1.2 6.4-1.2 2.3 0 4.4.4 6.2 1.2 1.8.8 3.2 2 4.3 3.4 1 1.4 1.5 3 1.5 5h-5.8z"/></svg>
+</file>
+
+<file path="public/vercel.svg">
+<svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1155 1000"><path d="m577.3 0 577.4 1000H0z" fill="#fff"/></svg>
+</file>
+
+<file path="public/window.svg">
+<svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" clip-rule="evenodd" d="M1.5 2.5h13v10a1 1 0 0 1-1 1h-11a1 1 0 0 1-1-1zM0 1h16v11.5a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 0 12.5zm3.75 4.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5M7 4.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0m1.75.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5" fill="#666"/></svg>
+</file>
+
+<file path="services/routingService.ts">
+import { Location, RouteStats, TransportMode } from "@/types";
+
+export const getRoute = async (
+  start: Location,
+  end: Location,
+  mode: TransportMode = "driving",
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  apiKey: string // On garde le paramètre pour compatibilité mais OSRM public n'en a pas besoin
+): Promise<RouteStats | null> => {
+  try {
+    // 1. Conversion du mode de transport pour OSRM
+    // OSRM supporte: 'driving', 'walking', 'cycling' (syntaxe exacte diffère légèrement parfois)
+    let profile = "driving";
+    if (mode === "cycling") profile = "bike"; // OSRM utilise souvent 'bike'
+    if (mode === "walking") profile = "foot"; // OSRM utilise souvent 'foot'
+
+    // 2. Utilisation de l'API publique OSRM (Router Project)
+    // Note: C'est un service de démo gratuit, parfait pour le développement.
+    const url = `https://router.project-osrm.org/route/v1/${profile}/${start.longitude},${start.latitude};${end.longitude},${end.latitude}?overview=full&geometries=geojson`;
+
+    console.log("Fetching Route:", url); // Pour le debug
+
+    const response = await fetch(url);
+
+    // 3. Gestion correcte des erreurs HTTP (le 404 "Not Found")
+    if (!response.ok) {
+      console.error(`Erreur API Route: ${response.status} ${response.statusText}`);
+      return null;
+    }
+
+    // 4. Parsing sécurisé
+    const data = await response.json();
+
+    // 5. Vérification du format de réponse OSRM
+    if (data.code !== "Ok" || !data.routes || data.routes.length === 0) {
+      console.warn("Pas de route trouvée par OSRM");
+      return null;
+    }
+
+    const route = data.routes[0];
+
+    return {
+      distance: route.distance, // En mètres
+      duration: route.duration, // En secondes
+      geometry: route.geometry, // GeoJSON LineString
+    };
+
+  } catch (error) {
+    console.error("Exception service routage:", error);
+    return null;
+  }
+};
+</file>
+
+<file path=".gitignore">
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+.env*
+.env.local
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+</file>
+
+<file path="eslint.config.mjs">
+import { defineConfig, globalIgnores } from "eslint/config";
+import nextVitals from "eslint-config-next/core-web-vitals";
+import nextTs from "eslint-config-next/typescript";
+
+const eslintConfig = defineConfig([
+  ...nextVitals,
+  ...nextTs,
+  // Override default ignores of eslint-config-next.
+  globalIgnores([
+    // Default ignores of eslint-config-next:
+    ".next/**",
+    "out/**",
+    "build/**",
+    "next-env.d.ts",
+  ]),
+]);
+
+export default eslintConfig;
+</file>
+
+<file path="next.config.ts">
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
+    ],
+  },
+};
+
+export default nextConfig;
+</file>
+
+<file path="package.json">
+{
+  "name": "poi-navigoo-web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.26.2",
+    "lucide-react": "^0.562.0",
+    "maplibre-gl": "^5.16.0",
+    "next": "16.1.2",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "react-map-gl": "^8.1.0",
+    "tailwind-merge": "^3.4.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.1.2",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
+</file>
+
+<file path="postcss.config.mjs">
+const config = {
+  plugins: {
+    "@tailwindcss/postcss": {},
+  },
+};
+
+export default config;
+</file>
+
+<file path="tsconfig.json">
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": ["./*"]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts",
+    "**/*.mts"
+  ],
+  "exclude": ["node_modules"]
+}
+</file>
+
+<file path="components/sidebar/SecondarySidebar.tsx">
+import { motion } from "framer-motion";
+import { X, MapPin, Clock, Bookmark, PlusCircle, Crown, Navigation, Edit2 } from "lucide-react";
+import { POI, Trip } from "@/types";
+import Image from "next/image";
+import { Button } from "@/components/ui/Button";
+import { useRouter } from "next/navigation";
+import { useUserData } from "@/hooks/useUserData";
+
+type ViewType = "saved" | "recent" | "trips" | "mypois" | null;
+
+interface SecondarySidebarProps {
+  view: ViewType;
+  onClose: () => void;
+  data: {
+    savedPois: POI[];
+    recentPois: POI[];
+    trips: Trip[];
+  };
+  onSelectPoi: (poi: POI) => void;
+}
+
+export const SecondarySidebar = ({ view, onClose, data, onSelectPoi }: SecondarySidebarProps) => {
+  const router = useRouter();
+  const { myPois } = useUserData(); // Accès aux POIs de l'utilisateur
+
+  const getHeader = () => {
+    switch (view) {
+      case "saved": return { title: "Enregistrés", icon: <Bookmark className="text-primary" /> };
+      case "recent": return { title: "Récents", icon: <Clock className="text-primary" /> };
+      case "trips": return { title: "Trajets Récents", icon: <Navigation className="text-primary" /> };
+      case "mypois": return { title: "Mes Points d'intérêt", icon: <MapPin className="text-primary" /> };
+      default: return { title: "", icon: null };
+    }
+  };
+
+  const { title, icon } = getHeader();
+
+  const formatDate = (isoString: string) => {
+    try { return new Date(isoString).toLocaleDateString('fr-CM', { day: 'numeric', month: 'short' }); } catch { return ""; }
+  };
+
+  return (
+    <motion.div
+      initial={{ x: "-100%" }}
+      animate={{ x: "0%" }}
+      exit={{ x: "-100%" }}
+      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+      className="fixed top-0 left-0 md:left-[72px] h-full w-full md:w-[400px] bg-white dark:bg-zinc-900 shadow-2xl z-[55] flex flex-col border-r border-zinc-200 dark:border-zinc-800"
+    >
+      {/* Header */}
+      <div className="p-4 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between bg-zinc-50 dark:bg-black/50">
+        <div className="flex items-center gap-3">
+            <div className="p-2 bg-primary/10 rounded-full">{icon}</div>
+            <h2 className="text-lg font-bold text-zinc-800 dark:text-white">{title}</h2>
+        </div>
+        <button onClick={onClose} className="p-2 hover:bg-zinc-200 dark:hover:bg-zinc-800 rounded-full text-zinc-500">
+            <X size={20} />
+        </button>
+      </div>
+
+      {/* Body */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+        
+        {/* === SECTION "MES POIS" === */}
+        {view === "mypois" && (
+            <div className="space-y-4">
+                
+                {/* Bouton Création Toujours Visible */}
+                <button 
+                    onClick={() => router.push("/add-poi")} 
+                    className="w-full py-4 border-2 border-dashed border-primary/30 rounded-xl flex items-center justify-center gap-3 hover:bg-primary/5 hover:border-primary transition-all group text-zinc-500 dark:text-zinc-400"
+                >
+                    <div className="p-2 bg-white dark:bg-zinc-800 rounded-full shadow-sm group-hover:scale-110 transition-transform">
+                        <PlusCircle size={20} className="text-primary" />
+                    </div>
+                    <span className="text-sm font-bold text-primary">Créer un nouveau lieu</span>
+                </button>
+
+                <div className="h-px bg-zinc-100 dark:bg-zinc-800 my-2"></div>
+
+                <h3 className="text-xs font-bold text-zinc-400 uppercase tracking-wider mb-2">Mes Établissements ({myPois.length})</h3>
+
+                {myPois.length > 0 ? (
+                    <div className="space-y-3">
+                        {myPois.map(poi => (
+                            <div 
+                                key={poi.poi_id} 
+                                onClick={() => onSelectPoi(poi)} // Clic sur un "MyPOI" ouvre la sidebar détail
+                                className="relative flex gap-3 p-3 rounded-xl bg-white dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-700 hover:border-primary cursor-pointer shadow-sm hover:shadow-md transition-all group"
+                            >
+                                <div className="w-16 h-16 rounded-lg overflow-hidden shrink-0 relative bg-zinc-200">
+                                   {poi.poi_images_urls[0] && <Image src={poi.poi_images_urls[0]} alt="" fill className="object-cover" />}
+                                </div>
+                                <div className="flex-1">
+                                    <h3 className="font-semibold text-zinc-800 dark:text-zinc-100 line-clamp-1 pr-6">{poi.poi_name}</h3>
+                                    <p className="text-xs text-zinc-500 mt-1 line-clamp-1">{poi.poi_description}</p>
+                                    <div className="mt-2 flex items-center gap-2">
+                                        <span className="text-[10px] bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-bold">Actif</span>
+                                        <div className="ml-auto text-primary text-xs flex items-center gap-1 group-hover:underline">
+                                            <Edit2 size={10} /> Gérer
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <div className="text-center py-8 text-zinc-400 text-sm">
+                        Vous n'avez pas encore ajouté de lieu.
+                    </div>
+                )}
+
+                {/* Promo Partenaire en bas de liste */}
+                <div className="bg-gradient-to-br from-indigo-900 to-primary p-5 rounded-2xl text-white relative overflow-hidden mt-6">
+                    <Crown className="absolute -right-4 -bottom-4 text-white/10" size={120} />
+                    <h3 className="font-bold text-lg mb-2 relative z-10">Devenir Partenaire</h3>
+                    <p className="text-white/80 text-sm mb-4 relative z-10 leading-relaxed">
+                        Boostez la visibilité de vos commerces sur Navigoo.
+                    </p>
+                    <Button size="sm" className="w-full bg-white text-primary hover:bg-zinc-100 border-none relative z-10 font-bold">
+                        Passer pro
+                    </Button>
+                </div>
+            </div>
+        )}
+
+        {/* Autres Vues (Code inchangé mais condensé pour l'exemple) */}
+        {(view === "saved" || view === "recent") && (
+             (view === "saved" ? data.savedPois : data.recentPois).length > 0 ? (
+                (view === "saved" ? data.savedPois : data.recentPois).map(poi => (
+                    <div key={poi.poi_id} onClick={() => onSelectPoi(poi)} className="flex gap-3 p-3 rounded-xl hover:bg-zinc-100 cursor-pointer border border-transparent hover:border-zinc-200 transition-colors">
+                        <div className="w-14 h-14 rounded-lg overflow-hidden shrink-0 relative bg-zinc-200">
+                           {poi.poi_images_urls[0] && <Image src={poi.poi_images_urls[0]} alt="" fill className="object-cover" />}
+                        </div>
+                        <div>
+                            <h3 className="font-semibold text-zinc-800 line-clamp-1">{poi.poi_name}</h3>
+                            <p className="text-xs text-zinc-500">{poi.poi_category} • {poi.address_city}</p>
+                        </div>
+                    </div>
+                ))
+             ) : <EmptyState text="Aucun lieu trouvé." />
+        )}
+
+        {view === "trips" && data.trips.length > 0 && (
+             data.trips.map(trip => (
+                <div key={trip.id} className="p-4 rounded-xl bg-zinc-50 border border-zinc-200 mb-3">
+                    <div className="flex justify-between items-center mb-2 text-xs text-zinc-400">
+                         <span>{formatDate(trip.date)}</span>
+                    </div>
+                    <div className="flex flex-col gap-1 text-sm">
+                        <span className="font-semibold">{trip.arriveName}</span>
+                        <span className="text-zinc-500 text-xs">depuis {trip.departName}</span>
+                    </div>
+                </div>
+             ))
+        )}
+      </div>
+    </motion.div>
+  );
+};
+
+const EmptyState = ({ text }: { text: string }) => (
+    <div className="flex flex-col items-center justify-center h-48 text-zinc-400">
+        <MapPin size={48} className="mb-2 opacity-20" />
+        <p>{text}</p>
+    </div>
+);
+</file>
+
+<file path="components/ui/Loader.tsx">
+"use client";
+
+import { clsx } from "clsx";
+
+export const Loader = ({ className }: { className?: string }) => {
+  return (
+    <div
+      className={clsx(
+        "flex flex-col items-center justify-center h-full w-full bg-zinc-50 dark:bg-black fixed inset-0 z-[100] overflow-hidden",
+        className
+      )}
+    >
+      {/* --- ARRIÈRE PLAN GRILLE --- */}
+      {/* Donne un effet technique de cartographie */}
+      <div className="absolute inset-0 z-0 opacity-[0.03] dark:opacity-[0.05] pointer-events-none" 
+           style={{ 
+             backgroundImage: "linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)", 
+             backgroundSize: "40px 40px" 
+           }} 
+      />
+
+      <div className="relative z-10 flex flex-col items-center gap-8">
+        
+        {/* --- CARTE DU CAMEROUN (DESSIN EXACT) --- */}
+        <div className="relative w-48 h-64 md:w-56 md:h-80 drop-shadow-2xl">
+          <svg
+            viewBox="0 0 350 600"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className="w-full h-full"
+          >
+            {/* L'ombre/Glow violet derrière la carte */}
+            <defs>
+              <filter id="glow">
+                <feGaussianBlur stdDeviation="4" result="coloredBlur" />
+                <feMerge>
+                  <feMergeNode in="coloredBlur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+
+            {/* Silhouette Principale du Cameroun (Retracée selon ton image) */}
+            <path
+              d="M210 10 C218 8 230 18 232 30 
+                 C236 45 225 60 230 65 
+                 C240 75 255 82 260 78 
+                 C270 70 290 85 292 95 
+                 C295 115 282 140 288 150 
+                 C300 165 325 185 330 205 
+                 C335 230 320 250 315 270 
+                 C315 290 330 315 335 340 
+                 C340 370 310 400 305 430 
+                 C300 460 320 480 325 500 
+                 C330 520 345 540 345 550 
+                 C345 570 250 590 180 585 
+                 C120 580 100 560 90 530 
+                 C80 500 70 480 55 470 
+                 C40 460 25 440 20 420 
+                 C15 400 35 385 40 365 
+                 C45 345 30 335 35 320 
+                 C40 305 55 295 70 280 
+                 C90 260 125 220 135 190 
+                 C145 160 160 120 170 85 
+                 C180 50 195 25 210 10 Z"
+              className="fill-primary/15 dark:fill-primary/20 stroke-primary stroke-[3] animate-pulse"
+              filter="url(#glow)"
+              strokeLinejoin="round"
+              strokeLinecap="round"
+            />
+
+            {/* Localisation Clignotante (Symbolise Yaoundé / Le cœur de l'app) */}
+            {/* Coordonnées ajustées pour être dans la partie Centre-Sud */}
+            <circle cx="200" cy="420" r="6" className="fill-primary animate-ping opacity-75" />
+            <circle cx="200" cy="420" r="3" className="fill-white dark:fill-zinc-950" />
+          </svg>
+        </div>
+
+        {/* --- TEXTE --- */}
+        <div className="flex flex-col items-center gap-3">
+          <div className="h-2 w-24 bg-zinc-200 dark:bg-zinc-800 rounded-full overflow-hidden">
+            <div className="h-full bg-primary w-2/3 animate-[shimmer_1.5s_infinite] rounded-full" 
+                 style={{ 
+                   backgroundImage: "linear-gradient(to right, transparent, rgba(255,255,255,0.5), transparent)" 
+                 }} 
+            />
+          </div>
+          
+          <h3 className="text-xl md:text-2xl font-black tracking-tight text-zinc-800 dark:text-white flex items-center gap-1.5 font-sans">
+            <span className="text-zinc-300 dark:text-zinc-600">Chargement</span>
+            <span className="text-primary animate-pulse">Navigoo</span>
+          </h3>
+        </div>
+
+      </div>
+    </div>
+  );
+};
+</file>
+
+<file path="README.md">
+# Navigoo - Plateforme de Navigation et Points d'Intérêt (POI)
+
+Navigoo est une application web moderne permettant de naviguer sur une carte, de découvrir des points d'intérêt (POI), de calculer des itinéraires et de contribuer à enrichir la base de données via un système de soumission et de validation.
+
+## 🚀 Fonctionnalités Clés
+
+### 1. Navigation et Carte
+- **Exploration Interactive** : Visualisation des POI sur une carte dynamique utilisant MapLibre GL.
+- **Recherche et Filtrage** : Recherche de POI par nom et filtrage par catégories (Restaurants, Hôtels, Culture, etc.).
+- **Calcul d'Itinéraires** : Calcul du trajet entre votre position et un POI sélectionné, avec statistiques (distance, durée).
+
+### 2. Système d'Authentification
+- **Inscription** : Les utilisateurs peuvent créer un compte en spécifiant leur nom, email, mot de passe et organisation.
+- **Connexion** : Accès sécurisé aux fonctionnalités de création et de gestion.
+- **Gestion de Session** : Persistance de la session via `localStorage` (simulation de service backend).
+
+### 3. Workflow des Points d'Intérêt (Contribution)
+- **Soumission (Clients)** : Seuls les utilisateurs authentifiés peuvent soumettre de nouveaux POI.
+- **État "Soumis"** : Un nouveau POI a initialement l'état `submitted`. Il n'est visible que par son auteur et les administrateurs.
+- **Validation (Administrateurs)** : Les administrateurs possèdent un bouton spécial "Valider" dans la fiche détails du POI. Une fois validé, le POI passe à l'état `validated` et devient public pour tous les utilisateurs.
+
+### 4. Profil Utilisateur
+- **Visualisation** : Consultation des informations personnelles et du rôle (Client ou Admin).
+- **Mise à jour** : Possibilité de modifier les informations non sensibles comme le nom et l'organisation.
+
+### 5. Contenus Additionnels (Placeholders)
+- **Podcasts et Blocs** : Sections prévues pour de futurs contenus, accessibles uniquement après authentification.
+
+---
+
+## 👥 Rôles Utilisateurs
+
+| Rôle | Capacités |
+| :--- | :--- |
+| **Visiteur (Anonyme)** | Consulter les POI validés, faire des recherches, calculer des itinéraires. |
+| **Client (Connecté)** | Toutes les capacités du visiteur + Soumettre des POI, voir ses propres soumissions en attente, modifier son profil. |
+| **Administrateur** | Toutes les capacités du client + Voir TOUS les POI (soumis et validés), Valider les POI soumis par les clients. |
+
+---
+
+## 📂 Hiérarchie du Projet
+
+```text
+.
+├── app/                    # Routes et pages Next.js (App Router)
+│   ├── add-poi/            # Formulaire de création de POI
+│   ├── login/              # Page de connexion
+│   ├── signup/             # Page d'inscription
+│   ├── profile/            # Gestion du profil utilisateur
+│   ├── layout.tsx          # Layout principal et AuthProvider
+│   └── page.tsx            # Page d'accueil (Carte et Sidebars)
+├── components/             # Composants React réutilisables
+│   ├── map/                # Composant de carte MapLibre
+│   ├── navigation/         # Barre de recherche, barre de catégories
+│   ├── sidebar/            # Panneaux latéraux (Détails, Itinéraire, etc.)
+│   └── ui/                 # Composants d'interface (Boutons, Inputs)
+├── context/                # Contextes React (Authentification)
+├── data/                   # Données de test (Mock Data) et catégories
+├── hooks/                  # Hooks personnalisés (useAuth, useUserData)
+├── public/                 # Assets statiques (Images, SVG)
+├── services/               # Services API (Calcul d'itinéraire)
+├── types/                  # Définitions de types TypeScript
+├── package.json            # Dépendances et scripts
+└── tsconfig.json           # Configuration TypeScript
+```
+
+---
+
+## 🛠️ Technologies Utilisées
+
+- **Framework** : [Next.js](https://nextjs.org/) (React)
+- **Langage** : TypeScript
+- **Style** : Tailwind CSS
+- **Carte** : MapLibre GL / React Map GL
+- **Icônes** : Lucide React
+- **Animations** : Framer Motion
+
+---
+
+## ⚙️ Installation et Lancement
+
+1. **Installer les dépendances** :
+   ```bash
+   npm install
+   ```
+
+2. **Lancer le serveur de développement** :
+   ```bash
+   npm run dev
+   ```
+
+3. **Accéder à l'application** : Ouvrez [http://localhost:3000](http://localhost:3000) dans votre navigateur.
+
+4. **Tester les rôles** :
+   - Pour être **Admin** : Connectez-vous avec un email contenant le mot "admin" (ex: `admin@navigoo.com`).
+   - Pour être **Client** : Utilisez n'importe quel autre email.
+</file>
+
+<file path="app/layout.tsx">
+import type { Metadata } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
+import "./globals.css";
+import "maplibre-gl/dist/maplibre-gl.css"; // Garde-le ici, ou déplace-le dans layout.tsx pour gagner encore + de vitesse
+import { AuthProvider } from "@/context/AuthContext";
+
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
+export const metadata: Metadata = {
+  title: "Points of interets - Navigoo",
+  description: "retrouvez et partagez des points d'intérêts autour de vous avec Navigoo",
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <AuthProvider>
+          {children}
+        </AuthProvider>
+      </body>
+    </html>
+  );
+}
+</file>
+
+<file path="components/map/Map.tsx">
+"use client";
+
+import { useState, useMemo, useEffect, useRef, memo } from "react";
+import Map, { Marker, NavigationControl, GeolocateControl, ScaleControl, Popup, MapRef, Source, Layer } from "react-map-gl/maplibre";
+import maplibregl, { LngLatBounds } from "maplibre-gl"; 
+import { POI, Location } from "@/types";
+import { getCategoryConfig } from "@/data/categories";
+import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
+import { Star, MapPin as MapPinIcon } from "lucide-react";
+
+interface MapProps {
+  apiKey: string;
+  pois: POI[];
+  onSelectPoi: (poi: POI | null) => void;
+  selectedPoi: POI | null;
+  userLocation: Location | null;
+  routeGeometry: any | null; 
+  mapStyleType: "streets-v2" | "hybrid";
+}
+
+// 1. MEMOIZATION DU PIN INDIVIDUEL (Très important pour la performance DOM)
+// Cela évite de re-rendre chaque pin si la carte bouge mais que le POI ne change pas
+const MapMarker = memo(({ poi, isSelected, onClick, onHover }: { poi: POI, isSelected: boolean, onClick: (e: any) => void, onHover: (p: POI | null) => void }) => {
+  const config = getCategoryConfig(poi.poi_category);
+
+  return (
+    <Marker
+      longitude={poi.location.longitude}
+      latitude={poi.location.latitude}
+      anchor="bottom"
+      onClick={onClick}
+    >
+      <div 
+        onMouseEnter={() => onHover(poi)}
+        onMouseLeave={() => onHover(null)}
+        // Utilisation de classes Tailwind group et hardware acceleration (transform-gpu)
+        className="relative flex flex-col items-center cursor-pointer group transform-gpu"
+        style={{ zIndex: isSelected ? 50 : 10 }}
+      >
+        {isSelected ? (
+           <div className="relative">
+              {/* Animation Ping simplifiée (CSS pur souvent plus rapide que JS Framer sur mobile) */}
+              <div className="absolute inset-0 bg-red-500 rounded-full opacity-75 animate-ping"></div>
+              <div className="relative z-10 text-red-600 drop-shadow-lg scale-125 transition-transform duration-200">
+                 <MapPinIcon size={48} fill="#ef4444" className="text-red-900" />
+                 <div className="absolute top-[14px] left-[14px] w-5 h-5 bg-white rounded-full flex items-center justify-center">
+                    <div className="w-2 h-2 bg-red-600 rounded-full" />
+                 </div>
+              </div>
+           </div>
+        ) : (
+          <>
+             <div 
+               className="flex items-center justify-center w-8 h-8 rounded-full shadow-lg border-2 border-white transition-transform duration-200 group-hover:scale-125 bg-zinc-900 will-change-transform"
+               style={{ backgroundColor: config.color }}
+             >
+               <div className="text-white drop-shadow-md">
+                 {config.icon}
+               </div>
+             </div>
+             {/* Le petit triangle sous la bulle */}
+             <div className="w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-t-[6px] mt-[-1px]" style={{ borderTopColor: config.color }}></div>
+          </>
+        )}
+      </div>
+    </Marker>
+  );
+});
+
+MapMarker.displayName = "MapMarker";
+
+// --- COMPOSANT CARTE ---
+
+function MapComponent({ apiKey, pois, onSelectPoi, selectedPoi, userLocation, routeGeometry, mapStyleType }: MapProps) {
+  const mapRef = useRef<MapRef>(null);
+  
+  // Utilisation d'un ref pour éviter les re-render inutiles lors des survols
+  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const [viewState, setViewState] = useState({
+    longitude: 11.516,
+    latitude: 3.866,
+    zoom: 13.5
+  });
+
+  const [hoveredPoi, setHoveredPoi] = useState<POI | null>(null);
+
+  // Optimisation Hover avec debounce léger
+  const handleHover = (poi: POI | null) => {
+    if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+    if (poi) {
+        setHoveredPoi(poi);
+    } else {
+        hoverTimeoutRef.current = setTimeout(() => setHoveredPoi(null), 100);
+    }
+  };
+
+  // --- EFFETS DE ZOOM (Ginchés inchangés mais optimisés via la condition) ---
+  
+  useEffect(() => {
+    if (userLocation && mapRef.current && !routeGeometry) {
+      mapRef.current.flyTo({ center: [userLocation.longitude, userLocation.latitude], zoom: 15, duration: 1200 }); // Duration réduite pour sensation de vitesse
+    }
+  }, [userLocation, routeGeometry]);
+
+  useEffect(() => {
+    if (selectedPoi && mapRef.current && !routeGeometry) {
+      mapRef.current.flyTo({ center: [selectedPoi.location.longitude, selectedPoi.location.latitude], zoom: 16, duration: 1000 });
+    }
+  }, [selectedPoi, routeGeometry]);
+
+  useEffect(() => {
+    if (routeGeometry && mapRef.current) {
+        const coords = routeGeometry.coordinates;
+        const bounds = new LngLatBounds(coords[0], coords[0]);
+        for (const coord of coords) bounds.extend(coord as [number, number]);
+        
+        mapRef.current.fitBounds(bounds, {
+            padding: { top: 80, bottom: 80, right: 50, left: window.innerWidth > 768 ? 420 : 50 }, // Padding ajusté pour éviter Sidebar
+            duration: 1500 
+        });
+    }
+  }, [routeGeometry]);
+
+  // --- RENDU OPTIMISÉ DES PINS ---
+  
+  const pins = useMemo(() => {
+    return pois.map((poi) => (
+      <MapMarker 
+        key={poi.poi_id} 
+        poi={poi} 
+        isSelected={selectedPoi?.poi_id === poi.poi_id}
+        onHover={handleHover}
+        onClick={(e) => {
+          e.originalEvent.stopPropagation();
+          onSelectPoi(poi);
+        }}
+      />
+    ));
+  }, [pois, selectedPoi?.poi_id, onSelectPoi]); // Dépendances strictes
+
+  return (
+    <Map
+      ref={mapRef}
+      {...viewState}
+      onMove={evt => setViewState(evt.viewState)}
+      style={{ width: "100%", height: "100%" }}
+      mapStyle={`https://api.maptiler.com/maps/${mapStyleType}/style.json?key=${apiKey}`}
+      attributionControl={false}
+      onClick={() => onSelectPoi(null)}
+      // --- PERFORMANCE BOOSTERS ---
+      mapLib={maplibregl} // Utilise la lib importée directement
+      reuseMaps={true}    // CRUCIAL: Réutilise le contexte WebGL au lieu de le détruire
+      cooperativeGestures={true} // UX: Gestion fluide du scroll
+      maxTileCacheSize={100} // Cache plus de tuiles en mémoire
+    >
+      <GeolocateControl position="bottom-right" />
+      <NavigationControl position="bottom-right" showCompass={false} />
+      <ScaleControl />
+
+      {/* ITINÉRAIRE - OPTIMISÉ via Source/Layer natif (Pas de React Nodes) */}
+      {routeGeometry && (
+          <Source id="route-source" type="geojson" data={routeGeometry}>
+             {/* Bordure blanche pour contraste */}
+             <Layer 
+               id="route-outline"
+               type="line"
+               paint={{
+                 'line-color': '#ffffff',
+                 'line-width': 8,
+                 'line-opacity': 0.8
+               }}
+               layout={{ 'line-cap': 'round', 'line-join': 'round' }}
+             />
+             {/* Ligne principale */}
+             <Layer 
+               id="route-line"
+               type="line"
+               paint={{
+                 'line-color': '#9400D3', // Couleur Primary
+                 'line-width': 5,
+                 'line-opacity': 1
+               }}
+               layout={{ 'line-cap': 'round', 'line-join': 'round' }}
+             />
+          </Source>
+       )}
+
+      {/* PIN UTILISATEUR */}
+      {userLocation && (
+        <Marker longitude={userLocation.longitude} latitude={userLocation.latitude}>
+           <div className="relative flex items-center justify-center w-6 h-6 transform-gpu">
+              <span className="absolute w-12 h-12 bg-blue-500 rounded-full opacity-30 animate-ping"></span>
+              <span className="absolute w-6 h-6 bg-blue-500/40 rounded-full border border-blue-500/50 backdrop-blur-sm"></span>
+              <span className="absolute w-3.5 h-3.5 bg-blue-600 rounded-full border-2 border-white shadow-sm z-10"></span>
+           </div>
+        </Marker>
+      )}
+
+      {/* POI MARKERS */}
+      {pins}
+
+      {/* TOOLTIP LEGER AU SURVOL */}
+      <AnimatePresence>
+        {hoveredPoi && !selectedPoi && (
+          <Popup
+            longitude={hoveredPoi.location.longitude}
+            latitude={hoveredPoi.location.latitude}
+            anchor="top"
+            closeButton={false}
+            offset={12}
+            className="z-50 pointer-events-none" // pointer-events-none pour fluidité
+          >
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9 }} 
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.1 }} // Animation très rapide
+              className="flex gap-2 p-0 min-w-[180px] shadow-xl rounded-lg bg-white overflow-hidden"
+            >
+               {/* Petite image optimisée ou placeholder */}
+               <div className="relative w-10 h-10 shrink-0 bg-zinc-100">
+                  {hoveredPoi.poi_images_urls && hoveredPoi.poi_images_urls[0] && (
+                     <Image 
+                       src={hoveredPoi.poi_images_urls[0]} 
+                       alt="" 
+                       fill 
+                       className="object-cover" 
+                       sizes="40px" // Indication au navigateur pour charger petit format
+                       quality={50} // Qualité basse suffisante pour thumbnail
+                     />
+                  )}
+               </div>
+               <div className="flex flex-col justify-center py-1 pr-2">
+                 <h4 className="font-bold text-xs text-zinc-900 leading-tight line-clamp-1">{hoveredPoi.poi_name}</h4>
+                 <div className="flex items-center gap-1 text-[10px] text-zinc-500 font-medium">
+                   <Star size={9} className="text-yellow-500 fill-current" />
+                   <span>{hoveredPoi.rating}</span>
+                   <span>•</span>
+                   <span>{getCategoryConfig(hoveredPoi.poi_category).label}</span>
+                 </div>
+               </div>
+            </motion.div>
+          </Popup>
+        )}
+      </AnimatePresence>
+    </Map>
+  );
+}
+
+export default memo(MapComponent);
+</file>
+
+<file path="components/sidebar/Sidebar.tsx">
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { SidebarItem } from "./SidebarItem";
+import { 
+  Bookmark, Clock, Share2, Printer, MapPin, 
+  Settings, HelpCircle, Shield, Globe, 
+  Building, UserSearch, PanelLeftClose, MapPinHouse,
+  User, LogIn, Mic, Layout
+} from "lucide-react";
+import { clsx } from "clsx";
+import { useAuth } from "@/hooks/useAuth";
+import { useRouter } from "next/navigation";
+
+interface SidebarProps {
+  isOpen: boolean; 
+  onClose: () => void;
+  // Actions
+  onViewChange: (view: "saved" | "recent" | "trips" | "mypois") => void;
+  onLocateMe: () => void;
+  onShare: () => void;
+  onPrint: () => void;
+  onToggleSettings: () => void;
+}
+
+export const Sidebar = ({ 
+    isOpen, 
+    onClose, 
+    onViewChange, 
+    onLocateMe,
+    onShare,
+    onPrint,
+    onToggleSettings
+}: SidebarProps) => {
+  const [isHovered, setIsHovered] = useState(false);
+  const { user, isAuthenticated } = useAuth();
+  const router = useRouter();
+  const isExpanded = isHovered || isOpen;
+
+  const handleAction = (action: () => void) => {
+    action();    // 1. Exécute l'action demandée (ex: ouvrir panneau favoris)
+    onClose();   // 2. Force la fermeture du mode "Menu étendu"
+    setIsHovered(false); // 3. Force la fin de l'état survol (pour éviter qu'il reste ouvert si la souris ne bouge pas vite)
+  };
+
+  return (
+    <>
+      <motion.div
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        initial={{ width: "70px" }}
+        animate={{ width: isExpanded ? "300px" : "72px" }}
+        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+        className={clsx(
+          "fixed top-0 left-0 h-full bg-white dark:bg-black/95 backdrop-blur-md shadow-2xl z-[60] flex flex-col border-r border-zinc-200 dark:border-zinc-800 overflow-hidden",
+          !isOpen && "hidden md:flex" 
+        )}
+      >
+        {/* HEADER LOGO */}
+        <div className="h-16 flex items-center shrink-0 border-b border-zinc-100 dark:border-zinc-800 px-3">
+           {isExpanded ? (
+             <div className="flex items-center justify-between w-full pl-2">
+               <div className="flex items-center gap-3">
+                 <div className="bg-primary/10 p-1.5 rounded-lg"><MapPinHouse className="text-primary" size={24} /></div>
+                 <span className="text-xl font-bold tracking-tight text-zinc-700 dark:text-white">Navi<span className="text-primary">goo</span></span>
+               </div>
+               <button onClick={onClose} className="p-1 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-md text-zinc-400"><PanelLeftClose size={20} /></button>
+             </div>
+           ) : (
+             <div className="w-full flex justify-center">
+                <div className="bg-white dark:bg-zinc-800 p-2 rounded-xl border border-zinc-100 dark:border-zinc-700">
+                  <MapPinHouse className="text-primary" size={26} />
+                </div>
+             </div>
+           )}
+        </div>
+
+        {/* CONTENT */}
+        <div className="flex-1 overflow-y-auto overflow-x-hidden scrollbar-thin px-2 py-4 space-y-1">
+          <SidebarItem isExpanded={isExpanded} icon={<Bookmark size={22} />} label="Enregistrés" onClick={() => handleAction(() => onViewChange("saved"))} />
+          <SidebarItem isExpanded={isExpanded} icon={<Clock size={22} />} label="Récents" onClick={() => handleAction(() => onViewChange("recent"))} />
+          <SidebarItem isExpanded={isExpanded} icon={<Building size={22} />} label="Creer un point d'interet" onClick={() => handleAction(() => isAuthenticated ? onViewChange("mypois") : router.push("/login"))} />
+          <SidebarItem isExpanded={isExpanded} icon={<Mic size={22} />} label="Podcasts" onClick={() => handleAction(() => isAuthenticated ? alert("Bientôt disponible") : router.push("/login"))} />
+          <SidebarItem isExpanded={isExpanded} icon={<Layout size={22} />} label="Blocs" onClick={() => handleAction(() => isAuthenticated ? alert("Bientôt disponible") : router.push("/login"))} />
+          <SidebarItem isExpanded={isExpanded} icon={<UserSearch size={22} />} label="Trouver ma position" onClick={() => handleAction(onLocateMe)} />
+          <SidebarItem isExpanded={isExpanded} icon={<MapPin size={22} />} label="Mes trajets" onClick={() => handleAction(() => onViewChange("trips"))} />
+          
+          <div className="h-px bg-zinc-100 dark:bg-zinc-800 my-2 mx-2" />
+
+          <SidebarItem isExpanded={isExpanded} icon={<Share2 size={22} />} label="Partager la carte" onClick={() => handleAction(onShare)} />
+          <SidebarItem isExpanded={isExpanded} icon={<Printer size={22} />} label="Imprimer la carte" onClick={() => handleAction(onPrint)} />
+          
+          <div className="h-px bg-zinc-100 dark:bg-zinc-800 my-2 mx-2" />
+
+          <SidebarItem isExpanded={isExpanded} icon={<Settings size={22} />} label="Paramètres & Style" onClick={() => handleAction(onToggleSettings)} />
+          <SidebarItem isExpanded={isExpanded} icon={<Shield size={22} />} label="Confidentialité" />
+
+          <div className="h-px bg-zinc-100 dark:bg-zinc-800 my-2 mx-2" />
+
+          {isAuthenticated ? (
+            <SidebarItem
+              isExpanded={isExpanded}
+              icon={<User size={22} className="text-primary" />}
+              label="Mon Profil"
+              onClick={() => handleAction(() => router.push("/profile"))}
+            />
+          ) : (
+            <SidebarItem
+              isExpanded={isExpanded}
+              icon={<LogIn size={22} />}
+              label="Connexion / Inscription"
+              onClick={() => handleAction(() => router.push("/login"))}
+            />
+          )}
+        </div>
+
+        {/* Footer */}
+        <div className={clsx("p-4 border-t border-zinc-100 dark:border-zinc-800 flex justify-center")}>
+             <Globe size={20} className="text-zinc-400 hover:text-primary cursor-pointer" />
+        </div>
+      </motion.div>
+      
+      {/* Mobile Backdrop */}
+      {isOpen && <div className="fixed inset-0 bg-black/50 z-[55] md:hidden" onClick={onClose} />}
+    </>
+  );
+};
+</file>
+
+<file path="data/mockData.ts">
 import { POI } from "@/types";
 
 export const POI_DATA: POI[] = [
@@ -1655,7 +5351,7 @@ export const POI_DATA: POI[] = [
     validated_by_name: "Admin Navigoo",
     poi_images_urls: ["https://images.unsplash.com/photo-1605333144866-e3d8f8be0f96?q=80&w=800"],
   },
-
+  
   // --- SPÉCIALITÉS LOCALES & VILLAGES ---
   {
     poi_id: "86",
@@ -5096,3 +8792,1237 @@ export const POI_DATA: POI[] = [
   }
 
 ];
+</file>
+
+<file path="hooks/useUserData.ts">
+"use client";
+
+import { useState, useEffect } from "react";
+import { POI, Trip, MapStyle } from "@/types";
+
+export const useUserData = () => {
+  const [savedPois, setSavedPois] = useState<POI[]>([]);
+  const [recentPois, setRecentPois] = useState<POI[]>([]);
+  const [recentTrips, setRecentTrips] = useState<Trip[]>([]);
+  const [myPois, setMyPois] = useState<POI[]>([]); 
+  const [mapStyle, setMapStyle] = useState<MapStyle>("streets-v2");
+
+  // Chargement initial
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("navigoo_saved");
+      const recents = localStorage.getItem("navigoo_recent");
+      const trips = localStorage.getItem("navigoo_trips");
+      const style = localStorage.getItem("navigoo_style");
+      const my = localStorage.getItem("navigoo_my_pois");
+
+      if (saved) setSavedPois(JSON.parse(saved));
+      if (recents) setRecentPois(JSON.parse(recents));
+      if (trips) setRecentTrips(JSON.parse(trips));
+      if (my) setMyPois(JSON.parse(my));
+      if (style === "hybrid" || style === "streets-v2") setMapStyle(style);
+    }
+  }, []);
+
+  // --- ACTIONS ---
+
+  const toggleSavePoi = (poi: POI) => {
+    let newSaved;
+    if (savedPois.some((p) => p.poi_id === poi.poi_id)) {
+      newSaved = savedPois.filter((p) => p.poi_id !== poi.poi_id);
+    } else {
+      newSaved = [poi, ...savedPois];
+    }
+    setSavedPois(newSaved);
+    localStorage.setItem("navigoo_saved", JSON.stringify(newSaved));
+  };
+
+  const addRecentPoi = (poi: POI) => {
+    const filtered = recentPois.filter((p) => p.poi_id !== poi.poi_id);
+    const newRecent = [poi, ...filtered].slice(0, 10);
+    setRecentPois(newRecent);
+    localStorage.setItem("navigoo_recent", JSON.stringify(newRecent));
+  };
+
+  const addTrip = (trip: Trip) => {
+    const newTrips = [trip, ...recentTrips].slice(0, 10);
+    setRecentTrips(newTrips);
+    localStorage.setItem("navigoo_trips", JSON.stringify(newTrips));
+  };
+
+  // Ajout d'un nouveau POI utilisateur
+  const addMyPoi = (poi: POI) => {
+    const newPois = [poi, ...myPois];
+    setMyPois(newPois);
+    localStorage.setItem("navigoo_my_pois", JSON.stringify(newPois));
+  };
+
+  const validatePoi = (poiId: string) => {
+    const newPois = myPois.map(p => p.poi_id === poiId ? { ...p, status: "validated" as const } : p);
+    setMyPois(newPois);
+    localStorage.setItem("navigoo_my_pois", JSON.stringify(newPois));
+  };
+
+  // Modification d'un POI existant
+  const updateMyPoi = (updatedPoi: POI) => {
+    const newPois = myPois.map(p => p.poi_id === updatedPoi.poi_id ? updatedPoi : p);
+    setMyPois(newPois);
+    localStorage.setItem("navigoo_my_pois", JSON.stringify(newPois));
+  };
+
+  // Suppression d'un POI
+  const deleteMyPoi = (poiId: string) => {
+    const newPois = myPois.filter(p => p.poi_id !== poiId);
+    setMyPois(newPois);
+    localStorage.setItem("navigoo_my_pois", JSON.stringify(newPois));
+  };
+
+  const toggleMapStyle = () => {
+    const newStyle: MapStyle = mapStyle === "streets-v2" ? "hybrid" : "streets-v2";
+    setMapStyle(newStyle);
+    localStorage.setItem("navigoo_style", newStyle);
+  };
+
+  return {
+    savedPois,
+    recentPois,
+    recentTrips,
+    myPois,
+    mapStyle,
+    toggleSavePoi,
+    addRecentPoi,
+    addTrip,
+    addMyPoi,
+    updateMyPoi,
+    validatePoi,
+    deleteMyPoi,
+    toggleMapStyle,
+    isSaved: (id: string) => savedPois.some(p => p.poi_id === id)
+  };
+};
+</file>
+
+<file path="components/sidebar/POIDetailsSidebar.tsx">
+import { motion } from "framer-motion";
+import Image from "next/image";
+import { POI } from "@/types";
+import { X, Navigation, Bookmark, Share2, Smartphone, Globe, Clock, MapPin, Star, MessageSquare, Edit, CheckCircle } from "lucide-react";
+import { getCategoryConfig } from "@/data/categories";
+import { useRouter } from "next/navigation";
+import { useUserData } from "@/hooks/useUserData"; // Pour vérifier propriété
+import { useAuth } from "@/hooks/useAuth";
+
+interface PoiDetailsProps {
+  poi: POI;
+  onClose: () => void;
+  isOpen: boolean;
+  onOpenDirections: () => void;
+}
+
+export const PoiDetailsSidebar = ({ poi, onClose, isOpen, onOpenDirections }: PoiDetailsProps) => {
+  const categoryConfig = getCategoryConfig(poi.poi_category);
+  const router = useRouter();
+  const { myPois, validatePoi } = useUserData();
+  const { user } = useAuth();
+
+  // Vérifier si le POI appartient à l'utilisateur
+  const isOwner = myPois.some(p => p.poi_id === poi.poi_id);
+  const isAdmin = user?.role === "admin";
+  const canValidate = isAdmin && poi.status === "submitted";
+
+  const handleEdit = () => {
+    router.push(`/add-poi?id=${poi.poi_id}`);
+  };
+
+  return (
+    <motion.div
+      initial={{ x: "-100%" }}
+      animate={{ x: isOpen ? "0%" : "-100%" }}
+      exit={{ x: "-100%" }}
+      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+      className="fixed top-0 left-0 md:left-[72px] h-full w-full md:w-[400px] bg-white dark:bg-zinc-900 shadow-2xl z-[55] flex flex-col border-r border-zinc-200 dark:border-zinc-800 overflow-y-auto"
+    >
+      {/* HEADER IMAGE HERO */}
+      <div className="relative w-full h-56 shrink-0 bg-zinc-200">
+        {poi.poi_images_urls && poi.poi_images_urls[0] ? (
+            <Image src={poi.poi_images_urls[0]} alt={poi.poi_name} fill className="object-cover"/>
+        ) : (
+            <div className="w-full h-full flex items-center justify-center text-zinc-400 bg-zinc-100">Aucune image</div>
+        )}
+        
+        {/* Close Button */}
+        <button onClick={onClose} className="absolute top-4 right-4 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full backdrop-blur-md transition-colors z-20">
+          <X size={20} />
+        </button>
+
+        {/* OWNER EDIT BUTTON */}
+        {isOwner && (
+            <button 
+                onClick={handleEdit}
+                className="absolute bottom-4 right-4 bg-white text-black px-4 py-2 rounded-full shadow-lg font-bold text-sm flex items-center gap-2 hover:scale-105 transition-transform"
+            >
+                <Edit size={16} /> Modifier Infos
+            </button>
+        )}
+      </div>
+
+      {/* CONTENU */}
+      <div className="p-6 space-y-6 pb-20">
+        
+        {/* STATUS BADGE */}
+        {poi.status === "submitted" && (
+          <div className="bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 px-3 py-1 rounded-full text-xs font-bold w-fit mb-2">
+            En attente de validation
+          </div>
+        )}
+
+        {/* TITRE & REVIEW */}
+        <div className="flex justify-between items-start gap-4">
+          <h1 className="text-3xl font-bold text-zinc-900 dark:text-zinc-50 leading-tight flex-1">{poi.poi_name}</h1>
+          {canValidate && (
+             <button
+                onClick={() => { validatePoi(poi.poi_id); onClose(); }}
+                className="bg-green-600 hover:bg-green-700 text-white p-2 rounded-xl shadow-lg transition-colors flex items-center gap-2"
+                title="Valider ce point d&apos;intérêt"
+             >
+                <CheckCircle size={20} />
+                <span className="text-xs font-bold pr-1">Valider</span>
+             </button>
+          )}
+        </div>
+          <div className="flex items-center gap-2 mt-3">
+            <span className="font-black text-sm bg-green-600 text-white px-1.5 rounded">{poi.rating || "N/A"}</span>
+            <div className="flex text-yellow-500">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <Star key={star} size={14} fill={star <= Math.round(poi.rating) ? "currentColor" : "none"} />
+              ))}
+            </div>
+            <span className="text-zinc-500 text-sm underline">({poi.review_count} avis)</span>
+            <span className="text-zinc-300">•</span>
+            <span className="text-primary text-sm font-semibold flex items-center gap-1">
+                {categoryConfig.icon} {categoryConfig.label}
+            </span>
+          </div>
+
+        {/* ACTIONS CIRCULAIRES */}
+        <div className="flex justify-between px-2 py-2">
+          <ActionButton icon={<Navigation size={22} className="-rotate-45 ml-1 mt-1" />} label="Y aller" active onClick={onOpenDirections} />
+          <ActionButton icon={<Bookmark size={22} />} label="Sauver" onClick={() => {}}/>
+          <ActionButton icon={<Share2 size={22} />} label="Partager" onClick={() => {}}/>
+          <ActionButton icon={<Globe size={22} />} label="Site web" onClick={() => {}} disabled={!poi.poi_contacts?.website} />
+        </div>
+
+        <div className="h-px bg-zinc-100 dark:bg-zinc-800 w-full" />
+
+        {/* DESCRIPTION */}
+        <div className="text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed">
+          <p>{poi.poi_description || "Aucune description disponible."}</p>
+        </div>
+
+        {/* SUBMITTER INFO */}
+        {(poi.submitted_by_name || poi.organization) && (
+          <div className="bg-zinc-50 dark:bg-zinc-800/50 p-4 rounded-2xl border border-zinc-100 dark:border-zinc-800">
+             <h4 className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-2">Soumis par</h4>
+             <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-xs">
+                   {poi.submitted_by_name?.charAt(0) || "O"}
+                </div>
+                <div>
+                   <p className="text-sm font-bold text-zinc-700 dark:text-zinc-200">{poi.submitted_by_name || "Explorateur anonyme"}</p>
+                   {poi.organization && <p className="text-[11px] text-zinc-500">{poi.organization}</p>}
+                </div>
+             </div>
+          </div>
+        )}
+
+        {/* AMENITIES */}
+        {poi.poi_amenities && poi.poi_amenities.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+                {poi.poi_amenities.map(am => (
+                    <span key={am} className="text-xs px-3 py-1 bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 rounded-full font-medium border border-zinc-200 dark:border-zinc-700">
+                        {am}
+                    </span>
+                ))}
+            </div>
+        )}
+
+        <div className="h-px bg-zinc-100 dark:bg-zinc-800 w-full" />
+
+        {/* INFO PRATIQUES */}
+        <div className="space-y-4">
+          <InfoRow icon={<MapPin className="text-zinc-400" size={20} />} text={poi.address_informal || `${poi.address_city}, ${poi.address_country || "Cameroun"}`} />
+          <InfoRow icon={<Clock className="text-zinc-400" size={20} />} text="Ouvert maintenant (ferme à 22h)" isActive />
+          <InfoRow icon={<Smartphone className="text-zinc-400" size={20} />} text={poi.poi_contacts?.phone || "Non renseigné"} />
+        </div>
+
+        <div className="h-px bg-zinc-100 dark:bg-zinc-800 w-full" />
+
+        {/* SECTION AVIS / COMMENTAIRES */}
+        <div>
+            <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
+                <MessageSquare size={18} /> Avis et commentaires
+            </h3>
+            
+            <div className="space-y-4">
+                {/* Simulation Commentaire 1 */}
+                <div className="flex gap-3">
+                    <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center font-bold text-blue-600 text-sm">JM</div>
+                    <div className="bg-zinc-50 dark:bg-zinc-800 p-3 rounded-r-xl rounded-bl-xl text-sm flex-1">
+                        <div className="flex justify-between items-center mb-1">
+                            <span className="font-bold">Jean-Marc</span>
+                            <div className="flex text-yellow-500"><Star size={10} fill="currentColor"/> 5.0</div>
+                        </div>
+                        <p className="text-zinc-600 dark:text-zinc-300">Très bel endroit, je recommande pour les soirées entre amis !</p>
+                    </div>
+                </div>
+
+                {/* Simulation Commentaire 2 */}
+                <div className="flex gap-3">
+                    <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center font-bold text-purple-600 text-sm">AL</div>
+                    <div className="bg-zinc-50 dark:bg-zinc-800 p-3 rounded-r-xl rounded-bl-xl text-sm flex-1">
+                        <div className="flex justify-between items-center mb-1">
+                            <span className="font-bold">Alice L.</span>
+                            <div className="flex text-yellow-500"><Star size={10} fill="currentColor"/> 4.0</div>
+                        </div>
+                        <p className="text-zinc-600 dark:text-zinc-300">Le service est un peu lent mais la nourriture est excellente.</p>
+                    </div>
+                </div>
+            </div>
+
+            <button className="w-full mt-4 py-2 border border-zinc-200 dark:border-zinc-700 text-zinc-500 text-sm font-medium rounded-lg hover:bg-zinc-50 transition-colors">
+                Voir les 45 avis
+            </button>
+        </div>
+
+      </div>
+    </motion.div>
+  );
+};
+
+const ActionButton = ({ icon, label, active, onClick, disabled }: any) => (
+  <button 
+    onClick={onClick}
+    disabled={disabled}
+    className={`flex flex-col items-center gap-2 group ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+  >
+    <div className={`w-12 h-12 rounded-full flex items-center justify-center border transition-all ${
+      active ? "bg-primary text-white border-primary shadow-md" : "bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-600 dark:text-zinc-300 hover:text-primary hover:border-primary/30"
+    }`}>
+      {icon}
+    </div>
+    <span className={`text-[10px] font-medium uppercase tracking-wide ${active ? "text-primary" : "text-zinc-500"}`}>{label}</span>
+  </button>
+);
+
+const InfoRow = ({ icon, text, isActive }: any) => (
+  <div className="flex items-start gap-4">
+    <div className="mt-0.5 min-w-[20px]">{icon}</div>
+    <span className={`text-sm ${isActive ? "text-green-600 font-bold" : "text-zinc-700 dark:text-zinc-300"}`}>{text}</span>
+  </div>
+);
+</file>
+
+<file path="app/add-poi/page.tsx">
+"use client";
+
+import { useState, useEffect, Suspense, useRef } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { 
+  ArrowLeft, Save, Loader2, Camera, MapPin, 
+  Hash, Globe, Phone, Building2, Flag, Mail, 
+  ScanLine, Type, Sparkles, CheckCircle2, CircleDashed,
+  Target, ImagePlus, LocateFixed, Maximize, Check
+} from "lucide-react";
+
+// Imports pour la carte
+import Map, { Marker, NavigationControl, ScaleControl, MapRef } from "react-map-gl/maplibre";
+import "maplibre-gl/dist/maplibre-gl.css";
+
+import { POI, Location } from "@/types";
+import { useUserData } from "@/hooks/useUserData";
+import { useAuth } from "@/hooks/useAuth";
+import { CATEGORIES } from "@/data/categories";
+import { Button } from "@/components/ui/Button";
+import { FormInput } from "@/components/ui/form/FormInput";
+import { FormSelect } from "@/components/ui/form/FormSelect";
+import Image from "next/image";
+import { clsx } from "clsx";
+
+// Clé API MapTiler (la même que dans page.tsx)
+const MAPTILER_API_KEY = "Lr72DkH8TYyjpP7RNZS9"; 
+
+const AMENITIES_OPTIONS = [
+  "Wi-Fi", "Parking", "Climatisé", "Terrasse", "Mobile Money", 
+  "Traiteur", "Sécurité", "Vue", "Handicap", "Bar", "24h/24"
+];
+
+function AddPoiContent() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const { addMyPoi, updateMyPoi, myPois } = useUserData();
+  const { user, isAuthenticated, isLoading: authLoading } = useAuth();
+  
+  // States
+  const [isLoading, setIsLoading] = useState(true);
+  const [isMapOpen, setIsMapOpen] = useState(false); // Modal Carte
+  const [postalCode, setPostalCode] = useState(""); 
+  const [keywordsString, setKeywordsString] = useState("");
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+
+  const editId = searchParams.get("id");
+
+  // Données du formulaire
+  const [formData, setFormData] = useState<Partial<POI>>({
+    poi_name: "",
+    poi_category: "",
+    poi_description: "",
+    poi_amenities: [],
+    location: { latitude: 3.86667, longitude: 11.51667 }, // Défaut: Yaoundé
+    address_informal: "",
+    address_city: "Yaoundé",
+    address_country: "Cameroun",
+    poi_contacts: { phone: "", website: "" },
+    poi_images_urls: [],
+    poi_keywords: []
+  });
+
+  // State temporaire pour la carte plein écran
+  const [tempLocation, setTempLocation] = useState<Location>({ latitude: 0, longitude: 0 });
+  const mapRef = useRef<MapRef>(null);
+
+  // Auth protection
+  useEffect(() => {
+    if (!authLoading && !isAuthenticated) {
+      router.push("/login");
+    }
+  }, [isAuthenticated, authLoading, router]);
+
+  // Initialisation
+  useEffect(() => {
+    if (editId) {
+      const existing = myPois.find(p => p.poi_id === editId);
+      if (existing) {
+        setFormData(existing);
+        setTempLocation(existing.location);
+        if (existing.poi_images_urls && existing.poi_images_urls[0]) {
+          setPreviewImage(existing.poi_images_urls[0]);
+        }
+        setKeywordsString(existing.poi_keywords?.join(", ") || "");
+      }
+    } else {
+      // Géolocalisation navigateur au chargement
+      if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition((pos) => {
+          const loc = { latitude: pos.coords.latitude, longitude: pos.coords.longitude };
+          setFormData(prev => ({ ...prev, location: loc }));
+          setTempLocation(loc);
+        });
+      }
+    }
+    setIsLoading(false);
+  }, [editId, myPois]);
+
+  // --- HANDLERS ---
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    if (name === "phone" || name === "website") {
+        setFormData(prev => ({ ...prev, poi_contacts: { ...prev.poi_contacts, [name]: value } }));
+    } else if (name === "latitude" || name === "longitude") {
+        const val = parseFloat(value) || 0;
+        setFormData(prev => ({ ...prev, location: { ...prev.location!, [name]: val } }));
+        setTempLocation(prev => ({ ...prev, [name]: val }));
+    } else {
+        setFormData(prev => ({ ...prev, [name]: value }));
+    }
+  };
+
+  const handleAmenityToggle = (amenity: string) => {
+    const current = formData.poi_amenities || [];
+    const newAmenities = current.includes(amenity)
+        ? current.filter(a => a !== amenity)
+        : [...current, amenity];
+    setFormData(prev => ({ ...prev, poi_amenities: newAmenities }));
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            const res = reader.result as string;
+            setPreviewImage(res);
+            setFormData(prev => ({ ...prev, poi_images_urls: [res] }));
+        };
+        reader.readAsDataURL(file);
+    }
+  };
+
+  // Gestion Carte
+  const handleMapClick = (evt: any) => {
+    setTempLocation({
+        latitude: evt.lngLat.lat,
+        longitude: evt.lngLat.lng
+    });
+  };
+
+  const handleDragEnd = (evt: any) => {
+    setTempLocation({
+        latitude: evt.lngLat.lat,
+        longitude: evt.lngLat.lng
+    });
+  };
+
+  const saveMapLocation = () => {
+    setFormData(prev => ({
+        ...prev,
+        location: tempLocation
+    }));
+    setIsMapOpen(false);
+  };
+
+  // Soumission
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.poi_name || !formData.poi_category) return alert("Nom et Catégorie requis.");
+
+    const finalPoi: POI = {
+        ...formData as POI,
+        poi_id: editId || Date.now().toString(),
+        poi_keywords: keywordsString.split(",").map(s => s.trim()).filter(Boolean),
+        rating: formData.rating || 4.5,
+        review_count: formData.review_count || 0,
+        popularity_score: 10,
+        status: editId ? (formData.status || "submitted") : "submitted",
+        submitted_by: editId ? formData.submitted_by : user?.id,
+        submitted_by_name: editId ? formData.submitted_by_name : user?.name,
+        organization: editId ? formData.organization : user?.organization
+    };
+
+    if (editId) updateMyPoi(finalPoi);
+    else addMyPoi(finalPoi);
+    router.push("/");
+  };
+
+  if (isLoading || authLoading || !isAuthenticated) return <div className="h-screen w-full bg-zinc-50 dark:bg-black flex items-center justify-center"><Loader2 className="animate-spin text-primary" size={40}/></div>;
+
+  return (
+    <div className="h-screen w-full bg-zinc-50 dark:bg-black font-sans overflow-y-auto">
+      
+      {/* HEADER FIXE */}
+      <div className="sticky top-0 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md border-b border-zinc-200 dark:border-zinc-800 z-40 py-3 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 lg:px-8">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div className="flex items-center gap-4">
+                    <button onClick={() => router.back()} className="p-2.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-xl transition-colors border border-transparent hover:border-zinc-200 dark:hover:border-zinc-700">
+                        <ArrowLeft size={20} className="text-zinc-600 dark:text-zinc-400" />
+                    </button>
+                    <div>
+                        <div className="flex items-center gap-2">
+                            <span className="text-xs font-bold text-primary uppercase tracking-wider bg-primary/10 px-2 py-0.5 rounded-full">
+                                {editId ? "Édition" : "Nouveau"}
+                            </span>
+                            <h1 className="text-lg md:text-xl font-bold text-zinc-900 dark:text-white leading-none">
+                                Bienvenue, Explorateur
+                            </h1>
+                        </div>
+                        <p className="text-xs md:text-sm text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5 mt-1">
+                            <Sparkles size={12} className="text-yellow-500 fill-yellow-500" /> 
+                            Partagez vos meilleures découvertes et enrichissez la carte.
+                        </p>
+                    </div>
+                </div>
+                <div className="flex items-center justify-end">
+                    <Button 
+                        onClick={handleSubmit} 
+                        variant="primary" 
+                        className="px-6 py-2 h-11 text-sm font-bold shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-transform flex items-center gap-2"
+                    >
+                        <Save size={18} /> {editId ? "Mettre à jour" : "Publier le lieu"}
+                    </Button>
+                </div>
+            </div>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto p-4 md:p-6 pb-24">
+        <form className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+
+            {/* GAUCHE : INFOS */}
+            <div className="bg-white dark:bg-zinc-900 rounded-3xl p-5 border border-zinc-200 dark:border-zinc-800 shadow-sm space-y-5">
+                <div className="flex items-center gap-3 pb-4 border-b border-zinc-100 dark:border-zinc-800">
+                    <div className="p-2.5 bg-violet-100 dark:bg-violet-900/30 rounded-xl text-primary">
+                        <ScanLine size={20} />
+                    </div>
+                    <div>
+                        <h2 className="text-base font-bold text-zinc-800 dark:text-zinc-100">Informations Générales</h2>
+                        <p className="text-[11px] text-zinc-500">Détails essentiels pour identifier le lieu.</p>
+                    </div>
+                </div>
+
+                {/* Upload Photo */}
+                <div className="relative h-40 w-full bg-zinc-100 dark:bg-zinc-800 rounded-2xl border-2 border-dashed border-zinc-300 dark:border-zinc-700 overflow-hidden group cursor-pointer transition-colors hover:border-primary hover:bg-primary/5">
+                    {previewImage ? (
+                        <Image src={previewImage} alt="Cover" fill className="object-cover transition-transform group-hover:scale-105" />
+                    ) : (
+                        <div className="absolute inset-0 flex flex-col items-center justify-center text-zinc-400">
+                            <ImagePlus size={24} className="mb-2 group-hover:text-primary" />
+                            <span className="text-xs font-semibold">Ajouter une couverture</span>
+                        </div>
+                    )}
+                    <input type="file" onChange={handleImageChange} accept="image/*" className="absolute inset-0 opacity-0 cursor-pointer z-10" />
+                </div>
+
+                <div className="space-y-12">
+                    <FormInput 
+                        label="Nom du lieu" name="poi_name" 
+                        value={formData.poi_name} onChange={handleChange} 
+                        icon={<Type size={16}/>} className="h-11" placeholder="Ex: Restaurant Le Délice"
+                    />
+                    
+                    <FormSelect 
+                        label="Catégorie" name="poi_category" 
+                        value={formData.poi_category} onChange={handleChange}
+                        icon={<Hash size={16}/>}
+                        options={CATEGORIES.map(c => ({ id: c.id, label: c.label }))}
+                    />
+
+                    <FormInput 
+                        as="textarea" label="Courte description" name="poi_description"
+                        value={formData.poi_description} onChange={handleChange} 
+                        icon={<Type size={16}/>} style={{ minHeight: '80px', maxHeight: '120px' }}
+                    />
+
+                    <div className="grid grid-cols-2 gap-3">
+                        <FormInput 
+                            label="Téléphone" name="phone" 
+                            value={formData.poi_contacts?.phone} onChange={handleChange}
+                            icon={<Phone size={16}/>} className="h-11" 
+                        />
+                        <FormInput 
+                            label="Site Web" name="website" 
+                            value={formData.poi_contacts?.website} onChange={handleChange}
+                            icon={<Globe size={16}/>} className="h-11" placeholder="facultatif"
+                        />
+                    </div>
+
+                    <FormInput 
+                        label="Mots-clés" name="keywords" 
+                        value={keywordsString} onChange={(e) => setKeywordsString(e.target.value)}
+                        icon={<Hash size={16}/>} className="h-11" placeholder="tag1, tag2..."
+                    />
+
+                    <div>
+                        <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider mb-2 ml-1 block">Équipements</label>
+                        <div className="flex flex-wrap gap-1.5">
+                            {AMENITIES_OPTIONS.map(am => (
+                                <button key={am} type="button" onClick={() => handleAmenityToggle(am)}
+                                    className={clsx(
+                                        "px-3 py-1.5 rounded-lg text-[11px] font-bold border flex items-center gap-1.5 transition-all",
+                                        formData.poi_amenities?.includes(am)
+                                        ? "bg-zinc-800 text-white border-zinc-800 dark:bg-white dark:text-black shadow-sm" 
+                                        : "bg-white dark:bg-zinc-800 text-zinc-500 border-zinc-200 dark:border-zinc-700 hover:bg-zinc-50"
+                                    )}
+                                >
+                                    {formData.poi_amenities?.includes(am) ? <CheckCircle2 size={12}/> : <CircleDashed size={12}/>}
+                                    {am}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* DROITE : COORDONNÉES */}
+            <div className="bg-white dark:bg-zinc-900 rounded-3xl p-5 border border-zinc-200 dark:border-zinc-800 shadow-sm space-y-5 h-full flex flex-col">
+                <div className="flex items-center gap-3 pb-4 border-b border-zinc-100 dark:border-zinc-800">
+                    <div className="p-2.5 bg-blue-100 dark:bg-blue-900/30 rounded-xl text-blue-600">
+                        <MapPin size={20} />
+                    </div>
+                    <div>
+                        <h2 className="text-base font-bold text-zinc-800 dark:text-zinc-100">Coordonnées</h2>
+                        <p className="text-[11px] text-zinc-500">Sélectionnez la position exacte sur la carte.</p>
+                    </div>
+                </div>
+
+                {/* --- VUE MINIATURE AVEC BOUTON --- */}
+                <div className="relative w-full h-48 rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-800 shadow-inner group">
+                    {/* Carte Miniature Statique (MapLibre avec interactivité désactivée) */}
+                    <div className="absolute inset-0 grayscale-[50%] group-hover:grayscale-0 transition-all duration-500">
+                       {/* Note: Pour éviter trop de lourdeur, on peut aussi utiliser une image statique, 
+                           mais ici j'utilise la Map désactivée pour la précision visuelle */}
+                        <Map
+                            initialViewState={{
+                                longitude: formData.location?.longitude || 11.5,
+                                latitude: formData.location?.latitude || 3.8,
+                                zoom: 14
+                            }}
+                            mapStyle={`https://api.maptiler.com/maps/streets-v2/style.json?key=${MAPTILER_API_KEY}`}
+                            scrollZoom={false}
+                            dragPan={false}
+                            doubleClickZoom={false}
+                            attributionControl={false}
+                        >
+                            <Marker longitude={formData.location?.longitude || 0} latitude={formData.location?.latitude || 0}>
+                                <MapPin size={32} className="text-primary fill-primary/20 drop-shadow-md" />
+                            </Marker>
+                        </Map>
+                    </div>
+
+                    {/* Overlay d'Action */}
+                    <div className="absolute inset-0 bg-black/10 hover:bg-black/20 transition-colors flex items-center justify-center pointer-events-none">
+                        <div className="pointer-events-auto transform transition-transform group-hover:scale-105">
+                            <button 
+                                type="button"
+                                onClick={() => { setTempLocation(formData.location!); setIsMapOpen(true); }}
+                                className="bg-white text-zinc-800 px-5 py-2.5 rounded-full font-bold shadow-xl flex items-center gap-2 text-sm border-2 border-primary/20 hover:border-primary transition-all"
+                            >
+                                <Maximize size={16} className="text-primary"/> 
+                                Choisir sur la carte
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="space-y-12 pt-2 flex-1">
+                    {/* Bloc info GPS Rapide */}
+                    <div className="p-3 bg-zinc-50 dark:bg-zinc-950 border border-dashed border-zinc-200 dark:border-zinc-700 rounded-xl flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                            <Target size={16} className="text-zinc-400"/>
+                            <div className="text-xs font-mono font-bold text-zinc-600 dark:text-zinc-300">
+                                {formData.location?.latitude.toFixed(6)}, {formData.location?.longitude.toFixed(6)}
+                            </div>
+                        </div>
+                        <span className="text-[10px] text-green-600 font-bold bg-green-100 dark:bg-green-900/30 px-2 py-0.5 rounded-md">
+                            Synchronisé
+                        </span>
+                    </div>
+
+                    <FormInput 
+                        label="Adresse / Lieu-dit" name="address_informal"
+                        value={formData.address_informal} onChange={handleChange} 
+                        icon={<MapPin size={16}/>} className="h-11" placeholder="Ex: Bastos, Face ambassade..."
+                    />
+
+                    <div className="grid grid-cols-2 gap-3">
+                        <FormInput 
+                            label="Ville" name="address_city"
+                            value={formData.address_city} onChange={handleChange} 
+                            icon={<Building2 size={16}/>} className="h-11"
+                        />
+                        <FormInput 
+                            label="Pays" name="address_country"
+                            value={formData.address_country} onChange={handleChange} 
+                            icon={<Flag size={16}/>} className="h-11"
+                        />
+                    </div>
+
+                    <FormInput 
+                        label="Code Postal" name="postalCode"
+                        value={postalCode} onChange={(e) => setPostalCode(e.target.value)} 
+                        icon={<Mail size={16}/>} className="h-11"
+                    />
+                </div>
+            </div>
+
+        </form>
+      </div>
+
+      {/* --- MODALE CARTE PLEIN ÉCRAN --- */}
+      {isMapOpen && (
+        <div className="fixed inset-0 z-[60] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 md:p-8 animate-in fade-in zoom-in-95 duration-200">
+            <div className="bg-white dark:bg-zinc-900 w-full h-full rounded-3xl overflow-hidden relative shadow-2xl flex flex-col">
+                
+                {/* En-tête Modal */}
+                <div className="absolute top-4 left-4 right-4 z-10 flex justify-between pointer-events-none">
+                    <div className="bg-white/90 dark:bg-zinc-800/90 backdrop-blur px-4 py-2 rounded-full shadow-lg border border-zinc-200 dark:border-zinc-700 pointer-events-auto">
+                        <h3 className="text-sm font-bold flex items-center gap-2">
+                            <MapPin size={16} className="text-primary"/>
+                            Glissez le marqueur ou cliquez pour définir
+                        </h3>
+                    </div>
+                    <button 
+                        onClick={() => setIsMapOpen(false)}
+                        className="bg-white text-zinc-800 p-2 rounded-full shadow-lg pointer-events-auto hover:bg-zinc-100"
+                    >
+                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                    </button>
+                </div>
+
+                {/* Map Interactive */}
+                <div className="flex-1 w-full h-full relative bg-zinc-100">
+                    <Map
+                        initialViewState={{
+                            longitude: tempLocation.longitude,
+                            latitude: tempLocation.latitude,
+                            zoom: 15
+                        }}
+                        mapStyle={`https://api.maptiler.com/maps/streets-v2/style.json?key=${MAPTILER_API_KEY}`}
+                        onClick={handleMapClick}
+                    >
+                        <NavigationControl position="bottom-left" showCompass={false} />
+                        <ScaleControl position="bottom-right" />
+
+                        {/* Draggable Marker */}
+                        <Marker 
+                            longitude={tempLocation.longitude} 
+                            latitude={tempLocation.latitude} 
+                            draggable
+                            onDragEnd={handleDragEnd}
+                            anchor="bottom"
+                        >
+                            <div className="flex flex-col items-center cursor-move hover:scale-110 transition-transform">
+                                <Flag size={40} className="text-red-600 fill-red-600 drop-shadow-xl filter" strokeWidth={2} />
+                                <div className="w-2.5 h-2.5 bg-black/50 rounded-full blur-[2px] mt-[-2px]"></div>
+                            </div>
+                        </Marker>
+                    </Map>
+                </div>
+
+                {/* Footer Modal avec Actions */}
+                <div className="bg-white dark:bg-zinc-900 border-t border-zinc-200 dark:border-zinc-800 p-4 flex flex-col md:flex-row justify-between items-center gap-4 shrink-0">
+                    <div className="flex items-center gap-2 text-zinc-500 text-xs font-mono">
+                       <LocateFixed size={14}/>
+                       Lat: <span className="text-zinc-800 dark:text-zinc-200 font-bold">{tempLocation.latitude.toFixed(6)}</span> 
+                       Lon: <span className="text-zinc-800 dark:text-zinc-200 font-bold">{tempLocation.longitude.toFixed(6)}</span>
+                    </div>
+                    
+                    <div className="flex gap-3 w-full md:w-auto">
+                        <Button variant="secondary" onClick={() => navigator.geolocation.getCurrentPosition(p => setTempLocation({latitude: p.coords.latitude, longitude: p.coords.longitude}))} size="md" className="flex-1 md:flex-none">
+                            <LocateFixed size={18} /> Ma position
+                        </Button>
+                        <Button onClick={saveMapLocation} variant="primary" size="md" className="flex-1 md:flex-none font-bold gap-2">
+                            <Check size={18} /> Valider la position
+                        </Button>
+                    </div>
+                </div>
+            </div>
+        </div>
+      )}
+
+    </div>
+  );
+}
+
+// Wrapper Suspense pour Next.js 
+export default function AddPoiPage() {
+    return (
+        <Suspense fallback={<div className="h-screen w-full bg-white dark:bg-black" />}>
+            <AddPoiContent />
+        </Suspense>
+    )
+}
+</file>
+
+<file path="types/index.ts">
+export type UserRole = 'client' | 'admin';
+
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  organization?: string;
+  role: UserRole;
+  avatar?: string; // URL de l'avatar
+}
+
+/**
+ * Statut d'un Point d'Intérêt
+ * - submitted: En attente de validation par un admin
+ * - validated: Approuvé et visible publiquement
+ * - rejected: Refusé par un admin
+ */
+export type POIStatus = "submitted" | "validated" | "rejected";
+
+export interface POI {
+  // ============================================================================
+  // IDENTIFICATION
+  // ============================================================================
+  poi_id: string; // UUID unique
+  poi_name: string;
+  poi_category: string; // Ex: "Tourne-dos", "Kiosque", "Restaurant"
+  poi_description: string;
+  poi_amenities: string[]; // Ex: ["WiFi", "Parking", "Climatisé"]
+  
+  // ============================================================================
+  // GÉOGRAPHIE
+  // ============================================================================
+  location: {
+    latitude: number;
+    longitude: number;
+  };
+
+  // Adresses
+  address_informal?: string; // Ex: "Mvog-Betsi, face station Total"
+  address_city: string; // Ex: "Yaoundé"
+  address_country?: string; // Ex: "Cameroun"
+
+  // ============================================================================
+  // STATISTIQUES & POPULARITÉ
+  // ============================================================================
+  rating: number; // Note moyenne (0-5)
+  review_count: number; // Nombre d'avis
+  poi_images_urls: string[]; // URLs des images
+  popularity_score: number; // Score de popularité (algorithme interne)
+  poi_keywords?: string[]; // Mots-clés pour recherche (ex: ["africain", "grillades"])
+  
+  // ============================================================================
+  // CONTACTS
+  // ============================================================================
+  poi_contacts?: {
+    phone?: string;
+    website?: string;
+    email?: string;
+  };
+
+  // ============================================================================
+  // HORAIRES
+  // ============================================================================
+  operation_time_plan?: any;
+
+  // ============================================================================
+  // WORKFLOW & VALIDATION
+  // ============================================================================
+  
+  /**
+   * Statut du POI dans le workflow de validation
+   */
+  status: POIStatus;
+  
+  /**
+   * ID de l'utilisateur qui a soumis le POI
+   * Utilisé pour la visibilité : un client peut voir ses propres soumissions
+   */
+  submitted_by?: string;
+  
+  /**
+   * Nom de l'utilisateur soumetteur (pour affichage)
+   */
+  submitted_by_name?: string;
+  
+  /**
+   * Organisation de l'utilisateur soumetteur
+   */
+  organization?: string;
+  
+  /**
+   * Date de soumission (ISO 8601)
+   */
+  submitted_at?: string;
+  
+  /**
+   * Date de validation (ISO 8601)
+   * Définie uniquement si status === "validated"
+   */
+  validated_at?: string;
+  
+  /**
+   * ID de l'admin qui a validé le POI
+   */
+  validated_by?: string;
+  
+  /**
+   * Nom de l'admin validateur (pour audit)
+   */
+  validated_by_name?: string;
+  
+  /**
+   * Date de rejet (ISO 8601)
+   * Définie uniquement si status === "rejected"
+   */
+  rejected_at?: string;
+  
+  /**
+   * ID de l'admin qui a rejeté le POI
+   */
+  rejected_by?: string;
+  
+  /**
+   * Raison du rejet (optionnelle)
+   */
+  rejection_reason?: string;
+}
+</file>
+
+<file path="app/page.tsx">
+"use client";
+
+import { useMemo, useState, useEffect } from "react";
+import dynamic from "next/dynamic";
+import { TopLayout } from "@/components/navigation/TopLayout";
+import { Sidebar } from "@/components/sidebar/Sidebar";
+import { PoiDetailsSidebar } from "@/components/sidebar/POIDetailsSidebar";
+import { DirectionsSidebar } from "@/components/sidebar/DirectionSidebar";
+import { SecondarySidebar } from "@/components/sidebar/SecondarySidebar";
+import { POI_DATA } from "@/data/mockData";
+import { POI, Location, TransportMode } from "@/types";
+import { getRoute } from "@/services/routingService";
+import { useUserData } from "@/hooks/useUserData";
+import { useAuth } from "@/hooks/useAuth";
+import { Settings as SettingsIcon, Check, X } from "lucide-react";
+import { Loader } from "@/components/ui/Loader";
+import { MobileNavBar } from "@/components/navigation/MobileNavbar";
+
+
+const MapComponent = dynamic(() => import("@/components/map/Map"), {
+  ssr: false,
+  loading: () => <Loader />,
+});
+
+const MAPTILER_API_KEY = "Lr72DkH8TYyjpP7RNZS9"; 
+
+export default function Home() {
+  // Gestionnaires d'ouverture
+  const [isMainSidebarOpen, setIsMainSidebarOpen] = useState(false); // Le mode "étendu" du menu
+  
+  // Contenu "Secondaire" (Panneaux qui s'affichent à coté du dock)
+  // On utilise un state commun pour garantir qu'un seul panneau s'affiche à la fois
+  // Types: "details" (fiche poi) | "directions" (itinéraire) | "list-saved" | "list-recent" | "list-trips" | "list-mypois" | null
+  const [panelState, setPanelState] = useState<{
+     type: "details" | "directions" | "saved" | "recent" | "trips" | "mypois" | null;
+     data?: any; // Pour passer le POI selectionné ou autre
+  }>({ type: null });
+  
+  const { savedPois, recentPois, recentTrips, mapStyle, addRecentPoi, addTrip, toggleMapStyle, myPois } = useUserData();
+  const { user } = useAuth();
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  
+  // États transverses
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [userLocation, setUserLocation] = useState<Location | null>(null);
+  
+  // États Routing spécifiques
+  const [routeStats, setRouteStats] = useState<any>(null);
+  const [routeGeometry, setRouteGeometry] = useState<any>(null);
+  const [isRouteLoading, setIsRouteLoading] = useState(false);
+  const [activeTransportMode, setActiveTransportMode] = useState<TransportMode>("driving");
+
+  useEffect(() => {
+     if("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(
+            pos => setUserLocation({ latitude: pos.coords.latitude, longitude: pos.coords.longitude }),
+            err => console.warn(err)
+        );
+     }
+  }, []);
+
+  // --- GESTIONNAIRES D'AFFICHAGE ---
+
+  // 1. Clic sur un POI (Carte ou Recherche)
+  const handleSelectPoi = (poi: POI | null) => {
+    if(!poi) {
+        // Clic dans le vide -> Tout fermer sauf la barre de recherche
+        setPanelState({ type: null });
+        return;
+    }
+    
+    // Ajout historique
+    addRecentPoi(poi);
+
+    // Ouvre le panneau détails et ferme le menu étendu s'il gêne
+    setIsMainSidebarOpen(false); 
+    setPanelState({ type: "details", data: poi });
+  };
+
+  // 2. Clic sur un élément du Menu Latéral (Ouvre Sidebar Secondaire)
+  const handleViewChange = (view: "saved" | "recent" | "trips" | "mypois") => {
+    setIsMainSidebarOpen(false); // On réduit le menu pour voir la liste
+    setPanelState({ type: view });
+    // Reset POI select (la carte reste centrée mais on n'est plus en mode fiche détails)
+  };
+
+  // 3. Passage en mode Itinéraire
+  const handleOpenDirections = () => {
+    if (panelState.type === "details" && panelState.data) {
+        setPanelState({ type: "directions", data: panelState.data });
+        handleCalculateRoute(panelState.data, "driving");
+    }
+  };
+
+  // --- LOGIQUE ROUTING ---
+
+  const handleCalculateRoute = async (destination: POI, mode: TransportMode) => {
+    if (!userLocation) return alert("Géolocalisation requise pour le départ.");
+    
+    setActiveTransportMode(mode);
+    setIsRouteLoading(true);
+
+    const result = await getRoute(userLocation, destination.location, mode, MAPTILER_API_KEY);
+    
+    if (result) {
+        addTrip({
+            id: Date.now().toString(),
+            departName: "Ma Position",
+            arriveName: destination.poi_name,
+            date: new Date().toISOString(),
+            distance: result.distance,
+            duration: result.duration
+        });
+        setRouteStats(result);
+        setRouteGeometry(result.geometry);
+    } else {
+        alert("Itinéraire introuvable");
+    }
+    setIsRouteLoading(false);
+  };
+
+  const handleClosePanel = () => {
+    setPanelState({ type: null });
+    setRouteGeometry(null); // Nettoyage carte
+    setRouteStats(null);
+  };
+
+    // 2. Créer une fonction pour réinitialiser la vue (Action du bouton "Carte")
+  const handleResetToMap = () => {
+    setPanelState({ type: null }); // Ferme tout les panneaux
+    setIsMainSidebarOpen(false);   // Ferme le menu latéral si ouvert
+    
+    // Optionnel : Recentrer sur l'utilisateur
+    if (userLocation) {
+       // La MapComponent a un effet useEffect qui réagira si userLocation change ou si on le force
+       // Ici, on ferme juste les panneaux pour dégager la vue.
+    }
+  };
+
+
+  const filteredPois = useMemo(() => {
+    const base = [...POI_DATA, ...myPois]; // Fusion
+    return base.filter((poi) => {
+      // Visibilité basée sur le statut et le rôle
+      const isVisible =
+        user?.role === "admin" ||
+        poi.status === "validated" ||
+        (poi.submitted_by && user?.id && poi.submitted_by === user.id);
+
+      if (!isVisible) return false;
+
+      const cat = selectedCategory ? poi.poi_category === selectedCategory : true;
+      const search = searchQuery ? poi.poi_name.toLowerCase().includes(searchQuery.toLowerCase()) : true;
+      return cat && search;
+    });
+  }, [selectedCategory, searchQuery, myPois, user]);
+
+  return (
+    <main className="relative h-screen w-screen overflow-hidden bg-zinc-50 dark:bg-black font-sans">
+      
+      {/* Niveau 4 (Top) */}
+      <TopLayout 
+        onToggleSidebar={() => setIsMainSidebarOpen(!isMainSidebarOpen)}
+        allPois={POI_DATA}
+        selectedCategory={selectedCategory}
+        onSelectCategory={(id) => setSelectedCategory(prev => prev === id ? "" : id)}
+        onSearch={setSearchQuery}
+        onSelectResult={handleSelectPoi}
+        onLocateMe={() => userLocation && setUserLocation({...userLocation})}
+        recentSearches={[]} 
+        recentPois={recentPois}
+      />
+
+      {/* Niveau 3 (Gauche) - Sidebar Navigation */}
+      <Sidebar 
+        isOpen={isMainSidebarOpen} 
+        onClose={() => setIsMainSidebarOpen(false)}
+        onViewChange={handleViewChange}
+        onLocateMe={() => userLocation && setUserLocation({...userLocation})}
+        onShare={() => navigator.clipboard.writeText(window.location.href)}
+        onPrint={() => setTimeout(() => window.print(), 100)}
+        onToggleSettings={() => setIsSettingsOpen(true)}
+      />
+
+      {/* ------ AJOUTER ICI : BARRE DE NAVIGATION MOBILE (Niveau 3.5) ------ */}
+      <MobileNavBar 
+        currentView={panelState.type === "details" || panelState.type === "directions" ? null : panelState.type}
+        onViewChange={handleViewChange}
+        onOpenSidebar={() => setIsMainSidebarOpen(true)}
+        onResetView={handleResetToMap}
+      />
+
+      {/* Niveau 2 (Panneaux glissants) - Mutuellement Exclusifs */}
+      
+      {/* A. Fiche Détails POI */}
+      {panelState.type === "details" && panelState.data && (
+        <PoiDetailsSidebar 
+          poi={panelState.data} 
+          isOpen={true}
+          onClose={handleClosePanel}
+          onOpenDirections={handleOpenDirections}
+        />
+      )}
+
+      {/* B. Itinéraire */}
+      {panelState.type === "directions" && panelState.data && (
+        <DirectionsSidebar 
+            isOpen={true}
+            onClose={handleClosePanel}
+            originPoi={null}
+            destinationPoi={panelState.data}
+            userLocation={userLocation}
+            activeMode={activeTransportMode}
+            isLoadingRoute={isRouteLoading}
+            routeStats={routeStats}
+            onCalculateRoute={(mode) => handleCalculateRoute(panelState.data, mode)}
+        />
+      )}
+
+      {/* C. Listes (Saved, Recent, Trips...) */}
+      {(panelState.type === "saved" || panelState.type === "recent" || panelState.type === "trips" || panelState.type === "mypois") && (
+          <SecondarySidebar 
+             view={panelState.type}
+             onClose={handleClosePanel}
+             data={{ savedPois, recentPois, trips: recentTrips }}
+             onSelectPoi={handleSelectPoi}
+          />
+      )}
+
+      {/* Settings Modal (Overlay) */}
+      {isSettingsOpen && (
+         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+             <div className="bg-white dark:bg-zinc-900 rounded-2xl w-full max-w-sm p-6 shadow-2xl">
+                 <div className="flex justify-between items-center mb-6">
+                    <h2 className="text-xl font-bold flex items-center gap-2">
+                        <SettingsIcon className="text-primary" /> Apparence
+                    </h2>
+                    <button onClick={() => setIsSettingsOpen(false)} className="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-full"><X/></button>
+                 </div>
+                 <div className="grid grid-cols-2 gap-4">
+                    <button 
+                       onClick={() => { toggleMapStyle(); setIsSettingsOpen(false); }}
+                       className={`p-4 rounded-xl border-2 flex flex-col items-center gap-3 transition-all ${mapStyle === 'streets-v2' ? 'border-primary bg-primary/5' : 'border-zinc-200 dark:border-zinc-700'}`}
+                    >
+                        <div className="w-full h-20 bg-zinc-200 rounded-lg bg-cover bg-center" style={{backgroundImage: "url('https://cloud.maptiler.com/static/img/maps/streets-v2.png')"}}></div>
+                        <span className="font-semibold text-sm">Plan</span>
+                        {mapStyle === 'streets-v2' && <Check size={16} className="text-primary"/>}
+                    </button>
+                    <button 
+                       onClick={() => { toggleMapStyle(); setIsSettingsOpen(false); }}
+                       className={`p-4 rounded-xl border-2 flex flex-col items-center gap-3 transition-all ${mapStyle === 'hybrid' ? 'border-primary bg-primary/5' : 'border-zinc-200 dark:border-zinc-700'}`}
+                    >
+                         <div className="w-full h-20 bg-zinc-700 rounded-lg bg-cover bg-center" style={{backgroundImage: "url('https://cloud.maptiler.com/static/img/maps/hybrid.png')"}}></div>
+                        <span className="font-semibold text-sm">Satellite</span>
+                        {mapStyle === 'hybrid' && <Check size={16} className="text-primary"/>}
+                    </button>
+                 </div>
+             </div>
+         </div>
+      )}
+
+      {/* Niveau 1 (Map) */}
+      <div className="absolute top-0 left-0 w-full h-full z-0 print:block">
+        <MapComponent 
+          apiKey={MAPTILER_API_KEY} 
+          pois={filteredPois} 
+          selectedPoi={panelState.type === "details" || panelState.type === "directions" ? panelState.data : null}
+          userLocation={userLocation}
+          onSelectPoi={handleSelectPoi}
+          routeGeometry={routeGeometry}
+          mapStyleType={mapStyle} 
+        />
+      </div>
+
+    </main>
+  );
+}
+</file>
+
+</files>
