@@ -43,7 +43,11 @@ The content is organized as follows:
 app/
   add-poi/
     page.tsx
+  blogs/
+    page.tsx
   login/
+    page.tsx
+  podcasts/
     page.tsx
   profile/
     page.tsx
@@ -97,6 +101,7 @@ public/
   vercel.svg
   window.svg
 services/
+  apiService.ts
   authService.ts
   routingService.ts
 types/
@@ -112,6 +117,171 @@ tsconfig.json
 
 <files>
 This section contains the contents of the repository's files.
+
+<file path="app/blogs/page.tsx">
+"use client";
+
+import { useEffect, useState } from "react";
+import { apiService, Blog } from "@/services/apiService";
+import { ArrowLeft, BookOpen, Clock, Tag } from "lucide-react";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+
+export default function BlogsPage() {
+  const [blogs, setBlogs] = useState<Blog[]>([]);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+
+  useEffect(() => {
+    apiService.getAllBlogs()
+      .then(setBlogs)
+      .catch(err => console.error("Error fetching blogs:", err))
+      .finally(() => setLoading(false));
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-zinc-50 dark:bg-black p-6">
+      <div className="max-w-4xl mx-auto">
+        <button
+          onClick={() => router.push("/")}
+          className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400 mb-8 hover:text-primary transition-colors"
+        >
+          <ArrowLeft size={20} /> Retour à la carte
+        </button>
+
+        <h1 className="text-4xl font-bold text-zinc-900 dark:text-white mb-2 flex items-center gap-3">
+          <BookOpen className="text-primary" /> Nos Blogs (Blocs)
+        </h1>
+        <p className="text-zinc-500 dark:text-zinc-400 mb-12">Découvrez les dernières actualités et histoires de nos points d'intérêt.</p>
+
+        {loading ? (
+          <div className="flex justify-center p-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+          </div>
+        ) : (
+          <div className="grid gap-8">
+            {blogs.length === 0 ? (
+              <div className="bg-white dark:bg-zinc-900 p-12 rounded-3xl text-center border border-zinc-200 dark:border-zinc-800">
+                <p className="text-zinc-500">Aucun blog disponible pour le moment.</p>
+              </div>
+            ) : (
+              blogs.map(blog => (
+                <article key={blog.blogId} className="bg-white dark:bg-zinc-900 rounded-3xl overflow-hidden border border-zinc-200 dark:border-zinc-800 shadow-sm hover:shadow-md transition-shadow">
+                  {blog.imageUrl && (
+                    <div className="relative h-64 w-full">
+                      <Image src={blog.imageUrl} alt={blog.title} fill className="object-cover" />
+                    </div>
+                  )}
+                  <div className="p-8">
+                    <div className="flex items-center gap-4 text-xs text-zinc-500 mb-4">
+                      <span className="flex items-center gap-1"><Clock size={14} /> {new Date(blog.createdAt).toLocaleDateString()}</span>
+                      {blog.tags?.map(tag => (
+                        <span key={tag} className="flex items-center gap-1 bg-zinc-100 dark:bg-zinc-800 px-2 py-1 rounded-full text-primary font-medium">
+                          <Tag size={12} /> {tag}
+                        </span>
+                      ))}
+                    </div>
+                    <h2 className="text-2xl font-bold text-zinc-900 dark:text-white mb-4">{blog.title}</h2>
+                    <p className="text-zinc-600 dark:text-zinc-400 line-clamp-3 mb-6">{blog.content}</p>
+                    <button className="text-primary font-bold hover:underline">Lire la suite</button>
+                  </div>
+                </article>
+              ))
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="app/podcasts/page.tsx">
+"use client";
+
+import { useEffect, useState } from "react";
+import { apiService, Podcast } from "@/services/apiService";
+import { ArrowLeft, Mic, Play, Clock, Tag } from "lucide-react";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+
+export default function PodcastsPage() {
+  const [podcasts, setPodcasts] = useState<Podcast[]>([]);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+
+  useEffect(() => {
+    apiService.getAllPodcasts()
+      .then(setPodcasts)
+      .catch(err => console.error("Error fetching podcasts:", err))
+      .finally(() => setLoading(false));
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-zinc-50 dark:bg-black p-6">
+      <div className="max-w-4xl mx-auto">
+        <button
+          onClick={() => router.push("/")}
+          className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400 mb-8 hover:text-primary transition-colors"
+        >
+          <ArrowLeft size={20} /> Retour à la carte
+        </button>
+
+        <h1 className="text-4xl font-bold text-zinc-900 dark:text-white mb-2 flex items-center gap-3">
+          <Mic className="text-primary" /> Nos Podcasts (Potcasts)
+        </h1>
+        <p className="text-zinc-500 dark:text-zinc-400 mb-12">Écoutez les guides et les récits de voyage en audio.</p>
+
+        {loading ? (
+          <div className="flex justify-center p-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+          </div>
+        ) : (
+          <div className="grid gap-6">
+            {podcasts.length === 0 ? (
+              <div className="bg-white dark:bg-zinc-900 p-12 rounded-3xl text-center border border-zinc-200 dark:border-zinc-800">
+                <p className="text-zinc-500">Aucun podcast disponible pour le moment.</p>
+              </div>
+            ) : (
+              podcasts.map(podcast => (
+                <div key={podcast.podcastId} className="bg-white dark:bg-zinc-900 rounded-3xl p-6 border border-zinc-200 dark:border-zinc-800 shadow-sm flex gap-6 items-center">
+                  <div className="relative h-24 w-24 shrink-0 rounded-2xl overflow-hidden bg-primary/10 flex items-center justify-center">
+                    {podcast.imageUrl ? (
+                      <Image src={podcast.imageUrl} alt={podcast.title} fill className="object-cover" />
+                    ) : (
+                      <Mic className="text-primary" size={32} />
+                    )}
+                    <button className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+                      <Play className="text-white fill-white" size={24} />
+                    </button>
+                  </div>
+
+                  <div className="flex-1">
+                    <h2 className="text-xl font-bold text-zinc-900 dark:text-white mb-1">{podcast.title}</h2>
+                    <p className="text-sm text-zinc-500 dark:text-zinc-400 line-clamp-1 mb-3">{podcast.description}</p>
+                    <div className="flex items-center gap-4 text-xs">
+                      <span className="flex items-center gap-1 text-zinc-400 font-mono tracking-tighter uppercase"><Clock size={14} /> {Math.floor((podcast.duration || 0) / 60)} min</span>
+                      <div className="flex gap-2">
+                        {podcast.tags?.map(tag => (
+                          <span key={tag} className="bg-zinc-100 dark:bg-zinc-800 px-2 py-0.5 rounded text-zinc-500">{tag}</span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  <button className="h-12 w-12 rounded-full bg-primary text-white flex items-center justify-center shadow-lg shadow-primary/20 hover:scale-105 transition-transform">
+                    <Play size={20} className="ml-1" fill="currentColor" />
+                  </button>
+                </div>
+              ))
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+</file>
 
 <file path="components/navigation/AuthButtons.tsx">
 "use client";
@@ -343,6 +513,38 @@ const DropdownItem = ({ icon, label, onClick, variant = "default" }: DropdownIte
 };
 </file>
 
+<file path="components/navigation/CategoryBar.tsx">
+import { clsx } from "clsx";
+import { CATEGORIES } from "@/data/categories";
+
+interface CategoryBarProps {
+  onSelect: (cat: string) => void;
+  selected: string;
+}
+
+export const CategoryBar = ({ onSelect, selected }: CategoryBarProps) => {
+  return (
+    <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide py-2 px-1 h-full mask-gradient-right">
+      {CATEGORIES.map((cat) => (
+        <button
+          key={cat.id}
+          onClick={() => onSelect(cat.id)}
+          className={clsx(
+            "flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium transition-all shadow-sm border whitespace-nowrap bg-white dark:bg-zinc-800",
+            selected === cat.id
+              ? "bg-zinc-900 text-white dark:bg-white dark:text-purple-400 border-transparent shadow-md" // Style "actif" google noir/blanc
+              : "text-zinc-700 dark:text-zinc-200 border-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-700 dark:border-zinc-700"
+          )}
+        >
+          {cat.icon}
+          <span>{cat.label}</span>
+        </button>
+      ))}
+    </div>
+  );
+};
+</file>
+
 <file path="components/poi/POIStatusBadge.tsx">
 // components/poi/POIStatusBadge.tsx
 
@@ -413,6 +615,148 @@ export const POIStatusBadge = ({
         </p>
       )}
     </div>
+  );
+};
+</file>
+
+<file path="components/ui/form/FormSection.tsx">
+import { ReactNode } from "react";
+import { motion } from "framer-motion";
+
+interface FormSectionProps {
+  children: ReactNode;
+  title: string;
+  subtitle?: string;
+  delay?: number;
+}
+
+export const FormSection = ({ children, title, subtitle, delay = 0 }: FormSectionProps) => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay }}
+      className="bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm p-6 md:p-8 rounded-3xl border border-zinc-200/50 dark:border-zinc-800 shadow-xl dark:shadow-none h-full flex flex-col"
+    >
+      <div className="mb-6">
+        <h2 className="text-2xl font-bold text-zinc-800 dark:text-white">{title}</h2>
+        {subtitle && <p className="text-zinc-500 dark:text-zinc-400 text-sm mt-1">{subtitle}</p>}
+      </div>
+      <div className="space-y-3 flex-1">
+        {children}
+      </div>
+    </motion.div>
+  );
+};
+</file>
+
+<file path="components/ui/form/FormSelect.tsx">
+import { ReactNode } from "react";
+import { ChevronDown } from "lucide-react";
+
+interface Option {
+  id: string;
+  label: string;
+}
+
+interface FormSelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
+  label: string;
+  icon: ReactNode;
+  options: Option[];
+}
+
+export const FormSelect = ({ label, icon, options, ...props }: FormSelectProps) => {
+  return (
+    <div>
+      <label className="text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2 ml-1 block">
+        {label}
+      </label>
+      <div className="relative flex items-center group">
+        <div className="absolute left-4 text-zinc-400 group-focus-within:text-primary transition-colors">
+          {icon}
+        </div>
+        <select
+          {...props}
+          className="w-full pl-12 pr-10 h-14 appearance-none rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-black/50 text-zinc-900 dark:text-zinc-100 outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-medium cursor-pointer"
+        >
+          <option value="" disabled>Sélectionner...</option>
+          {options.map((opt) => (
+            <option key={opt.id} value={opt.id}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
+        <div className="absolute right-4 text-zinc-400 pointer-events-none">
+          <ChevronDown size={20} />
+        </div>
+      </div>
+    </div>
+  );
+};
+</file>
+
+<file path="components/ui/form/ImageUpload.tsx">
+import { ChangeEvent } from "react";
+import { ImagePlus, X } from "lucide-react";
+import Image from "next/image";
+
+interface ImageUploadProps {
+  imagePreview: string | null;
+  onImageChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  onRemove: () => void;
+}
+
+export const ImageUpload = ({ imagePreview, onImageChange, onRemove }: ImageUploadProps) => {
+  return (
+    <div>
+       <label className="text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2 ml-1 block">
+        Photo principale
+      </label>
+      {imagePreview ? (
+        <div className="relative w-full h-48 rounded-xl overflow-hidden shadow-md group">
+          <Image src={imagePreview} alt="Preview" fill className="object-cover" />
+          <button type="button" onClick={onRemove} className="absolute top-2 right-2 p-2 bg-black/50 text-white rounded-full hover:bg-red-500 transition-colors">
+            <X size={16} />
+          </button>
+        </div>
+      ) : (
+        <label className="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-zinc-300 dark:border-zinc-700 rounded-xl cursor-pointer hover:bg-violet-50 dark:hover:bg-zinc-800/50 hover:border-primary/50 transition-all group">
+          <div className="p-3 bg-white dark:bg-zinc-800 rounded-full shadow-sm mb-3 group-hover:scale-110 transition-transform">
+            <ImagePlus size={24} className="text-zinc-400 group-hover:text-primary" />
+          </div>
+          <span className="text-sm font-medium text-zinc-600 dark:text-zinc-400">Ajouter une photo</span>
+          <input type="file" className="hidden" accept="image/*" onChange={onImageChange} />
+        </label>
+      )}
+    </div>
+  );
+};
+</file>
+
+<file path="components/ui/CategoryChip.tsx">
+import { clsx } from "clsx";
+
+interface ChipProps {
+  label: string;
+  active: boolean;
+  onClick: () => void;
+  icon?: React.ReactNode;
+}
+
+export const CategoryChip = ({ label, active, onClick, icon }: ChipProps) => {
+  return (
+    <button
+      onClick={onClick}
+      className={clsx(
+        "flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all shadow-sm border whitespace-nowrap",
+        active
+          ? "bg-primary text-white border-primary"
+          : "bg-white text-zinc-700 border-zinc-200 hover:bg-zinc-50 dark:bg-zinc-900 dark:text-zinc-300 dark:border-zinc-800"
+      )}
+    >
+      {icon && <span className="w-4 h-4">{icon}</span>}
+      {label}
+    </button>
   );
 };
 </file>
@@ -527,6 +871,16 @@ export const POI_STATUS_PRIORITY: Record<POIStatus, number> = {
   validated: 3, // Priorité haute (affichage en premier)
   submitted: 2, // Priorité moyenne
   rejected: 1, // Priorité basse
+};
+</file>
+
+<file path="hooks/useAuth.ts">
+"use client";
+
+import { useAuthContext } from "@/context/AuthContext";
+
+export const useAuth = () => {
+  return useAuthContext();
 };
 </file>
 
@@ -721,6 +1075,237 @@ export const usePOIActions = (options: UsePOIActionsOptions = {}) => {
 };
 </file>
 
+<file path="public/file.svg">
+<svg fill="none" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M14.5 13.5V5.41a1 1 0 0 0-.3-.7L9.8.29A1 1 0 0 0 9.08 0H1.5v13.5A2.5 2.5 0 0 0 4 16h8a2.5 2.5 0 0 0 2.5-2.5m-1.5 0v-7H8v-5H3v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1M9.5 5V2.12L12.38 5zM5.13 5h-.62v1.25h2.12V5zm-.62 3h7.12v1.25H4.5zm.62 3h-.62v1.25h7.12V11z" clip-rule="evenodd" fill="#666" fill-rule="evenodd"/></svg>
+</file>
+
+<file path="public/globe.svg">
+<svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><g clip-path="url(#a)"><path fill-rule="evenodd" clip-rule="evenodd" d="M10.27 14.1a6.5 6.5 0 0 0 3.67-3.45q-1.24.21-2.7.34-.31 1.83-.97 3.1M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.48-1.52a7 7 0 0 1-.96 0H7.5a4 4 0 0 1-.84-1.32q-.38-.89-.63-2.08a40 40 0 0 0 3.92 0q-.25 1.2-.63 2.08a4 4 0 0 1-.84 1.31zm2.94-4.76q1.66-.15 2.95-.43a7 7 0 0 0 0-2.58q-1.3-.27-2.95-.43a18 18 0 0 1 0 3.44m-1.27-3.54a17 17 0 0 1 0 3.64 39 39 0 0 1-4.3 0 17 17 0 0 1 0-3.64 39 39 0 0 1 4.3 0m1.1-1.17q1.45.13 2.69.34a6.5 6.5 0 0 0-3.67-3.44q.65 1.26.98 3.1M8.48 1.5l.01.02q.41.37.84 1.31.38.89.63 2.08a40 40 0 0 0-3.92 0q.25-1.2.63-2.08a4 4 0 0 1 .85-1.32 7 7 0 0 1 .96 0m-2.75.4a6.5 6.5 0 0 0-3.67 3.44 29 29 0 0 1 2.7-.34q.31-1.83.97-3.1M4.58 6.28q-1.66.16-2.95.43a7 7 0 0 0 0 2.58q1.3.27 2.95.43a18 18 0 0 1 0-3.44m.17 4.71q-1.45-.12-2.69-.34a6.5 6.5 0 0 0 3.67 3.44q-.65-1.27-.98-3.1" fill="#666"/></g><defs><clipPath id="a"><path fill="#fff" d="M0 0h16v16H0z"/></clipPath></defs></svg>
+</file>
+
+<file path="public/next.svg">
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 394 80"><path fill="#000" d="M262 0h68.5v12.7h-27.2v66.6h-13.6V12.7H262V0ZM149 0v12.7H94v20.4h44.3v12.6H94v21h55v12.6H80.5V0h68.7zm34.3 0h-17.8l63.8 79.4h17.9l-32-39.7 32-39.6h-17.9l-23 28.6-23-28.6zm18.3 56.7-9-11-27.1 33.7h17.8l18.3-22.7z"/><path fill="#000" d="M81 79.3 17 0H0v79.3h13.6V17l50.2 62.3H81Zm252.6-.4c-1 0-1.8-.4-2.5-1s-1.1-1.6-1.1-2.6.3-1.8 1-2.5 1.6-1 2.6-1 1.8.3 2.5 1a3.4 3.4 0 0 1 .6 4.3 3.7 3.7 0 0 1-3 1.8zm23.2-33.5h6v23.3c0 2.1-.4 4-1.3 5.5a9.1 9.1 0 0 1-3.8 3.5c-1.6.8-3.5 1.3-5.7 1.3-2 0-3.7-.4-5.3-1s-2.8-1.8-3.7-3.2c-.9-1.3-1.4-3-1.4-5h6c.1.8.3 1.6.7 2.2s1 1.2 1.6 1.5c.7.4 1.5.5 2.4.5 1 0 1.8-.2 2.4-.6a4 4 0 0 0 1.6-1.8c.3-.8.5-1.8.5-3V45.5zm30.9 9.1a4.4 4.4 0 0 0-2-3.3 7.5 7.5 0 0 0-4.3-1.1c-1.3 0-2.4.2-3.3.5-.9.4-1.6 1-2 1.6a3.5 3.5 0 0 0-.3 4c.3.5.7.9 1.3 1.2l1.8 1 2 .5 3.2.8c1.3.3 2.5.7 3.7 1.2a13 13 0 0 1 3.2 1.8 8.1 8.1 0 0 1 3 6.5c0 2-.5 3.7-1.5 5.1a10 10 0 0 1-4.4 3.5c-1.8.8-4.1 1.2-6.8 1.2-2.6 0-4.9-.4-6.8-1.2-2-.8-3.4-2-4.5-3.5a10 10 0 0 1-1.7-5.6h6a5 5 0 0 0 3.5 4.6c1 .4 2.2.6 3.4.6 1.3 0 2.5-.2 3.5-.6 1-.4 1.8-1 2.4-1.7a4 4 0 0 0 .8-2.4c0-.9-.2-1.6-.7-2.2a11 11 0 0 0-2.1-1.4l-3.2-1-3.8-1c-2.8-.7-5-1.7-6.6-3.2a7.2 7.2 0 0 1-2.4-5.7 8 8 0 0 1 1.7-5 10 10 0 0 1 4.3-3.5c2-.8 4-1.2 6.4-1.2 2.3 0 4.4.4 6.2 1.2 1.8.8 3.2 2 4.3 3.4 1 1.4 1.5 3 1.5 5h-5.8z"/></svg>
+</file>
+
+<file path="public/vercel.svg">
+<svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1155 1000"><path d="m577.3 0 577.4 1000H0z" fill="#fff"/></svg>
+</file>
+
+<file path="public/window.svg">
+<svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" clip-rule="evenodd" d="M1.5 2.5h13v10a1 1 0 0 1-1 1h-11a1 1 0 0 1-1-1zM0 1h16v11.5a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 0 12.5zm3.75 4.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5M7 4.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0m1.75.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5" fill="#666"/></svg>
+</file>
+
+<file path="services/apiService.ts">
+import { POI, Location } from "../types";
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api/v1";
+
+export interface Blog {
+  blogId: string;
+  title: string;
+  content: string;
+  authorId: string;
+  imageUrl?: string;
+  tags: string[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Podcast {
+  podcastId: string;
+  title: string;
+  description: string;
+  audioUrl: string;
+  duration?: number;
+  authorId: string;
+  imageUrl?: string;
+  tags: string[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+/**
+ * Adaptateur pour transformer un POI du Back-end vers le format Front-end
+ */
+const mapBackendToFrontendPoi = (backendPoi: any): POI => {
+  return {
+    poi_id: backendPoi.poiId,
+    poi_name: backendPoi.poiName,
+    poi_category: backendPoi.poiCategory,
+    poi_description: backendPoi.poiDescription || "",
+    poi_amenities: backendPoi.poiAmenities || [],
+    location: {
+      latitude: backendPoi.latitude,
+      longitude: backendPoi.longitude,
+    },
+    address_informal: backendPoi.poiAddress?.informalAddress,
+    address_city: backendPoi.poiAddress?.city || "Inconnue",
+    address_country: backendPoi.poiAddress?.country || "Cameroun",
+    rating: backendPoi.rating || 0,
+    review_count: backendPoi.reviewCount || 0,
+    poi_images_urls: backendPoi.poiImages || [],
+    popularity_score: backendPoi.popularityScore || 0,
+    poi_keywords: backendPoi.poiKeywords || [],
+    poi_contacts: {
+      phone: backendPoi.phoneNumber,
+      website: backendPoi.websiteUrl,
+    },
+    operation_time_plan: backendPoi.operationTimePlan ? JSON.parse(backendPoi.operationTimePlan) : undefined
+  };
+};
+
+/**
+ * Adaptateur pour transformer un POI du Front-end vers le format Back-end
+ */
+const mapFrontendToBackendPoi = (frontendPoi: Partial<POI>, orgId: string, userId: string) => {
+  return {
+    orgId,
+    createdByUserId: userId,
+    poiName: frontendPoi.poi_name,
+    poiType: "GENERAL",
+    poiCategory: frontendPoi.poi_category,
+    poiDescription: frontendPoi.poi_description,
+    latitude: frontendPoi.location?.latitude,
+    longitude: frontendPoi.location?.longitude,
+    poiAddress: {
+      city: frontendPoi.address_city,
+      country: frontendPoi.address_country,
+      informalAddress: frontendPoi.address_informal
+    },
+    phoneNumber: frontendPoi.poi_contacts?.phone,
+    websiteUrl: frontendPoi.poi_contacts?.website,
+    poiAmenities: frontendPoi.poi_amenities,
+    poiKeywords: frontendPoi.poi_keywords,
+    operationTimePlan: frontendPoi.operation_time_plan ? JSON.stringify(frontendPoi.operation_time_plan) : null,
+    isActive: true
+  };
+};
+
+export const apiService = {
+  // Health check
+  checkHealth: async () => {
+    const url = `${API_BASE_URL}/health`;
+    console.log(`Checking health: ${url}`);
+    const response = await fetch(url);
+    return response.json();
+  },
+
+  // POIs
+  getAllPois: async (): Promise<POI[]> => {
+    const url = `${API_BASE_URL}/pois`;
+    console.log(`Calling API: ${url}`);
+    try {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`Status ${response.status}: ${response.statusText}`);
+      const data = await response.json();
+      return data.map(mapBackendToFrontendPoi);
+    } catch (err) {
+      console.error("Failed to fetch POIs", err);
+      throw err;
+    }
+  },
+
+  getPoiById: async (id: string): Promise<POI> => {
+    const url = `${API_BASE_URL}/pois/${id}`;
+    console.log(`Calling API: ${url}`);
+    const response = await fetch(url);
+    if (!response.ok) throw new Error("POI not found");
+    const data = await response.json();
+    return mapBackendToFrontendPoi(data);
+  },
+
+  createPoi: async (poi: Partial<POI>, orgId: string, userId: string): Promise<POI> => {
+    const url = `${API_BASE_URL}/pois`;
+    console.log(`Calling API: ${url}`);
+    const backendData = mapFrontendToBackendPoi(poi, orgId, userId);
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(backendData),
+    });
+    if (!response.ok) throw new Error("Failed to create POI");
+    const data = await response.json();
+    return mapBackendToFrontendPoi(data);
+  },
+
+  // Blogs
+  getAllBlogs: async (): Promise<Blog[]> => {
+    const url = `${API_BASE_URL}/blogs`;
+    console.log(`Calling API: ${url}`);
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Failed to fetch blogs: ${response.status} ${response.statusText} - ${errorText}`);
+      }
+      return response.json();
+    } catch (error: any) {
+      console.error("API Error (getAllBlogs):", error);
+      throw error;
+    }
+  },
+
+  createBlog: async (blog: Partial<Blog>): Promise<Blog> => {
+    const url = `${API_BASE_URL}/blogs`;
+    console.log(`Calling API: ${url}`);
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(blog),
+    });
+    return response.json();
+  },
+
+  // Podcasts
+  getAllPodcasts: async (): Promise<Podcast[]> => {
+    const url = `${API_BASE_URL}/podcasts`;
+    console.log(`Calling API: ${url}`);
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Failed to fetch podcasts: ${response.status} ${response.statusText} - ${errorText}`);
+      }
+      return response.json();
+    } catch (error: any) {
+      console.error("API Error (getAllPodcasts):", error);
+      throw error;
+    }
+  },
+
+  createPodcast: async (podcast: Partial<Podcast>): Promise<Podcast> => {
+    const url = `${API_BASE_URL}/podcasts`;
+    console.log(`Calling API: ${url}`);
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(podcast),
+    });
+    return response.json();
+  },
+
+  // Users
+  getAllUsers: async () => {
+    const response = await fetch(`${API_BASE_URL}/users`);
+    return response.json();
+  },
+
+  // Organizations
+  getAllOrganizations: async () => {
+    const response = await fetch(`${API_BASE_URL}/organizations`);
+    return response.json();
+  },
+
+  // Reviews
+  getReviewsByPoiId: async (poiId: string) => {
+    const baseUrl = API_BASE_URL.replace("/v1", ""); // Go back to /api
+    const response = await fetch(`${baseUrl}/reviews/poi/${poiId}`);
+    if (!response.ok) throw new Error("Failed to fetch reviews");
+    return response.json();
+  }
+};
+</file>
+
 <file path="services/authService.ts">
 import { User, UserRole } from "@/types";
 
@@ -752,6 +1337,13 @@ export interface SignupData {
   password: string;
   organization?: string;
   role?: UserRole;
+  avatar?: string; // URL de l'avatar
+}
+
+export interface UpdateProfileData {
+  name?: string;
+  organization?: string;
+  avatar?: string; // URL de l'avatar
 }
 
 export interface AuthResponse {
@@ -933,6 +1525,7 @@ export const authService = {
           email: userData.email,
           role: userData.role || "client",
           organization: userData.organization || "Ma Société",
+          avatar: userData.avatar || `https://i.pravatar.cc/150?u=${Date.now()}`
         };
         
         MOCK_USERS.push(newUser);
@@ -977,7 +1570,7 @@ export const authService = {
   /**
    * Mise à jour du profil utilisateur
    */
-  async updateProfile(data: Partial<Omit<User, "id" | "email" | "role">>): Promise<User> {
+  async updateProfile(userData: UpdateProfileData): Promise<User> {
     // 1. MODE MOCK
     if (USE_MOCK_API) {
       return mockRequest(() => {
@@ -987,12 +1580,12 @@ export const authService = {
         const currentUser = JSON.parse(storedString) as User;
         
         // Fusion des données
-        const updatedUser = { ...currentUser, ...data };
+        const updatedUser = { ...currentUser, ...userData };
         
         // Mise à jour du Mock Array (pour persistance session mock)
         const index = MOCK_USERS.findIndex(u => u.id === currentUser.id);
         if (index !== -1) {
-            MOCK_USERS[index] = { ...MOCK_USERS[index], ...data };
+            MOCK_USERS[index] = { ...MOCK_USERS[index], ...userData };
         }
 
         // Mise à jour du stockage local
@@ -1005,7 +1598,7 @@ export const authService = {
     // 2. MODE API RÉEL
     const updatedUser = await apiRequest<User>("/auth/profile", {
       method: "PATCH",
-      body: JSON.stringify(data),
+      body: JSON.stringify(userData),
     });
 
     // Mise à jour du cache local avec la réponse 'fraîche' du serveur
@@ -1083,6 +1676,184 @@ export const authService = {
 };
 </file>
 
+<file path="services/routingService.ts">
+import { Location, RouteStats, TransportMode } from "@/types";
+
+export const getRoute = async (
+  start: Location,
+  end: Location,
+  mode: TransportMode = "driving",
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  apiKey: string // On garde le paramètre pour compatibilité mais OSRM public n'en a pas besoin
+): Promise<RouteStats | null> => {
+  try {
+    // 1. Conversion du mode de transport pour OSRM
+    // OSRM supporte: 'driving', 'walking', 'cycling' (syntaxe exacte diffère légèrement parfois)
+    let profile = "driving";
+    if (mode === "cycling") profile = "bike"; // OSRM utilise souvent 'bike'
+    if (mode === "walking") profile = "foot"; // OSRM utilise souvent 'foot'
+
+    // 2. Utilisation de l'API publique OSRM (Router Project)
+    // Note: C'est un service de démo gratuit, parfait pour le développement.
+    const url = `https://router.project-osrm.org/route/v1/${profile}/${start.longitude},${start.latitude};${end.longitude},${end.latitude}?overview=full&geometries=geojson`;
+
+    console.log("Fetching Route:", url); // Pour le debug
+
+    const response = await fetch(url);
+
+    // 3. Gestion correcte des erreurs HTTP (le 404 "Not Found")
+    if (!response.ok) {
+      console.error(`Erreur API Route: ${response.status} ${response.statusText}`);
+      return null;
+    }
+
+    // 4. Parsing sécurisé
+    const data = await response.json();
+
+    // 5. Vérification du format de réponse OSRM
+    if (data.code !== "Ok" || !data.routes || data.routes.length === 0) {
+      console.warn("Pas de route trouvée par OSRM");
+      return null;
+    }
+
+    const route = data.routes[0];
+
+    return {
+      distance: route.distance, // En mètres
+      duration: route.duration, // En secondes
+      geometry: route.geometry, // GeoJSON LineString
+    };
+
+  } catch (error) {
+    console.error("Exception service routage:", error);
+    return null;
+  }
+};
+</file>
+
+<file path="eslint.config.mjs">
+import { defineConfig, globalIgnores } from "eslint/config";
+import nextVitals from "eslint-config-next/core-web-vitals";
+import nextTs from "eslint-config-next/typescript";
+
+const eslintConfig = defineConfig([
+  ...nextVitals,
+  ...nextTs,
+  // Override default ignores of eslint-config-next.
+  globalIgnores([
+    // Default ignores of eslint-config-next:
+    ".next/**",
+    "out/**",
+    "build/**",
+    "next-env.d.ts",
+  ]),
+]);
+
+export default eslintConfig;
+</file>
+
+<file path="next.config.ts">
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
+    ],
+  },
+};
+
+export default nextConfig;
+</file>
+
+<file path="package.json">
+{
+  "name": "poi-navigoo-web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.26.2",
+    "lucide-react": "^0.562.0",
+    "maplibre-gl": "^5.16.0",
+    "next": "16.1.2",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "react-map-gl": "^8.1.0",
+    "tailwind-merge": "^3.4.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.1.2",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
+</file>
+
+<file path="postcss.config.mjs">
+const config = {
+  plugins: {
+    "@tailwindcss/postcss": {},
+  },
+};
+
+export default config;
+</file>
+
+<file path="tsconfig.json">
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "noEmit": true,
+    "incremental": true,
+    "module": "esnext",
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
+  },
+  "include": [
+    "next-env.d.ts",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts",
+    "**/*.mts",
+    "**/*.ts",
+    "**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
+</file>
+
 <file path="app/login/page.tsx">
 "use client";
 
@@ -1091,39 +1862,63 @@ import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { FormInput } from "@/components/ui/form/FormInput";
-import { MapPinHouse, Mail, Lock, ArrowRight } from "lucide-react";
+import { MapPinHouse, Mail, Lock, ArrowRight, ArrowLeft, AlertCircle, Loader2 } from "lucide-react";
 import Link from "next/link";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  
+  // Utilisation exclusive du hook, pas de service direct
   const { login, isLoading } = useAuth();
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
+    
     try {
-      await login({email, password});
+      await login({ email, password });
       router.push("/");
-    } catch (error) {
-      alert("Erreur de connexion");
+    } catch (err: any) {
+      // Gestion d'erreur locale pour l'UX
+      setError(err.message || "Email ou mot de passe incorrect.");
     }
   };
 
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-black flex items-center justify-center p-4">
-      <div className="w-full max-w-md bg-white dark:bg-zinc-900 rounded-3xl shadow-xl p-8 border border-zinc-200 dark:border-zinc-800">
-        <div className="flex flex-col items-center mb-8">
+      <div className="w-full max-w-md bg-white dark:bg-zinc-900 rounded-3xl shadow-xl p-8 border border-zinc-200 dark:border-zinc-800 relative">
+        
+        {/* Bouton Retour (UX Vital) */}
+        <button 
+          onClick={() => router.back()} 
+          className="absolute top-6 left-6 p-2 text-zinc-400 hover:text-zinc-800 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-full transition-all"
+          aria-label="Retour"
+        >
+          <ArrowLeft size={20} />
+        </button>
+
+        <div className="flex flex-col items-center mb-8 mt-4">
           <div className="bg-primary/10 p-4 rounded-2xl mb-4">
             <MapPinHouse className="text-primary" size={40} />
           </div>
           <h1 className="text-2xl font-bold text-zinc-900 dark:text-white">Bon retour !</h1>
-          <p className="text-zinc-500 dark:text-zinc-400 text-sm mt-2 text-center">
-            Connectez-vous pour accéder à vos points d&apos;intérêt et partager vos découvertes.
+          <p className="text-zinc-500 dark:text-zinc-400 text-sm mt-2 text-center max-w-[260px]">
+            Connectez-vous pour retrouver vos favoris.
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-5">
+          {/* Zone d'erreur visuelle */}
+          {error && (
+            <div className="p-3 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-900 text-red-600 dark:text-red-400 text-sm flex items-center gap-2 animate-in slide-in-from-top-2">
+              <AlertCircle size={16} className="shrink-0" /> 
+              <span>{error}</span>
+            </div>
+          )}
+
           <FormInput
             label="Email"
             type="email"
@@ -1146,11 +1941,17 @@ export default function LoginPage() {
           <Button
             type="submit"
             variant="primary"
-            className="w-full h-12 text-base font-bold"
+            className="w-full h-12 text-base font-bold shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all"
             disabled={isLoading}
           >
-            {isLoading ? "Connexion..." : "Se connecter"}
-            {!isLoading && <ArrowRight size={18} className="ml-2" />}
+            {isLoading ? (
+              <Loader2 className="animate-spin" size={20} />
+            ) : (
+              <>
+                Se connecter
+                <ArrowRight size={18} className="ml-2" />
+              </>
+            )}
           </Button>
         </form>
 
@@ -1174,16 +1975,22 @@ import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { FormInput } from "@/components/ui/form/FormInput";
-import { User, Mail, Building, ArrowLeft, Save, LogOut, Shield } from "lucide-react";
+import { User, Mail, Building, ArrowLeft, Save, LogOut, Shield, CheckCircle2, Loader2, Image as ImageIcon } from "lucide-react";
 
 export default function ProfilePage() {
   const { user, isAuthenticated, isLoading, updateProfile, logout } = useAuth();
   const router = useRouter();
 
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [organization, setOrganization] = useState("");
+  // Ajout du champ avatar dans le state local
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    organization: "",
+    avatar: "", // Nouveau champ
+  });
+  
   const [isSaving, setIsSaving] = useState(false);
+  const [successMsg, setSuccessMsg] = useState(false);
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
@@ -1193,18 +2000,33 @@ export default function ProfilePage() {
 
   useEffect(() => {
     if (user) {
-      setName(user.name);
-      setEmail(user.email);
-      setOrganization(user.organization || "");
+      setFormData({
+        name: user.name || "",
+        email: user.email || "",
+        organization: user.organization || "",
+        avatar: user.avatar || "", // Chargement de l'avatar existant
+      });
     }
   }, [user]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSaving(true);
+    setSuccessMsg(false);
+
     try {
-      await updateProfile({ name, organization, avatar });
-      alert("Profil mis à jour !");
+      // Envoi de l'avatar à la mise à jour
+      await updateProfile({ 
+        name: formData.name, 
+        organization: formData.organization,
+        avatar: formData.avatar 
+      });
+      setSuccessMsg(true);
+      setTimeout(() => setSuccessMsg(false), 3000);
     } catch (error) {
       alert("Erreur lors de la mise à jour");
     } finally {
@@ -1212,88 +2034,125 @@ export default function ProfilePage() {
     }
   };
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
     router.push("/");
   };
 
-  if (isLoading || !isAuthenticated) {
+  if (isLoading || !user) {
     return (
       <div className="min-h-screen bg-zinc-50 dark:bg-black flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+        <Loader2 className="animate-spin text-primary w-10 h-10" />
       </div>
     );
   }
 
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-black p-4 md:p-8">
-      <div className="max-w-2xl mx-auto">
+      <div className="max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
+        
         <div className="mb-8 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <button
-              onClick={() => router.push("/")}
-              className="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-xl transition-colors"
-            >
+            <button onClick={() => router.push("/")} className="p-2 hover:bg-zinc-200 dark:hover:bg-zinc-800 rounded-full transition-colors">
               <ArrowLeft size={24} className="text-zinc-600 dark:text-zinc-400" />
             </button>
             <h1 className="text-2xl font-bold text-zinc-900 dark:text-white">Mon Profil</h1>
           </div>
-          <Button variant="secondary" onClick={handleLogout} className="text-red-500 hover:text-red-600 border-red-200 hover:bg-red-50">
-            <LogOut size={18} className="mr-2" /> Déconnexion
+          <Button variant="secondary" onClick={handleLogout} className="text-red-600 bg-red-50 hover:bg-red-100">
+            <LogOut size={18} className="mr-2" /> <span className="hidden sm:inline">Déconnexion</span>
           </Button>
         </div>
 
         <div className="bg-white dark:bg-zinc-900 rounded-3xl shadow-sm border border-zinc-200 dark:border-zinc-800 overflow-hidden">
-          <div className="p-8 bg-primary/5 border-b border-zinc-200 dark:border-zinc-800 flex items-center gap-6">
-            <div className="w-20 h-20 rounded-full bg-primary/20 flex items-center justify-center text-primary text-3xl font-bold border-4 border-white dark:border-zinc-900 shadow-sm">
-              {user?.name.charAt(0).toUpperCase()}
+          
+          {/* Header avec Prévisualisation en direct */}
+          <div className="p-8 bg-gradient-to-br from-primary/5 via-transparent to-transparent border-b border-zinc-100 dark:border-zinc-800 flex items-center gap-6">
+            <div className="relative group">
+              {/* Si une URL d'avatar valide est entrée, on l'affiche, sinon initiales */}
+              {formData.avatar ? (
+                <img 
+                  src={formData.avatar} 
+                  alt="Avatar" 
+                  className="w-20 h-20 rounded-full object-cover border-4 border-white shadow-md bg-white"
+                  onError={(e) => {
+                    // Fallback si l'image ne charge pas (lien cassé)
+                    (e.target as HTMLImageElement).style.display = 'none';
+                  }}
+                />
+              ) : (
+                <div className="w-20 h-20 rounded-full bg-white dark:bg-zinc-800 flex items-center justify-center text-primary text-3xl font-bold border border-zinc-100 shadow-md">
+                  {user.name.charAt(0).toUpperCase()}
+                </div>
+              )}
             </div>
+            
             <div>
-              <h2 className="text-xl font-bold text-zinc-900 dark:text-white">{user?.name}</h2>
-              <p className="text-zinc-500 flex items-center gap-2 mt-1">
-                <Shield size={14} className="text-primary" />
-                Rôle : <span className="font-semibold uppercase text-xs tracking-wider">{user?.role}</span>
-              </p>
+              <h2 className="text-xl font-bold text-zinc-900 dark:text-white">{formData.name || user.name}</h2>
+              <p className="text-zinc-500 text-sm mt-1">Gérez vos informations personnelles</p>
             </div>
           </div>
 
           <form onSubmit={handleSave} className="p-8 space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <FormInput
-                label="Nom complet"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                icon={<User size={18} />}
-                required
-              />
-              <FormInput
-                label="Email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                icon={<Mail size={18} />}
-                required
-              />
+            <div className="grid grid-cols-1 gap-6">
+              {/* Ligne 1 : Nom et Email */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <FormInput
+                  label="Nom complet"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  icon={<User size={18} />}
+                  required
+                />
+                <FormInput
+                  label="Email"
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  disabled
+                  className="opacity-60 bg-zinc-50"
+                  icon={<Mail size={18} />}
+                />
+              </div>
+
+              {/* Ligne 2 : Organisation */}
               <FormInput
                 label="Organisation"
-                value={organization}
-                onChange={(e) => setOrganization(e.target.value)}
+                name="organization"
+                value={formData.organization}
+                onChange={handleChange}
                 icon={<Building size={18} />}
               />
+
+              {/* Ligne 3 : URL Avatar */}
+              <FormInput
+                label="URL de l'avatar (Photo)"
+                name="avatar"
+                value={formData.avatar}
+                onChange={handleChange}
+                placeholder="https://example.com/ma-photo.jpg"
+                icon={<ImageIcon size={18} />}
+                // Petit helper text
+              />
+              <p className="-mt-4 text-xs text-zinc-400 ml-1">
+                Collez un lien vers une image (ex: Gravatar, LinkedIn profile pic URL, etc.)
+              </p>
             </div>
 
-            <div className="pt-4 flex justify-end">
+            <div className="pt-4 flex items-center justify-end gap-4">
+              {successMsg && (
+                <span className="text-green-600 text-sm font-medium flex items-center animate-in fade-in">
+                  <CheckCircle2 size={16} className="mr-1" /> Profil mis à jour !
+                </span>
+              )}
+              
               <Button
                 type="submit"
                 variant="primary"
                 className="px-8 h-12 font-bold shadow-lg shadow-primary/20"
                 disabled={isSaving}
               >
-                {isSaving ? "Enregistrement..." : (
-                  <>
-                    <Save size={18} className="mr-2" /> Enregistrer les modifications
-                  </>
-                )}
+                {isSaving ? <Loader2 className="animate-spin" /> : <><Save size={18} className="mr-2" /> Enregistrer</>}
               </Button>
             </div>
           </form>
@@ -1312,52 +2171,70 @@ import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { FormInput } from "@/components/ui/form/FormInput";
-import { FormSelect } from "@/components/ui/form/FormSelect";
-import { MapPinHouse, User, Mail, Lock, Building, ArrowRight } from "lucide-react";
+import { User, Mail, Lock, Building, ArrowRight, ArrowLeft, Loader2, AlertCircle } from "lucide-react";
 import Link from "next/link";
 
 export default function SignupPage() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [organization, setOrganization] = useState("");
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    organization: "",
+    password: ""
+  });
+  const [error, setError] = useState<string | null>(null);
+
   const { signup, isLoading } = useAuth();
   const router = useRouter();
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
+
     try {
       await signup({
-        name,
-        email,
-        role: "client",
-        organization,
-        password,
+        ...formData,
+        role: "client", // Rôle par défaut
       });
       router.push("/");
-    } catch (error) {
-      alert("Erreur lors de l'inscription");
+    } catch (err: any) {
+      setError(err.message || "Erreur lors de l'inscription.");
     }
   };
 
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-black flex items-center justify-center p-4">
-      <div className="w-full max-w-md bg-white dark:bg-zinc-900 rounded-3xl shadow-xl p-8 border border-zinc-200 dark:border-zinc-800">
-        <div className="flex flex-col items-center mb-8">
-          <div className="bg-primary/10 p-4 rounded-2xl mb-4">
-            <MapPinHouse className="text-primary" size={40} />
-          </div>
+      <div className="w-full max-w-md bg-white dark:bg-zinc-900 rounded-3xl shadow-xl p-8 border border-zinc-200 dark:border-zinc-800 relative">
+        
+        <button 
+          onClick={() => router.back()} 
+          className="absolute top-6 left-6 p-2 text-zinc-400 hover:text-zinc-800 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-full transition-all"
+        >
+          <ArrowLeft size={20} />
+        </button>
+
+        <div className="flex flex-col items-center mb-6 mt-4">
           <h1 className="text-2xl font-bold text-zinc-900 dark:text-white">Créer un compte</h1>
-          <p className="text-zinc-500 dark:text-zinc-400 text-sm mt-2 text-center">
-            Rejoignez la communauté Navigoo et commencez à explorer.
+          <p className="text-zinc-500 dark:text-zinc-400 text-sm mt-2">
+            Rejoignez la communauté Navigoo.
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          {error && (
+            <div className="p-3 rounded-xl bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-sm flex items-center gap-2">
+              <AlertCircle size={16} /> <span>{error}</span>
+            </div>
+          )}
+
           <FormInput
             label="Nom complet"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
             placeholder="Jean Dupont"
             icon={<User size={18} />}
             required
@@ -1365,25 +2242,27 @@ export default function SignupPage() {
           <FormInput
             label="Email"
             type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
             placeholder="votre@email.com"
             icon={<Mail size={18} />}
             required
           />
           <FormInput
             label="Organisation"
-            value={organization}
-            onChange={(e) => setOrganization(e.target.value)}
-            placeholder="Nom de votre organisation"
+            name="organization"
+            value={formData.organization}
+            onChange={handleChange}
+            placeholder="Optionnel"
             icon={<Building size={18} />}
-            required
           />
           <FormInput
             label="Mot de passe"
             type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
             placeholder="••••••••"
             icon={<Lock size={18} />}
             required
@@ -1392,16 +2271,16 @@ export default function SignupPage() {
           <Button
             type="submit"
             variant="primary"
-            className="w-full h-12 text-base font-bold mt-4"
+            className="w-full h-12 text-base font-bold mt-2 shadow-lg shadow-primary/20"
             disabled={isLoading}
           >
-            {isLoading ? "Création..." : "S'inscrire"}
+            {isLoading ? <Loader2 className="animate-spin" /> : "S'inscrire"}
             {!isLoading && <ArrowRight size={18} className="ml-2" />}
           </Button>
         </form>
 
-        <div className="mt-8 pt-6 border-t border-zinc-100 dark:border-zinc-800 text-center text-sm">
-          <span className="text-zinc-500">Déjà un compte ?</span>{" "}
+        <div className="mt-6 pt-6 border-t border-zinc-100 dark:border-zinc-800 text-center text-sm">
+          <span className="text-zinc-500">Déjà membre ?</span>{" "}
           <Link href="/login" className="text-primary font-bold hover:underline">
             Se connecter
           </Link>
@@ -1421,7 +2300,7 @@ export default function SignupPage() {
   --color-primary-light: #b64dff;
   --color-background: #ffffff;
   --color-foreground: #171717;
-  
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -1468,7 +2347,7 @@ body {
   .fixed, .absolute:not(.mapboxgl-map):not(.maplibregl-map), header, aside {
     display: none !important;
   }
-  
+
   /* On s'assure que la carte prend tout */
   main {
     width: 100vw;
@@ -1485,38 +2364,6 @@ body {
 }
 </file>
 
-<file path="components/navigation/CategoryBar.tsx">
-import { clsx } from "clsx";
-import { CATEGORIES } from "@/data/categories";
-
-interface CategoryBarProps {
-  onSelect: (cat: string) => void;
-  selected: string;
-}
-
-export const CategoryBar = ({ onSelect, selected }: CategoryBarProps) => {
-  return (
-    <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide py-2 px-1 h-full mask-gradient-right">
-      {CATEGORIES.map((cat) => (
-        <button
-          key={cat.id}
-          onClick={() => onSelect(cat.id)}
-          className={clsx(
-            "flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium transition-all shadow-sm border whitespace-nowrap bg-white dark:bg-zinc-800",
-            selected === cat.id
-              ? "bg-zinc-900 text-white dark:bg-white dark:text-purple-400 border-transparent shadow-md" // Style "actif" google noir/blanc
-              : "text-zinc-700 dark:text-zinc-200 border-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-700 dark:border-zinc-700"
-          )}
-        >
-          {cat.icon}
-          <span>{cat.label}</span>
-        </button>
-      ))}
-    </div>
-  );
-};
-</file>
-
 <file path="components/navigation/MobileNavbar.tsx">
 "use client";
 
@@ -1531,11 +2378,11 @@ interface MobileNavBarProps {
   onResetView: () => void;
 }
 
-export const MobileNavBar = ({ 
-  currentView, 
-  onViewChange, 
+export const MobileNavBar = ({
+  currentView,
+  onViewChange,
   onOpenSidebar,
-  onResetView 
+  onResetView
 }: MobileNavBarProps) => {
   const router = useRouter();
 
@@ -1543,25 +2390,25 @@ export const MobileNavBar = ({
     <div className="md:hidden fixed bottom-0 left-0 w-full z-50 px-4 pb-4 pt-0">
       {/* Container Flottant pour effet "Island" ou simple barre fixée */}
       <nav className="bg-white/95 dark:bg-zinc-900/95 backdrop-blur-lg border border-zinc-200 dark:border-zinc-800 rounded-2xl shadow-xl shadow-zinc-200/50 dark:shadow-black/50 h-[72px] flex items-center justify-around px-2">
-        
+
         {/* 1. ACCUEIL / CARTE */}
-        <NavItem 
-          label="Carte" 
-          icon={<Map size={24} />} 
+        <NavItem
+          label="Carte"
+          icon={<Map size={24} />}
           isActive={currentView === null}
           onClick={onResetView}
         />
 
         {/* 2. FAVORIS */}
-        <NavItem 
-          label="Favoris" 
-          icon={<Bookmark size={24} />} 
+        <NavItem
+          label="Favoris"
+          icon={<Bookmark size={24} />}
           isActive={currentView === "saved"}
           onClick={() => onViewChange("saved")}
         />
 
         {/* 3. AJOUTER (Bouton Central Highlight) */}
-        <button 
+        <button
           onClick={() => router.push("/add-poi")}
           className="relative -top-6 flex flex-col items-center justify-center w-14 h-14 bg-primary text-white rounded-full shadow-lg shadow-primary/40 transform active:scale-95 transition-all border-4 border-zinc-50 dark:border-zinc-950"
         >
@@ -1569,17 +2416,17 @@ export const MobileNavBar = ({
         </button>
 
         {/* 4. TRAJETS */}
-        <NavItem 
-          label="Trajets" 
-          icon={<Route size={24} />} 
+        <NavItem
+          label="Trajets"
+          icon={<Route size={24} />}
           isActive={currentView === "trips"}
           onClick={() => onViewChange("trips")}
         />
 
         {/* 5. MENU (Ouvre la Sidebar existante) */}
-        <NavItem 
-          label="Menu" 
-          icon={<Menu size={24} />} 
+        <NavItem
+          label="Menu"
+          icon={<Menu size={24} />}
           isActive={false} // Le menu est un tiroir, pas un état actif de la nav
           onClick={onOpenSidebar}
         />
@@ -1591,12 +2438,12 @@ export const MobileNavBar = ({
 
 // Sous-composant pour les boutons classiques
 const NavItem = ({ label, icon, isActive, onClick }: any) => (
-  <button 
+  <button
     onClick={onClick}
     className={clsx(
       "flex flex-col items-center justify-center w-16 gap-1 transition-colors",
-      isActive 
-        ? "text-primary font-bold" 
+      isActive
+        ? "text-primary font-bold"
         : "text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200"
     )}
   >
@@ -1606,324 +2453,6 @@ const NavItem = ({ label, icon, isActive, onClick }: any) => (
     <span className="text-[10px] font-medium">{label}</span>
   </button>
 );
-</file>
-
-<file path="components/navigation/SearchInput.tsx">
-import { Search, Menu, X, ArrowRight, History, MapPin, Navigation2 } from "lucide-react";
-import { useState, useRef, useEffect } from "react";
-import clsx from "clsx";
-import { POI } from "@/types";
-
-interface SearchInputProps {
-  onMenuClick: () => void;
-  className?: string;
-  pois: POI[]; // Tous les POIs pour l'autocomplete
-  onSearch: (query: string) => void;
-  onSelectResult: (poi: POI) => void;
-  onLocateMe: () => void; // Nouvelle prop
-  recentSearches: string[];
-  recentPois: POI[];
-}
-
-export const SearchInput = ({ 
-  onMenuClick, 
-  className, 
-  pois, 
-  onLocateMe,
-  onSearch, 
-  onSelectResult,
-  recentSearches, 
-  recentPois 
-}: SearchInputProps) => {
-  const [isFocused, setIsFocused] = useState(false);
-  const [query, setQuery] = useState("");
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  // Filtrer les POIs pour l'autocomplétion (max 5 suggestions)
-  const suggestions = query.length > 0 
-    ? pois.filter(p => p.poi_name.toLowerCase().includes(query.toLowerCase())).slice(0, 5)
-    : [];
-
-  const handleSearchSubmit = (e?: React.FormEvent) => {
-    e?.preventDefault();
-    onSearch(query);
-    setIsFocused(false);
-    inputRef.current?.blur();
-  };
-
-  const handleSelectPoi = (poi: POI) => {
-    setQuery(poi.poi_name);
-    onSelectResult(poi); // Zoom sur la carte et ouvre details
-    setIsFocused(false);
-  };
-
-  return (
-    <div className={clsx("relative z-50", className)}>
-            <form 
-        onSubmit={handleSearchSubmit}
-        className={clsx(
-          "flex items-center bg-white dark:bg-zinc-800 h-11 border border-zinc-200 dark:border-zinc-700 transition-shadow",
-          isFocused ? "rounded-t-[24px] rounded-b-none shadow-lg border-b-0" : "rounded-full shadow-sm hover:shadow-md"
-        )}
-      >
-        <button 
-          type="button"
-          onClick={onMenuClick}
-          className="pl-3 pr-2 text-zinc-500 hover:text-black dark:text-zinc-400 dark:hover:text-white"
-        >
-          {isFocused ? <Search size={20} /> : <Menu size={20} />}
-        </button>
-
-        <input 
-          ref={inputRef}
-          type="text" 
-          placeholder="Rechercher ici..."
-          className="flex-1 bg-transparent border-none outline-none text-[15px] text-zinc-900 dark:text-zinc-100 px-2 truncate font-normal"
-          value={query}
-          onFocus={() => setIsFocused(true)}
-          onChange={(e) => {
-            setQuery(e.target.value);
-            if (e.target.value === "") onSearch("");
-          }}
-        />
-
-        <div className="flex items-center gap-1 pr-1.5">
-          {query && (
-            <button 
-              type="button" 
-              onClick={() => { setQuery(""); onSearch(""); }} 
-              className="p-2 text-zinc-500 hover:text-black"
-            >
-              <X size={18} />
-            </button>
-          )}
-          
-          <div className="h-6 w-px bg-zinc-300 dark:bg-zinc-600 mx-1"></div>
-          
-          {/* BOUTON LOCALISATION (Flèche Violette) */}
-          <button 
-            type="button" 
-            onClick={onLocateMe}
-            className="p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-700 rounded-full group transition-colors"
-            title="Me localiser"
-          >
-             <div className="w-7 h-7 bg-primary flex items-center justify-center rounded-full text-white shadow-sm group-hover:scale-105 transition-transform">
-                <Navigation2 size={14} className="-rotate-45" fill="currentColor" />
-             </div>
-          </button>
-        </div>
-      </form>
-
-      {/* --- MENU DÉROULANT --- */}
-      {isFocused && (
-        <>
-          <div 
-            className="fixed inset-0 bg-transparent z-[-1]" 
-            onClick={() => setIsFocused(false)} 
-          />
-          <div className="absolute top-full left-0 w-full bg-white dark:bg-zinc-800 rounded-b-[24px] shadow-lg border-t-0 border border-zinc-200 dark:border-zinc-700 pb-2 overflow-hidden">
-             
-             {/* CAS 1 : SUGGESTIONS AUTOCOMPLÉTION (Recherche active) */}
-             {query.length > 0 && (
-                <div className="pt-2">
-                  {suggestions.length > 0 ? (
-                    suggestions.map(poi => (
-                      <SuggestionItem 
-                        key={poi.poi_id}
-                        icon={<MapPin size={18} />} 
-                        title={poi.poi_name} 
-                        subtitle={poi.address_city} 
-                        onClick={() => handleSelectPoi(poi)}
-                        isLocation
-                      />
-                    ))
-                  ) : (
-                    <div className="px-4 py-3 text-sm text-zinc-500 italic">Aucun résultat trouvé</div>
-                  )}
-                </div>
-             )}
-
-             {/* CAS 2 : HISTORIQUE (Champ vide) */}
-             {query.length === 0 && (
-                <div className="pt-1">
-                  <div className="px-4 py-2 text-xs font-semibold text-zinc-400 uppercase tracking-wider">Récents</div>
-                  
-                  {/* 3 Dernières Recherches (String) */}
-                  {recentSearches.map((term, i) => (
-                    <SuggestionItem 
-                      key={`hist-${i}`}
-                      icon={<History size={18} />} 
-                      title={term} 
-                      onClick={() => { setQuery(term); onSearch(term); setIsFocused(false); }}
-                    />
-                  ))}
-
-                  {/* 2 Derniers POIs Vus (Objets) */}
-                  {recentPois.map((poi) => (
-                    <SuggestionItem 
-                      key={`recent-poi-${poi.poi_id}`}
-                      icon={<Navigation2 size={18} className="text-primary" />} 
-                      title={poi.poi_name} 
-                      subtitle={`${poi.poi_category} • Consulté récemment`}
-                      onClick={() => handleSelectPoi(poi)}
-                    />
-                  ))}
-                </div>
-             )}
-          </div>
-        </>
-      )}
-    </div>
-  );
-};
-
-// Item générique de la liste
-const SuggestionItem = ({ icon, title, subtitle, onClick, isLocation }: any) => (
-  <div 
-    onClick={onClick}
-    className="flex items-center gap-4 py-3 px-4 hover:bg-zinc-50 dark:hover:bg-zinc-700 cursor-pointer transition-colors"
-  >
-    <div className={clsx(
-      "w-9 h-9 min-w-9 rounded-full flex items-center justify-center",
-      isLocation ? "bg-white border border-zinc-200" : "bg-zinc-100 dark:bg-zinc-900"
-    )}>
-      <span className="text-zinc-500 dark:text-zinc-400">{icon}</span>
-    </div>
-    <div className="flex flex-col overflow-hidden">
-      <span className={clsx("text-[15px] truncate font-medium text-zinc-800 dark:text-zinc-100")}>
-        {title}
-      </span>
-      {subtitle && <span className="text-zinc-500 text-xs truncate">{subtitle}</span>}
-    </div>
-  </div>
-);
-</file>
-
-<file path="components/navigation/TopLayout.tsx">
-"use client";
-
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { SearchInput } from "./SearchInput";
-import { CategoryBar } from "./CategoryBar";
-import { POI } from "@/types";
-// Import du hook auth existant
-import { useAuth } from "@/hooks/useAuth"; 
-// Icônes
-import { LogIn, User as UserIcon, Loader2, LayoutGrid } from "lucide-react";
-
-interface TopLayoutProps {
-  onToggleSidebar: () => void;
-  allPois: POI[];
-  selectedCategory: string;
-  onSelectCategory: (cat: string) => void;
-  onSearch: (query: string) => void;
-  onSelectResult: (poi: POI) => void;
-  onLocateMe: () => void;
-  recentSearches: string[];
-  recentPois: POI[];
-}
-
-export const TopLayout = ({ 
-  onToggleSidebar, 
-  allPois,
-  selectedCategory,
-  onSelectCategory,
-  onSearch,
-  onLocateMe,
-  onSelectResult,
-  recentSearches,
-  recentPois
-}: TopLayoutProps) => {
-
-  // Récupération de l'état global
-  const { user, isLoading } = useAuth();
-  const router = useRouter();
-
-  // Helper pour obtenir les initiales
-  const getInitials = (name: string) => {
-    return name ? name.charAt(0).toUpperCase() : "U";
-  };
-
-  return (
-    <div className="absolute top-0 left-0 w-full z-40 bg-transparent p-2 md:p-3 pointer-events-none flex items-start gap-2">
-      
-      {/* --- BLOC 1 : RECHERCHE --- */}
-      <div className="pointer-events-auto min-w-[300px] md:min-w-[340px] max-w-[420px] shrink-0 transition-all duration-300">
-        <SearchInput 
-          onMenuClick={onToggleSidebar}
-          pois={allPois}
-          onSearch={onSearch}
-          onSelectResult={onSelectResult}
-          onLocateMe={onLocateMe}
-          recentSearches={recentSearches}
-          recentPois={recentPois}
-        />
-      </div>
-
-      {/* --- BLOC 2 : CATÉGORIES + AUTH --- */}
-      <div className="flex-1 flex items-center gap-2 min-w-0 pointer-events-auto pl-2">
-        
-        {/* Catégories - Cachées sur mobile si l'écran est trop petit */}
-        <div className="flex-1 min-w-0 hidden md:block">
-           <CategoryBar 
-             selected={selectedCategory} 
-             onSelect={onSelectCategory} 
-           />
-        </div>
-
-        {/* --- ZONE D'ACTION UTILISATEUR --- */}
-        <div className="shrink-0 ml-auto flex items-center gap-2">
-          
-          {/* Optionnel: Bouton App Launcher (Style Google) */}
-          <button className="hidden lg:flex items-center justify-center w-10 h-10 bg-white dark:bg-zinc-800 rounded-full shadow-md text-zinc-600 dark:text-zinc-300 hover:bg-gray-50 transition-colors">
-            <LayoutGrid size={20} />
-          </button>
-
-          {/* LOGIQUE D'AFFICHAGE AUTH */}
-          {isLoading ? (
-            // CAS 1: CHARGEMENT (Skeleton pour éviter le layout shift)
-            <div className="h-10 w-10 md:w-28 bg-white dark:bg-zinc-800 rounded-full shadow-md flex items-center justify-center animate-pulse">
-               <Loader2 className="w-5 h-5 text-zinc-400 animate-spin" />
-            </div>
-          ) : user ? (
-            // CAS 2: CONNECTÉ -> AVATAR
-            <button 
-              onClick={() => router.push("/profile")}
-              className="group relative flex items-center gap-2 pl-1 pr-1 md:pr-3 h-10 bg-white dark:bg-zinc-800 rounded-full shadow-md border border-transparent hover:border-zinc-200 transition-all"
-            >
-              {/* Cercle Avatar */}
-              <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center text-blue-700 dark:text-blue-200 font-bold border-2 border-white dark:border-zinc-700 shadow-sm">
-                 {getInitials(user.name)}
-              </div>
-              
-              {/* Nom (visible sur Desktop uniquement) */}
-              <div className="hidden md:flex flex-col items-start mr-1">
-                <span className="text-sm font-semibold text-zinc-800 dark:text-zinc-100 leading-none max-w-[80px] truncate">
-                  {user.name}
-                </span>
-                <span className="text-[10px] text-zinc-500 font-medium capitalize">
-                  {user.role}
-                </span>
-              </div>
-            </button>
-          ) : (
-            // CAS 3: NON CONNECTÉ -> BOUTON D'ACTION (Call to Action)
-            <Link href="/login">
-              <div className="h-10 px-4 md:px-5 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-md flex items-center gap-2 transition-transform active:scale-95">
-                <LogIn size={18} strokeWidth={2.5} />
-                <span className="hidden md:inline font-semibold text-sm">
-                  Connexion
-                </span>
-              </div>
-            </Link>
-          )}
-
-        </div>
-      </div>
-    </div>
-  );
-};
 </file>
 
 <file path="components/sidebar/DirectionSidebar.tsx">
@@ -1981,33 +2510,33 @@ export const DirectionsSidebar = ({
     >
       {/* --- HEADER --- */}
       <div className="bg-primary px-4 py-4 shadow-md text-white z-10">
-        
+
         {/* Navigation Modes */}
         <div className="flex justify-between items-center mb-4 px-2">
-            <ModeButton 
-              icon={<Car size={20} />} 
-              mode="driving" 
-              active={activeMode === "driving"} 
-              onClick={() => onCalculateRoute("driving")} 
+            <ModeButton
+              icon={<Car size={20} />}
+              mode="driving"
+              active={activeMode === "driving"}
+              onClick={() => onCalculateRoute("driving")}
             />
             {/* On ne montre Moto/Vélo que symboliquement pour le design Navigoo, API "cycling" utilisé */}
-            <ModeButton 
-              icon={<Bike size={20} />} 
-              mode="cycling" 
-              active={activeMode === "cycling"} 
-              onClick={() => onCalculateRoute("cycling")} 
+            <ModeButton
+              icon={<Bike size={20} />}
+              mode="cycling"
+              active={activeMode === "cycling"}
+              onClick={() => onCalculateRoute("cycling")}
             />
-            
+
             {/* Marche à pied (si dispo ou si active) */}
             {(!routeStats || routeStats.distance < 5000 || activeMode === "walking") && (
-              <ModeButton 
-                icon={<PersonStanding size={20} />} 
-                mode="walking" 
-                active={activeMode === "walking"} 
-                onClick={() => onCalculateRoute("walking")} 
+              <ModeButton
+                icon={<PersonStanding size={20} />}
+                mode="walking"
+                active={activeMode === "walking"}
+                onClick={() => onCalculateRoute("walking")}
               />
             )}
-            
+
             <button onClick={onClose} className="p-2 bg-white/20 hover:bg-white/30 rounded-full transition-colors ml-auto">
                 <X size={20} />
             </button>
@@ -2015,7 +2544,7 @@ export const DirectionsSidebar = ({
 
         {/* Input Fields Box */}
         <div className="bg-white dark:bg-zinc-800 rounded-lg p-3 shadow-inner flex gap-3 text-zinc-800 dark:text-zinc-200">
-           
+
            {/* Visual Indicators (Dot Line) */}
            <div className="flex flex-col items-center pt-2 gap-1 w-6">
               <CircleDot size={14} className="text-blue-500" />
@@ -2044,7 +2573,7 @@ export const DirectionsSidebar = ({
 
       {/* --- RESULTS BODY --- */}
       <div className="flex-1 overflow-y-auto bg-zinc-50 dark:bg-black p-2">
-        
+
         {isLoadingRoute ? (
            <div className="flex flex-col items-center justify-center h-40 gap-3 text-zinc-500">
                <Loader2 size={32} className="animate-spin text-primary" />
@@ -2071,7 +2600,7 @@ export const DirectionsSidebar = ({
                           {activeMode === "cycling" && <Bike size={24} />}
                       </div>
                    </div>
-                   
+
                    <div className="mt-4 pt-3 border-t border-zinc-100 dark:border-zinc-800">
                       <button className="w-full bg-primary text-white py-2 rounded-full font-bold flex items-center justify-center gap-2 shadow-lg shadow-primary/20 hover:bg-primary-hover active:scale-95 transition-all">
                           <Navigation size={18} fill="currentColor" />
@@ -2103,7 +2632,7 @@ export const DirectionsSidebar = ({
 };
 
 const ModeButton = ({ icon, active, onClick }: any) => (
-  <button 
+  <button
      onClick={onClick}
      className={clsx(
        "p-2 rounded-full transition-all flex flex-col items-center gap-1 min-w-[60px]",
@@ -2145,15 +2674,15 @@ export const SidebarItem = ({ icon, label, isExpanded, onClick, isActive }: Side
       className={clsx(
         "flex items-center w-full p-3 transition-colors rounded-lg group relative",
         // En mode fermé, on centre. En ouvert, aligné à gauche.
-        isExpanded ? "justify-start px-4 gap-4" : "justify-center px-0", 
-        isActive 
-          ? "bg-primary/10 text-primary" 
+        isExpanded ? "justify-start px-4 gap-4" : "justify-center px-0",
+        isActive
+          ? "bg-primary/10 text-primary"
           : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-primary"
       )}
     >
       {/* Icone : taille fixe */}
       <span className={clsx(
-        "shrink-0 transition-transform duration-200", 
+        "shrink-0 transition-transform duration-200",
         isActive ? "scale-110" : "group-hover:scale-110"
       )}>
         {icon}
@@ -2211,7 +2740,7 @@ export const FormInput = (props: FormInputProps) => {
 
   const containerStyles = "relative flex items-center group";
   const iconStyles = "absolute left-4 text-zinc-400 group-focus-within:text-primary transition-colors";
-  
+
   const inputStyles = clsx(
     "w-full pl-12 pr-4 py-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-black/50 text-zinc-900 dark:text-zinc-100",
     "outline-none transition-all font-medium placeholder:text-zinc-400/70",
@@ -2237,120 +2766,6 @@ export const FormInput = (props: FormInputProps) => {
 };
 </file>
 
-<file path="components/ui/form/FormSection.tsx">
-import { ReactNode } from "react";
-import { motion } from "framer-motion";
-
-interface FormSectionProps {
-  children: ReactNode;
-  title: string;
-  subtitle?: string;
-  delay?: number;
-}
-
-export const FormSection = ({ children, title, subtitle, delay = 0 }: FormSectionProps) => {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay }}
-      className="bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm p-6 md:p-8 rounded-3xl border border-zinc-200/50 dark:border-zinc-800 shadow-xl dark:shadow-none h-full flex flex-col"
-    >
-      <div className="mb-6">
-        <h2 className="text-2xl font-bold text-zinc-800 dark:text-white">{title}</h2>
-        {subtitle && <p className="text-zinc-500 dark:text-zinc-400 text-sm mt-1">{subtitle}</p>}
-      </div>
-      <div className="space-y-3 flex-1">
-        {children}
-      </div>
-    </motion.div>
-  );
-};
-</file>
-
-<file path="components/ui/form/FormSelect.tsx">
-import { ReactNode } from "react";
-import { ChevronDown } from "lucide-react";
-
-interface Option {
-  id: string;
-  label: string;
-}
-
-interface FormSelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
-  label: string;
-  icon: ReactNode;
-  options: Option[];
-}
-
-export const FormSelect = ({ label, icon, options, ...props }: FormSelectProps) => {
-  return (
-    <div>
-      <label className="text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2 ml-1 block">
-        {label}
-      </label>
-      <div className="relative flex items-center group">
-        <div className="absolute left-4 text-zinc-400 group-focus-within:text-primary transition-colors">
-          {icon}
-        </div>
-        <select
-          {...props}
-          className="w-full pl-12 pr-10 h-14 appearance-none rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-black/50 text-zinc-900 dark:text-zinc-100 outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-medium cursor-pointer"
-        >
-          <option value="" disabled>Sélectionner...</option>
-          {options.map((opt) => (
-            <option key={opt.id} value={opt.id}>
-              {opt.label}
-            </option>
-          ))}
-        </select>
-        <div className="absolute right-4 text-zinc-400 pointer-events-none">
-          <ChevronDown size={20} />
-        </div>
-      </div>
-    </div>
-  );
-};
-</file>
-
-<file path="components/ui/form/ImageUpload.tsx">
-import { ChangeEvent } from "react";
-import { ImagePlus, X } from "lucide-react";
-import Image from "next/image";
-
-interface ImageUploadProps {
-  imagePreview: string | null;
-  onImageChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  onRemove: () => void;
-}
-
-export const ImageUpload = ({ imagePreview, onImageChange, onRemove }: ImageUploadProps) => {
-  return (
-    <div>
-       <label className="text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2 ml-1 block">
-        Photo principale
-      </label>
-      {imagePreview ? (
-        <div className="relative w-full h-48 rounded-xl overflow-hidden shadow-md group">
-          <Image src={imagePreview} alt="Preview" fill className="object-cover" />
-          <button type="button" onClick={onRemove} className="absolute top-2 right-2 p-2 bg-black/50 text-white rounded-full hover:bg-red-500 transition-colors">
-            <X size={16} />
-          </button>
-        </div>
-      ) : (
-        <label className="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-zinc-300 dark:border-zinc-700 rounded-xl cursor-pointer hover:bg-violet-50 dark:hover:bg-zinc-800/50 hover:border-primary/50 transition-all group">
-          <div className="p-3 bg-white dark:bg-zinc-800 rounded-full shadow-sm mb-3 group-hover:scale-110 transition-transform">
-            <ImagePlus size={24} className="text-zinc-400 group-hover:text-primary" />
-          </div>
-          <span className="text-sm font-medium text-zinc-600 dark:text-zinc-400">Ajouter une photo</span>
-          <input type="file" className="hidden" accept="image/*" onChange={onImageChange} />
-        </label>
-      )}
-    </div>
-  );
-};
-</file>
-
 <file path="components/ui/Button.tsx">
 import { ButtonHTMLAttributes } from "react";
 import { clsx } from "clsx";
@@ -2363,7 +2778,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 export const Button = ({ className, variant = "primary", size = "md", ...props }: ButtonProps) => {
   const baseStyles = "inline-flex items-center justify-center rounded-full font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50 disabled:cursor-not-allowed";
-  
+
   const variants = {
     primary: "bg-primary text-white hover:bg-primary-dark shadow-md",
     secondary: "bg-zinc-100 text-zinc-900 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-100",
@@ -2381,34 +2796,6 @@ export const Button = ({ className, variant = "primary", size = "md", ...props }
 };
 </file>
 
-<file path="components/ui/CategoryChip.tsx">
-import { clsx } from "clsx";
-
-interface ChipProps {
-  label: string;
-  active: boolean;
-  onClick: () => void;
-  icon?: React.ReactNode;
-}
-
-export const CategoryChip = ({ label, active, onClick, icon }: ChipProps) => {
-  return (
-    <button
-      onClick={onClick}
-      className={clsx(
-        "flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all shadow-sm border whitespace-nowrap",
-        active
-          ? "bg-primary text-white border-primary"
-          : "bg-white text-zinc-700 border-zinc-200 hover:bg-zinc-50 dark:bg-zinc-900 dark:text-zinc-300 dark:border-zinc-800"
-      )}
-    >
-      {icon && <span className="w-4 h-4">{icon}</span>}
-      {label}
-    </button>
-  );
-};
-</file>
-
 <file path="context/AuthContext.tsx">
 "use client";
 
@@ -2418,7 +2805,8 @@ import {
   authService, 
   LoginCredentials, 
   SignupData, 
-  AuthError 
+  AuthError, 
+  UpdateProfileData
 } from "@/services/authService";
 
 // ============================================================================
@@ -2433,7 +2821,7 @@ interface AuthContextType {
   login: (credentials: LoginCredentials) => Promise<void>;
   signup: (userData: SignupData) => Promise<void>;
   logout: () => Promise<void>;
-  updateProfile: (data: Partial<Omit<User, "id" | "email" | "role">>) => Promise<void>;
+  updateProfile: (userData: UpdateProfileData) => Promise<void>;
   clearError: () => void;
 }
 
@@ -2604,7 +2992,7 @@ export const useAuthContext = () => {
 
 <file path="data/categories.tsx">
 import React from "react";
-import { 
+import {
   UtensilsCrossed, BedDouble, Bus, Landmark, // Classiques
   Soup, Coffee, Flame, Fish, Home, Beer, // Locaux 1
   Music4, Mic2, Sandwich, Wine, Croissant, Users, Speaker, Waves, // Locaux 2
@@ -2646,91 +3034,6 @@ export const CATEGORIES: CategoryDef[] = [
 ];
 
 export const getCategoryConfig = (id: string) => CATEGORIES.find(c => c.id === id) || CATEGORIES[0];
-</file>
-
-<file path="hooks/useAuth.ts">
-"use client";
-
-import { useAuthContext } from "@/context/AuthContext";
-
-export const useAuth = () => {
-  return useAuthContext();
-};
-</file>
-
-<file path="public/file.svg">
-<svg fill="none" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M14.5 13.5V5.41a1 1 0 0 0-.3-.7L9.8.29A1 1 0 0 0 9.08 0H1.5v13.5A2.5 2.5 0 0 0 4 16h8a2.5 2.5 0 0 0 2.5-2.5m-1.5 0v-7H8v-5H3v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1M9.5 5V2.12L12.38 5zM5.13 5h-.62v1.25h2.12V5zm-.62 3h7.12v1.25H4.5zm.62 3h-.62v1.25h7.12V11z" clip-rule="evenodd" fill="#666" fill-rule="evenodd"/></svg>
-</file>
-
-<file path="public/globe.svg">
-<svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><g clip-path="url(#a)"><path fill-rule="evenodd" clip-rule="evenodd" d="M10.27 14.1a6.5 6.5 0 0 0 3.67-3.45q-1.24.21-2.7.34-.31 1.83-.97 3.1M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.48-1.52a7 7 0 0 1-.96 0H7.5a4 4 0 0 1-.84-1.32q-.38-.89-.63-2.08a40 40 0 0 0 3.92 0q-.25 1.2-.63 2.08a4 4 0 0 1-.84 1.31zm2.94-4.76q1.66-.15 2.95-.43a7 7 0 0 0 0-2.58q-1.3-.27-2.95-.43a18 18 0 0 1 0 3.44m-1.27-3.54a17 17 0 0 1 0 3.64 39 39 0 0 1-4.3 0 17 17 0 0 1 0-3.64 39 39 0 0 1 4.3 0m1.1-1.17q1.45.13 2.69.34a6.5 6.5 0 0 0-3.67-3.44q.65 1.26.98 3.1M8.48 1.5l.01.02q.41.37.84 1.31.38.89.63 2.08a40 40 0 0 0-3.92 0q.25-1.2.63-2.08a4 4 0 0 1 .85-1.32 7 7 0 0 1 .96 0m-2.75.4a6.5 6.5 0 0 0-3.67 3.44 29 29 0 0 1 2.7-.34q.31-1.83.97-3.1M4.58 6.28q-1.66.16-2.95.43a7 7 0 0 0 0 2.58q1.3.27 2.95.43a18 18 0 0 1 0-3.44m.17 4.71q-1.45-.12-2.69-.34a6.5 6.5 0 0 0 3.67 3.44q-.65-1.27-.98-3.1" fill="#666"/></g><defs><clipPath id="a"><path fill="#fff" d="M0 0h16v16H0z"/></clipPath></defs></svg>
-</file>
-
-<file path="public/next.svg">
-<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 394 80"><path fill="#000" d="M262 0h68.5v12.7h-27.2v66.6h-13.6V12.7H262V0ZM149 0v12.7H94v20.4h44.3v12.6H94v21h55v12.6H80.5V0h68.7zm34.3 0h-17.8l63.8 79.4h17.9l-32-39.7 32-39.6h-17.9l-23 28.6-23-28.6zm18.3 56.7-9-11-27.1 33.7h17.8l18.3-22.7z"/><path fill="#000" d="M81 79.3 17 0H0v79.3h13.6V17l50.2 62.3H81Zm252.6-.4c-1 0-1.8-.4-2.5-1s-1.1-1.6-1.1-2.6.3-1.8 1-2.5 1.6-1 2.6-1 1.8.3 2.5 1a3.4 3.4 0 0 1 .6 4.3 3.7 3.7 0 0 1-3 1.8zm23.2-33.5h6v23.3c0 2.1-.4 4-1.3 5.5a9.1 9.1 0 0 1-3.8 3.5c-1.6.8-3.5 1.3-5.7 1.3-2 0-3.7-.4-5.3-1s-2.8-1.8-3.7-3.2c-.9-1.3-1.4-3-1.4-5h6c.1.8.3 1.6.7 2.2s1 1.2 1.6 1.5c.7.4 1.5.5 2.4.5 1 0 1.8-.2 2.4-.6a4 4 0 0 0 1.6-1.8c.3-.8.5-1.8.5-3V45.5zm30.9 9.1a4.4 4.4 0 0 0-2-3.3 7.5 7.5 0 0 0-4.3-1.1c-1.3 0-2.4.2-3.3.5-.9.4-1.6 1-2 1.6a3.5 3.5 0 0 0-.3 4c.3.5.7.9 1.3 1.2l1.8 1 2 .5 3.2.8c1.3.3 2.5.7 3.7 1.2a13 13 0 0 1 3.2 1.8 8.1 8.1 0 0 1 3 6.5c0 2-.5 3.7-1.5 5.1a10 10 0 0 1-4.4 3.5c-1.8.8-4.1 1.2-6.8 1.2-2.6 0-4.9-.4-6.8-1.2-2-.8-3.4-2-4.5-3.5a10 10 0 0 1-1.7-5.6h6a5 5 0 0 0 3.5 4.6c1 .4 2.2.6 3.4.6 1.3 0 2.5-.2 3.5-.6 1-.4 1.8-1 2.4-1.7a4 4 0 0 0 .8-2.4c0-.9-.2-1.6-.7-2.2a11 11 0 0 0-2.1-1.4l-3.2-1-3.8-1c-2.8-.7-5-1.7-6.6-3.2a7.2 7.2 0 0 1-2.4-5.7 8 8 0 0 1 1.7-5 10 10 0 0 1 4.3-3.5c2-.8 4-1.2 6.4-1.2 2.3 0 4.4.4 6.2 1.2 1.8.8 3.2 2 4.3 3.4 1 1.4 1.5 3 1.5 5h-5.8z"/></svg>
-</file>
-
-<file path="public/vercel.svg">
-<svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1155 1000"><path d="m577.3 0 577.4 1000H0z" fill="#fff"/></svg>
-</file>
-
-<file path="public/window.svg">
-<svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" clip-rule="evenodd" d="M1.5 2.5h13v10a1 1 0 0 1-1 1h-11a1 1 0 0 1-1-1zM0 1h16v11.5a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 0 12.5zm3.75 4.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5M7 4.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0m1.75.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5" fill="#666"/></svg>
-</file>
-
-<file path="services/routingService.ts">
-import { Location, RouteStats, TransportMode } from "@/types";
-
-export const getRoute = async (
-  start: Location,
-  end: Location,
-  mode: TransportMode = "driving",
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  apiKey: string // On garde le paramètre pour compatibilité mais OSRM public n'en a pas besoin
-): Promise<RouteStats | null> => {
-  try {
-    // 1. Conversion du mode de transport pour OSRM
-    // OSRM supporte: 'driving', 'walking', 'cycling' (syntaxe exacte diffère légèrement parfois)
-    let profile = "driving";
-    if (mode === "cycling") profile = "bike"; // OSRM utilise souvent 'bike'
-    if (mode === "walking") profile = "foot"; // OSRM utilise souvent 'foot'
-
-    // 2. Utilisation de l'API publique OSRM (Router Project)
-    // Note: C'est un service de démo gratuit, parfait pour le développement.
-    const url = `https://router.project-osrm.org/route/v1/${profile}/${start.longitude},${start.latitude};${end.longitude},${end.latitude}?overview=full&geometries=geojson`;
-
-    console.log("Fetching Route:", url); // Pour le debug
-
-    const response = await fetch(url);
-
-    // 3. Gestion correcte des erreurs HTTP (le 404 "Not Found")
-    if (!response.ok) {
-      console.error(`Erreur API Route: ${response.status} ${response.statusText}`);
-      return null;
-    }
-
-    // 4. Parsing sécurisé
-    const data = await response.json();
-
-    // 5. Vérification du format de réponse OSRM
-    if (data.code !== "Ok" || !data.routes || data.routes.length === 0) {
-      console.warn("Pas de route trouvée par OSRM");
-      return null;
-    }
-
-    const route = data.routes[0];
-
-    return {
-      distance: route.distance, // En mètres
-      duration: route.duration, // En secondes
-      geometry: route.geometry, // GeoJSON LineString
-    };
-
-  } catch (error) {
-    console.error("Exception service routage:", error);
-    return null;
-  }
-};
 </file>
 
 <file path=".gitignore">
@@ -2776,397 +3079,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-</file>
-
-<file path="eslint.config.mjs">
-import { defineConfig, globalIgnores } from "eslint/config";
-import nextVitals from "eslint-config-next/core-web-vitals";
-import nextTs from "eslint-config-next/typescript";
-
-const eslintConfig = defineConfig([
-  ...nextVitals,
-  ...nextTs,
-  // Override default ignores of eslint-config-next.
-  globalIgnores([
-    // Default ignores of eslint-config-next:
-    ".next/**",
-    "out/**",
-    "build/**",
-    "next-env.d.ts",
-  ]),
-]);
-
-export default eslintConfig;
-</file>
-
-<file path="next.config.ts">
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "images.unsplash.com",
-      },
-    ],
-  },
-};
-
-export default nextConfig;
-</file>
-
-<file path="package.json">
-{
-  "name": "poi-navigoo-web",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint"
-  },
-  "dependencies": {
-    "clsx": "^2.1.1",
-    "framer-motion": "^12.26.2",
-    "lucide-react": "^0.562.0",
-    "maplibre-gl": "^5.16.0",
-    "next": "16.1.2",
-    "react": "19.2.3",
-    "react-dom": "19.2.3",
-    "react-map-gl": "^8.1.0",
-    "tailwind-merge": "^3.4.0"
-  },
-  "devDependencies": {
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "16.1.2",
-    "tailwindcss": "^4",
-    "typescript": "^5"
-  }
-}
-</file>
-
-<file path="postcss.config.mjs">
-const config = {
-  plugins: {
-    "@tailwindcss/postcss": {},
-  },
-};
-
-export default config;
-</file>
-
-<file path="tsconfig.json">
-{
-  "compilerOptions": {
-    "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "noEmit": true,
-    "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "react-jsx",
-    "incremental": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
-    "paths": {
-      "@/*": ["./*"]
-    }
-  },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts",
-    ".next/dev/types/**/*.ts",
-    "**/*.mts"
-  ],
-  "exclude": ["node_modules"]
-}
-</file>
-
-<file path="components/sidebar/SecondarySidebar.tsx">
-import { motion } from "framer-motion";
-import { X, MapPin, Clock, Bookmark, PlusCircle, Crown, Navigation, Edit2 } from "lucide-react";
-import { POI, Trip } from "@/types";
-import Image from "next/image";
-import { Button } from "@/components/ui/Button";
-import { useRouter } from "next/navigation";
-import { useUserData } from "@/hooks/useUserData";
-
-type ViewType = "saved" | "recent" | "trips" | "mypois" | null;
-
-interface SecondarySidebarProps {
-  view: ViewType;
-  onClose: () => void;
-  data: {
-    savedPois: POI[];
-    recentPois: POI[];
-    trips: Trip[];
-  };
-  onSelectPoi: (poi: POI) => void;
-}
-
-export const SecondarySidebar = ({ view, onClose, data, onSelectPoi }: SecondarySidebarProps) => {
-  const router = useRouter();
-  const { myPois } = useUserData(); // Accès aux POIs de l'utilisateur
-
-  const getHeader = () => {
-    switch (view) {
-      case "saved": return { title: "Enregistrés", icon: <Bookmark className="text-primary" /> };
-      case "recent": return { title: "Récents", icon: <Clock className="text-primary" /> };
-      case "trips": return { title: "Trajets Récents", icon: <Navigation className="text-primary" /> };
-      case "mypois": return { title: "Mes Points d'intérêt", icon: <MapPin className="text-primary" /> };
-      default: return { title: "", icon: null };
-    }
-  };
-
-  const { title, icon } = getHeader();
-
-  const formatDate = (isoString: string) => {
-    try { return new Date(isoString).toLocaleDateString('fr-CM', { day: 'numeric', month: 'short' }); } catch { return ""; }
-  };
-
-  return (
-    <motion.div
-      initial={{ x: "-100%" }}
-      animate={{ x: "0%" }}
-      exit={{ x: "-100%" }}
-      transition={{ type: "spring", stiffness: 300, damping: 30 }}
-      className="fixed top-0 left-0 md:left-[72px] h-full w-full md:w-[400px] bg-white dark:bg-zinc-900 shadow-2xl z-[55] flex flex-col border-r border-zinc-200 dark:border-zinc-800"
-    >
-      {/* Header */}
-      <div className="p-4 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between bg-zinc-50 dark:bg-black/50">
-        <div className="flex items-center gap-3">
-            <div className="p-2 bg-primary/10 rounded-full">{icon}</div>
-            <h2 className="text-lg font-bold text-zinc-800 dark:text-white">{title}</h2>
-        </div>
-        <button onClick={onClose} className="p-2 hover:bg-zinc-200 dark:hover:bg-zinc-800 rounded-full text-zinc-500">
-            <X size={20} />
-        </button>
-      </div>
-
-      {/* Body */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        
-        {/* === SECTION "MES POIS" === */}
-        {view === "mypois" && (
-            <div className="space-y-4">
-                
-                {/* Bouton Création Toujours Visible */}
-                <button 
-                    onClick={() => router.push("/add-poi")} 
-                    className="w-full py-4 border-2 border-dashed border-primary/30 rounded-xl flex items-center justify-center gap-3 hover:bg-primary/5 hover:border-primary transition-all group text-zinc-500 dark:text-zinc-400"
-                >
-                    <div className="p-2 bg-white dark:bg-zinc-800 rounded-full shadow-sm group-hover:scale-110 transition-transform">
-                        <PlusCircle size={20} className="text-primary" />
-                    </div>
-                    <span className="text-sm font-bold text-primary">Créer un nouveau lieu</span>
-                </button>
-
-                <div className="h-px bg-zinc-100 dark:bg-zinc-800 my-2"></div>
-
-                <h3 className="text-xs font-bold text-zinc-400 uppercase tracking-wider mb-2">Mes Établissements ({myPois.length})</h3>
-
-                {myPois.length > 0 ? (
-                    <div className="space-y-3">
-                        {myPois.map(poi => (
-                            <div 
-                                key={poi.poi_id} 
-                                onClick={() => onSelectPoi(poi)} // Clic sur un "MyPOI" ouvre la sidebar détail
-                                className="relative flex gap-3 p-3 rounded-xl bg-white dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-700 hover:border-primary cursor-pointer shadow-sm hover:shadow-md transition-all group"
-                            >
-                                <div className="w-16 h-16 rounded-lg overflow-hidden shrink-0 relative bg-zinc-200">
-                                   {poi.poi_images_urls[0] && <Image src={poi.poi_images_urls[0]} alt="" fill className="object-cover" />}
-                                </div>
-                                <div className="flex-1">
-                                    <h3 className="font-semibold text-zinc-800 dark:text-zinc-100 line-clamp-1 pr-6">{poi.poi_name}</h3>
-                                    <p className="text-xs text-zinc-500 mt-1 line-clamp-1">{poi.poi_description}</p>
-                                    <div className="mt-2 flex items-center gap-2">
-                                        <span className="text-[10px] bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-bold">Actif</span>
-                                        <div className="ml-auto text-primary text-xs flex items-center gap-1 group-hover:underline">
-                                            <Edit2 size={10} /> Gérer
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                ) : (
-                    <div className="text-center py-8 text-zinc-400 text-sm">
-                        Vous n'avez pas encore ajouté de lieu.
-                    </div>
-                )}
-
-                {/* Promo Partenaire en bas de liste */}
-                <div className="bg-gradient-to-br from-indigo-900 to-primary p-5 rounded-2xl text-white relative overflow-hidden mt-6">
-                    <Crown className="absolute -right-4 -bottom-4 text-white/10" size={120} />
-                    <h3 className="font-bold text-lg mb-2 relative z-10">Devenir Partenaire</h3>
-                    <p className="text-white/80 text-sm mb-4 relative z-10 leading-relaxed">
-                        Boostez la visibilité de vos commerces sur Navigoo.
-                    </p>
-                    <Button size="sm" className="w-full bg-white text-primary hover:bg-zinc-100 border-none relative z-10 font-bold">
-                        Passer pro
-                    </Button>
-                </div>
-            </div>
-        )}
-
-        {/* Autres Vues (Code inchangé mais condensé pour l'exemple) */}
-        {(view === "saved" || view === "recent") && (
-             (view === "saved" ? data.savedPois : data.recentPois).length > 0 ? (
-                (view === "saved" ? data.savedPois : data.recentPois).map(poi => (
-                    <div key={poi.poi_id} onClick={() => onSelectPoi(poi)} className="flex gap-3 p-3 rounded-xl hover:bg-zinc-100 cursor-pointer border border-transparent hover:border-zinc-200 transition-colors">
-                        <div className="w-14 h-14 rounded-lg overflow-hidden shrink-0 relative bg-zinc-200">
-                           {poi.poi_images_urls[0] && <Image src={poi.poi_images_urls[0]} alt="" fill className="object-cover" />}
-                        </div>
-                        <div>
-                            <h3 className="font-semibold text-zinc-800 line-clamp-1">{poi.poi_name}</h3>
-                            <p className="text-xs text-zinc-500">{poi.poi_category} • {poi.address_city}</p>
-                        </div>
-                    </div>
-                ))
-             ) : <EmptyState text="Aucun lieu trouvé." />
-        )}
-
-        {view === "trips" && data.trips.length > 0 && (
-             data.trips.map(trip => (
-                <div key={trip.id} className="p-4 rounded-xl bg-zinc-50 border border-zinc-200 mb-3">
-                    <div className="flex justify-between items-center mb-2 text-xs text-zinc-400">
-                         <span>{formatDate(trip.date)}</span>
-                    </div>
-                    <div className="flex flex-col gap-1 text-sm">
-                        <span className="font-semibold">{trip.arriveName}</span>
-                        <span className="text-zinc-500 text-xs">depuis {trip.departName}</span>
-                    </div>
-                </div>
-             ))
-        )}
-      </div>
-    </motion.div>
-  );
-};
-
-const EmptyState = ({ text }: { text: string }) => (
-    <div className="flex flex-col items-center justify-center h-48 text-zinc-400">
-        <MapPin size={48} className="mb-2 opacity-20" />
-        <p>{text}</p>
-    </div>
-);
-</file>
-
-<file path="components/ui/Loader.tsx">
-"use client";
-
-import { clsx } from "clsx";
-
-export const Loader = ({ className }: { className?: string }) => {
-  return (
-    <div
-      className={clsx(
-        "flex flex-col items-center justify-center h-full w-full bg-zinc-50 dark:bg-black fixed inset-0 z-[100] overflow-hidden",
-        className
-      )}
-    >
-      {/* --- ARRIÈRE PLAN GRILLE --- */}
-      {/* Donne un effet technique de cartographie */}
-      <div className="absolute inset-0 z-0 opacity-[0.03] dark:opacity-[0.05] pointer-events-none" 
-           style={{ 
-             backgroundImage: "linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)", 
-             backgroundSize: "40px 40px" 
-           }} 
-      />
-
-      <div className="relative z-10 flex flex-col items-center gap-8">
-        
-        {/* --- CARTE DU CAMEROUN (DESSIN EXACT) --- */}
-        <div className="relative w-48 h-64 md:w-56 md:h-80 drop-shadow-2xl">
-          <svg
-            viewBox="0 0 350 600"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-full h-full"
-          >
-            {/* L'ombre/Glow violet derrière la carte */}
-            <defs>
-              <filter id="glow">
-                <feGaussianBlur stdDeviation="4" result="coloredBlur" />
-                <feMerge>
-                  <feMergeNode in="coloredBlur" />
-                  <feMergeNode in="SourceGraphic" />
-                </feMerge>
-              </filter>
-            </defs>
-
-            {/* Silhouette Principale du Cameroun (Retracée selon ton image) */}
-            <path
-              d="M210 10 C218 8 230 18 232 30 
-                 C236 45 225 60 230 65 
-                 C240 75 255 82 260 78 
-                 C270 70 290 85 292 95 
-                 C295 115 282 140 288 150 
-                 C300 165 325 185 330 205 
-                 C335 230 320 250 315 270 
-                 C315 290 330 315 335 340 
-                 C340 370 310 400 305 430 
-                 C300 460 320 480 325 500 
-                 C330 520 345 540 345 550 
-                 C345 570 250 590 180 585 
-                 C120 580 100 560 90 530 
-                 C80 500 70 480 55 470 
-                 C40 460 25 440 20 420 
-                 C15 400 35 385 40 365 
-                 C45 345 30 335 35 320 
-                 C40 305 55 295 70 280 
-                 C90 260 125 220 135 190 
-                 C145 160 160 120 170 85 
-                 C180 50 195 25 210 10 Z"
-              className="fill-primary/15 dark:fill-primary/20 stroke-primary stroke-[3] animate-pulse"
-              filter="url(#glow)"
-              strokeLinejoin="round"
-              strokeLinecap="round"
-            />
-
-            {/* Localisation Clignotante (Symbolise Yaoundé / Le cœur de l'app) */}
-            {/* Coordonnées ajustées pour être dans la partie Centre-Sud */}
-            <circle cx="200" cy="420" r="6" className="fill-primary animate-ping opacity-75" />
-            <circle cx="200" cy="420" r="3" className="fill-white dark:fill-zinc-950" />
-          </svg>
-        </div>
-
-        {/* --- TEXTE --- */}
-        <div className="flex flex-col items-center gap-3">
-          <div className="h-2 w-24 bg-zinc-200 dark:bg-zinc-800 rounded-full overflow-hidden">
-            <div className="h-full bg-primary w-2/3 animate-[shimmer_1.5s_infinite] rounded-full" 
-                 style={{ 
-                   backgroundImage: "linear-gradient(to right, transparent, rgba(255,255,255,0.5), transparent)" 
-                 }} 
-            />
-          </div>
-          
-          <h3 className="text-xl md:text-2xl font-black tracking-tight text-zinc-800 dark:text-white flex items-center gap-1.5 font-sans">
-            <span className="text-zinc-300 dark:text-zinc-600">Chargement</span>
-            <span className="text-primary animate-pulse">Navigoo</span>
-          </h3>
-        </div>
-
-      </div>
-    </div>
-  );
-};
 </file>
 
 <file path="README.md">
@@ -3268,6 +3180,602 @@ Navigoo est une application web moderne permettant de naviguer sur une carte, de
    - Pour être **Client** : Utilisez n'importe quel autre email.
 </file>
 
+<file path="components/navigation/SearchInput.tsx">
+import { Search, Menu, X, History, MapPin, Navigation2 } from "lucide-react";
+import { useState, useRef } from "react";
+import clsx from "clsx";
+import { POI } from "@/types";
+
+interface SearchInputProps {
+  onMenuClick: () => void;
+  className?: string;
+  pois: POI[];
+  onSearch: (query: string) => void;
+  onSelectResult: (poi: POI) => void;
+  onLocateMe: () => void;
+  recentSearches: string[];
+  recentPois: POI[];
+}
+
+export const SearchInput = ({
+  onMenuClick,
+  className,
+  pois,
+  onLocateMe,
+  onSearch,
+  onSelectResult,
+  recentSearches,
+  recentPois
+}: SearchInputProps) => {
+  const [isFocused, setIsFocused] = useState(false);
+  const [query, setQuery] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const suggestions = query.length > 0 
+    ? pois.filter(p => p.poi_name.toLowerCase().includes(query.toLowerCase())).slice(0, 5)
+    : [];
+
+  const handleSearchSubmit = (e?: React.FormEvent) => {
+    e?.preventDefault();
+    onSearch(query);
+    setIsFocused(false);
+    inputRef.current?.blur();
+  };
+
+  const handleSelectPoi = (poi: POI) => {
+    setQuery(poi.poi_name);
+    onSelectResult(poi);
+    setIsFocused(false);
+  };
+
+  return (
+    <div className={clsx("relative group", className)}>
+      {/* Ombre portée améliorée pour détacher du fond de carte */}
+      <div className={clsx(
+          "absolute inset-0 bg-white/80 dark:bg-zinc-900/90 rounded-3xl transition-all duration-300",
+          isFocused ? "shadow-2xl scale-[1.02]" : "shadow-md hover:shadow-lg"
+      )} />
+
+      <form 
+        onSubmit={handleSearchSubmit}
+        className={clsx(
+          "relative flex items-center h-12 px-1 z-10 transition-all border border-zinc-200/50 dark:border-zinc-700/50 backdrop-blur-md rounded-3xl",
+          isFocused ? "bg-white dark:bg-zinc-900 rounded-b-none border-b-0" : "bg-white/90 dark:bg-zinc-900/90"
+        )}
+      >
+        <button
+          type="button"
+          onClick={onMenuClick}
+          className="p-2.5 ml-1 text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-full transition-colors"
+        >
+          {isFocused ? <Search size={20} className="text-primary"/> : <Menu size={20} />}
+        </button>
+
+        <input
+          ref={inputRef}
+          type="text" 
+          placeholder="Rechercher un lieu, un restaurant..."
+          className="flex-1 bg-transparent border-none outline-none text-[15px] text-zinc-800 dark:text-zinc-100 px-3 placeholder:text-zinc-400 font-medium"
+          value={query}
+          onFocus={() => setIsFocused(true)}
+          onChange={(e) => {
+            setQuery(e.target.value);
+            if (e.target.value === "") onSearch("");
+          }}
+        />
+
+        <div className="flex items-center pr-1.5 gap-1">
+          {query && (
+            <button 
+              type="button" 
+              onClick={() => { setQuery(""); onSearch(""); inputRef.current?.focus(); }} 
+              className="p-2 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200"
+            >
+              <X size={18} />
+            </button>
+          )}
+          
+          {/* Séparateur */}
+          <div className="h-5 w-px bg-zinc-200 dark:bg-zinc-700 mx-1"></div>
+          
+          <button 
+            type="button" 
+            onClick={onLocateMe}
+            className="p-2 bg-primary/10 hover:bg-primary/20 text-primary rounded-full transition-colors"
+            title="Me localiser"
+          >
+             <Navigation2 size={18} className="-rotate-45 fill-primary/20" />
+          </button>
+        </div>
+      </form>
+
+      {/* --- MENU DÉROULANT --- */}
+      {isFocused && (
+        <>
+          <div className="fixed inset-0 z-0" onClick={() => setIsFocused(false)} />
+          
+          <div className="absolute top-full left-0 w-full bg-white dark:bg-zinc-900 rounded-b-3xl shadow-2xl border-x border-b border-zinc-200 dark:border-zinc-800 overflow-hidden z-20 pb-2 animate-in slide-in-from-top-2 duration-200">
+             
+             {/* Ligne de séparation visuelle */}
+             <div className="w-full h-px bg-gradient-to-r from-transparent via-zinc-200 dark:via-zinc-700 to-transparent mb-2"></div>
+
+             {/* RÉSULTATS ACTIFS */}
+             {query.length > 0 && (
+                <div className="max-h-[60vh] overflow-y-auto scrollbar-thin">
+                  {suggestions.length > 0 ? (
+                    suggestions.map(poi => (
+                      <SuggestionItem
+                        key={poi.poi_id}
+                        icon={<MapPin size={18} className="text-red-500" />} 
+                        title={poi.poi_name} 
+                        subtitle={poi.address_city} 
+                        onClick={() => handleSelectPoi(poi)}
+                        highlight
+                      />
+                    ))
+                  ) : (
+                    <div className="px-6 py-8 text-center text-zinc-400">
+                        <p className="text-sm">Aucun résultat pour &quot;{query}&quot;</p>
+                    </div>
+                  )}
+                </div>
+             )}
+
+             {/* HISTORIQUE (Si vide) */}
+             {query.length === 0 && (
+                <div className="py-2">
+                  <div className="px-5 py-2 text-[11px] font-bold text-zinc-400 uppercase tracking-wider flex items-center justify-between">
+                      <span>Récemment consultés</span>
+                  </div>
+                  
+                  {recentPois.length > 0 ? recentPois.map((poi) => (
+                    <SuggestionItem 
+                      key={`recent-${poi.poi_id}`}
+                      icon={<History size={18} className="text-primary/60" />} 
+                      title={poi.poi_name} 
+                      subtitle={poi.poi_category}
+                      onClick={() => handleSelectPoi(poi)}
+                    />
+                  )) : (
+                    <div className="px-5 py-4 text-sm text-zinc-400 italic">
+                        Votre historique de recherche apparaîtra ici.
+                    </div>
+                  )}
+                </div>
+             )}
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
+
+const SuggestionItem = ({ icon, title, subtitle, onClick, highlight }: any) => (
+  <div 
+    onClick={onClick}
+    className="flex items-center gap-4 py-3 px-5 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 cursor-pointer transition-colors group border-l-2 border-transparent hover:border-primary"
+  >
+    <div className={clsx(
+      "w-10 h-10 rounded-full flex items-center justify-center shrink-0 transition-colors",
+      highlight ? "bg-red-50 dark:bg-red-900/20" : "bg-zinc-100 dark:bg-zinc-800 group-hover:bg-white dark:group-hover:bg-zinc-700"
+    )}>
+      {icon}
+    </div>
+    <div className="flex flex-col min-w-0">
+      <span className={clsx(
+          "text-sm font-semibold truncate", 
+          highlight ? "text-zinc-900 dark:text-white" : "text-zinc-700 dark:text-zinc-200"
+      )}>
+        {title}
+      </span>
+      {subtitle && <span className="text-xs text-zinc-500 truncate">{subtitle}</span>}
+    </div>
+  </div>
+);
+</file>
+
+<file path="components/navigation/TopLayout.tsx">
+"use client";
+
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { SearchInput } from "./SearchInput";
+import { CategoryBar } from "./CategoryBar";
+import { POI } from "@/types";
+import { Button } from "@/components/ui/Button";
+import { useAuth } from "@/hooks/useAuth"; 
+import { LogIn, Loader2, LayoutGrid, Grip } from "lucide-react";
+
+interface TopLayoutProps {
+  onToggleSidebar: () => void;
+  allPois: POI[];
+  selectedCategory: string;
+  onSelectCategory: (cat: string) => void;
+  onSearch: (query: string) => void;
+  onSelectResult: (poi: POI) => void;
+  onLocateMe: () => void;
+  recentSearches: string[];
+  recentPois: POI[];
+}
+
+export const TopLayout = ({
+  onToggleSidebar,
+  allPois,
+  selectedCategory,
+  onSelectCategory,
+  onSearch,
+  onLocateMe,
+  onSelectResult,
+  recentSearches,
+  recentPois
+}: TopLayoutProps) => {
+
+  const { user, isLoading } = useAuth();
+  const router = useRouter();
+
+  const getInitials = (name: string) => {
+    return name ? name.charAt(0).toUpperCase() : "U";
+  };
+
+  return (
+    <div className="absolute top-0 left-0 w-full z-40 bg-transparent py-3 pl-[88px] pr-4 pointer-events-none flex items-start gap-3">
+      
+      {/* --- BLOC 1 : RECHERCHE (Priorité visuelle haute) --- */}
+      {/* shrink-0 empêche la barre de recherche d'être écrasée */}
+      <div className="pointer-events-auto min-w-[260px] max-w-[420px] md:min-w-[260px] shrink-0">
+        <SearchInput 
+          onMenuClick={onToggleSidebar}
+          pois={allPois}
+          onSearch={onSearch}
+          onSelectResult={onSelectResult}
+          onLocateMe={onLocateMe}
+          recentSearches={recentSearches}
+          recentPois={recentPois}
+        />
+      </div>
+
+      {/* --- BLOC 2 : CATÉGORIES + AUTH --- */}
+      {/* min-w-0 permet au flex container de rétrécir sans casser le layout */}
+      <div className="flex-1 flex items-center justify-between min-w-0 pointer-events-auto">
+        
+        {/* Catégories - Disparaît intelligemment si l'écran est trop petit (lg requis maintenant pour éviter le conflit) */}
+        <div className="flex-1 min-w-0 overflow-hidden mx-2 hidden md:block">
+           <CategoryBar 
+             selected={selectedCategory} 
+             onSelect={onSelectCategory} 
+           />
+        </div>
+
+        {/* --- ZONE D'ACTION UTILISATEUR --- */}
+        <div className="flex items-center gap-3 shrink-0 bg-white/80 dark:bg-black/50 backdrop-blur-sm p-1.5 rounded-full border border-white/20 shadow-sm">
+          
+          {/* Bouton App Launcher (Caché sur mobile) */}
+          <button className="hidden xl:flex items-center justify-center w-10 h-10 bg-white dark:bg-zinc-800 rounded-full shadow-md text-zinc-600 hover:bg-gray-50 transition-colors">
+            <LayoutGrid size={20} />
+          </button>
+
+          {/* LOGIQUE AUTH */}
+          {isLoading ? (
+            <div className="h-10 w-10 md:w-28 bg-white dark:bg-zinc-800 rounded-full shadow-md flex items-center justify-center">
+               <Loader2 className="w-5 h-5 text-zinc-400 animate-spin" />
+            </div>
+          ) : user ? (
+            // CONNECTÉ -> AVATAR
+            <button 
+              onClick={() => router.push("/profile")}
+              className="flex items-center gap-2 pr-3 pl-1 py-1 rounded-full bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 shadow-sm hover:shadow-md transition-all group"
+            >
+              {/* IMAGE OU INITIALES */}
+              {user.avatar ? (
+                 <img 
+                   src={user.avatar} 
+                   alt={user.name} 
+                   className="w-8 h-8 rounded-full object-cover border-2 border-white dark:border-zinc-700 shadow-sm"
+                 />
+              ) : (
+                <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center text-blue-700 dark:text-blue-200 font-bold border-2 border-white dark:border-zinc-700 shadow-sm">
+                   {getInitials(user.name)}
+                </div>
+              )}
+              
+              {/* Nom (Desktop uniquement) */}
+              <div className="hidden md:flex flex-col items-start mr-1">
+                <span className="text-xs font-bold text-zinc-800 dark:text-zinc-100 leading-none max-w-[80px] truncate">
+                  {user.name}
+                </span>
+              </div>
+            </button>
+          ) : (
+            // NON CONNECTÉ -> BOUTON ACTION
+            <Link href="/login">
+              <div className="h-10 w-10 md:w-auto md:px-5 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-md flex items-center justify-center gap-2 transition-transform active:scale-95">
+                <LogIn size={18} strokeWidth={2.5} />
+                {/* Texte caché sur mobile pour sauver l'espace */}
+                <span className="hidden md:inline font-semibold text-sm">
+                  Connexion
+                </span>
+              </div>
+            </Link>
+          )}
+
+        </div>
+      </div>
+    </div>
+  );
+};
+</file>
+
+<file path="components/sidebar/SecondarySidebar.tsx">
+import { motion } from "framer-motion";
+import { X, MapPin, Clock, Bookmark, PlusCircle, Crown, Navigation, Edit2 } from "lucide-react";
+import { POI, Trip } from "@/types";
+import Image from "next/image";
+import { Button } from "@/components/ui/Button";
+import { useRouter } from "next/navigation";
+import { useUserData } from "@/hooks/useUserData";
+
+type ViewType = "saved" | "recent" | "trips" | "mypois" | null;
+
+interface SecondarySidebarProps {
+  view: ViewType;
+  onClose: () => void;
+  data: {
+    savedPois: POI[];
+    recentPois: POI[];
+    trips: Trip[];
+  };
+  onSelectPoi: (poi: POI) => void;
+}
+
+export const SecondarySidebar = ({ view, onClose, data, onSelectPoi }: SecondarySidebarProps) => {
+  const router = useRouter();
+  const { myPois } = useUserData(); // Accès aux POIs de l'utilisateur
+
+  const getHeader = () => {
+    switch (view) {
+      case "saved": return { title: "Enregistrés", icon: <Bookmark className="text-primary" /> };
+      case "recent": return { title: "Récents", icon: <Clock className="text-primary" /> };
+      case "trips": return { title: "Trajets Récents", icon: <Navigation className="text-primary" /> };
+      case "mypois": return { title: "Mes Points d'intérêt", icon: <MapPin className="text-primary" /> };
+      default: return { title: "", icon: null };
+    }
+  };
+
+  const { title, icon } = getHeader();
+
+  const formatDate = (isoString: string) => {
+    try { return new Date(isoString).toLocaleDateString('fr-CM', { day: 'numeric', month: 'short' }); } catch { return ""; }
+  };
+
+  return (
+    <motion.div
+      initial={{ x: "-100%" }}
+      animate={{ x: "0%" }}
+      exit={{ x: "-100%" }}
+      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+      className="fixed top-0 left-0 md:left-[72px] h-full w-full md:w-[400px] bg-white dark:bg-zinc-900 shadow-2xl z-[55] flex flex-col border-r border-zinc-200 dark:border-zinc-800"
+    >
+      {/* Header */}
+      <div className="p-4 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between bg-zinc-50 dark:bg-black/50">
+        <div className="flex items-center gap-3">
+            <div className="p-2 bg-primary/10 rounded-full">{icon}</div>
+            <h2 className="text-lg font-bold text-zinc-800 dark:text-white">{title}</h2>
+        </div>
+        <button onClick={onClose} className="p-2 hover:bg-zinc-200 dark:hover:bg-zinc-800 rounded-full text-zinc-500">
+            <X size={20} />
+        </button>
+      </div>
+
+      {/* Body */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+
+        {/* === SECTION "MES POIS" === */}
+        {view === "mypois" && (
+            <div className="space-y-4">
+
+                {/* Bouton Création Toujours Visible */}
+                <button
+                    onClick={() => router.push("/add-poi")}
+                    className="w-full py-4 border-2 border-dashed border-primary/30 rounded-xl flex items-center justify-center gap-3 hover:bg-primary/5 hover:border-primary transition-all group text-zinc-500 dark:text-zinc-400"
+                >
+                    <div className="p-2 bg-white dark:bg-zinc-800 rounded-full shadow-sm group-hover:scale-110 transition-transform">
+                        <PlusCircle size={20} className="text-primary" />
+                    </div>
+                    <span className="text-sm font-bold text-primary">Créer un nouveau lieu</span>
+                </button>
+
+                <div className="h-px bg-zinc-100 dark:bg-zinc-800 my-2"></div>
+
+                <h3 className="text-xs font-bold text-zinc-400 uppercase tracking-wider mb-2">Mes Établissements ({myPois.length})</h3>
+
+                {myPois.length > 0 ? (
+                    <div className="space-y-3">
+                        {myPois.map(poi => (
+                            <div
+                                key={poi.poi_id}
+                                onClick={() => onSelectPoi(poi)} // Clic sur un "MyPOI" ouvre la sidebar détail
+                                className="relative flex gap-3 p-3 rounded-xl bg-white dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-700 hover:border-primary cursor-pointer shadow-sm hover:shadow-md transition-all group"
+                            >
+                                <div className="w-16 h-16 rounded-lg overflow-hidden shrink-0 relative bg-zinc-200">
+                                   {poi.poi_images_urls[0] && <Image src={poi.poi_images_urls[0]} alt="" fill className="object-cover" />}
+                                </div>
+                                <div className="flex-1">
+                                    <h3 className="font-semibold text-zinc-800 dark:text-zinc-100 line-clamp-1 pr-6">{poi.poi_name}</h3>
+                                    <p className="text-xs text-zinc-500 mt-1 line-clamp-1">{poi.poi_description}</p>
+                                    <div className="mt-2 flex items-center gap-2">
+                                        <span className="text-[10px] bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-bold">Actif</span>
+                                        <div className="ml-auto text-primary text-xs flex items-center gap-1 group-hover:underline">
+                                            <Edit2 size={10} /> Gérer
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <div className="text-center py-8 text-zinc-400 text-sm">
+                        Vous n'avez pas encore ajouté de lieu.
+                    </div>
+                )}
+
+                {/* Promo Partenaire en bas de liste */}
+                <div className="bg-gradient-to-br from-indigo-900 to-primary p-5 rounded-2xl text-white relative overflow-hidden mt-6">
+                    <Crown className="absolute -right-4 -bottom-4 text-white/10" size={120} />
+                    <h3 className="font-bold text-lg mb-2 relative z-10">Devenir Partenaire</h3>
+                    <p className="text-white/80 text-sm mb-4 relative z-10 leading-relaxed">
+                        Boostez la visibilité de vos commerces sur Navigoo.
+                    </p>
+                    <Button size="sm" className="w-full bg-white text-primary hover:bg-zinc-100 border-none relative z-10 font-bold">
+                        Passer pro
+                    </Button>
+                </div>
+            </div>
+        )}
+
+        {/* Autres Vues (Code inchangé mais condensé pour l'exemple) */}
+        {(view === "saved" || view === "recent") && (
+             (view === "saved" ? data.savedPois : data.recentPois).length > 0 ? (
+                (view === "saved" ? data.savedPois : data.recentPois).map(poi => (
+                    <div key={poi.poi_id} onClick={() => onSelectPoi(poi)} className="flex gap-3 p-3 rounded-xl hover:bg-zinc-100 cursor-pointer border border-transparent hover:border-zinc-200 transition-colors">
+                        <div className="w-14 h-14 rounded-lg overflow-hidden shrink-0 relative bg-zinc-200">
+                           {poi.poi_images_urls[0] && <Image src={poi.poi_images_urls[0]} alt="" fill className="object-cover" />}
+                        </div>
+                        <div>
+                            <h3 className="font-semibold text-zinc-800 line-clamp-1">{poi.poi_name}</h3>
+                            <p className="text-xs text-zinc-500">{poi.poi_category} • {poi.address_city}</p>
+                        </div>
+                    </div>
+                ))
+             ) : <EmptyState text="Aucun lieu trouvé." />
+        )}
+
+        {view === "trips" && data.trips.length > 0 && (
+             data.trips.map(trip => (
+                <div key={trip.id} className="p-4 rounded-xl bg-zinc-50 border border-zinc-200 mb-3">
+                    <div className="flex justify-between items-center mb-2 text-xs text-zinc-400">
+                         <span>{formatDate(trip.date)}</span>
+                    </div>
+                    <div className="flex flex-col gap-1 text-sm">
+                        <span className="font-semibold">{trip.arriveName}</span>
+                        <span className="text-zinc-500 text-xs">depuis {trip.departName}</span>
+                    </div>
+                </div>
+             ))
+        )}
+      </div>
+    </motion.div>
+  );
+};
+
+const EmptyState = ({ text }: { text: string }) => (
+    <div className="flex flex-col items-center justify-center h-48 text-zinc-400">
+        <MapPin size={48} className="mb-2 opacity-20" />
+        <p>{text}</p>
+    </div>
+);
+</file>
+
+<file path="components/ui/Loader.tsx">
+"use client";
+
+import { clsx } from "clsx";
+
+export const Loader = ({ className }: { className?: string }) => {
+  return (
+    <div
+      className={clsx(
+        "flex flex-col items-center justify-center h-full w-full bg-zinc-50 dark:bg-black fixed inset-0 z-[100] overflow-hidden",
+        className
+      )}
+    >
+      {/* --- ARRIÈRE PLAN GRILLE --- */}
+      {/* Donne un effet technique de cartographie */}
+      <div className="absolute inset-0 z-0 opacity-[0.03] dark:opacity-[0.05] pointer-events-none"
+           style={{
+             backgroundImage: "linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)",
+             backgroundSize: "40px 40px"
+           }}
+      />
+
+      <div className="relative z-10 flex flex-col items-center gap-8">
+
+        {/* --- CARTE DU CAMEROUN (DESSIN EXACT) --- */}
+        <div className="relative w-48 h-64 md:w-56 md:h-80 drop-shadow-2xl">
+          <svg
+            viewBox="0 0 350 600"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className="w-full h-full"
+          >
+            {/* L'ombre/Glow violet derrière la carte */}
+            <defs>
+              <filter id="glow">
+                <feGaussianBlur stdDeviation="4" result="coloredBlur" />
+                <feMerge>
+                  <feMergeNode in="coloredBlur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+
+            {/* Silhouette Principale du Cameroun (Retracée selon ton image) */}
+            <path
+              d="M210 10 C218 8 230 18 232 30
+                 C236 45 225 60 230 65
+                 C240 75 255 82 260 78
+                 C270 70 290 85 292 95
+                 C295 115 282 140 288 150
+                 C300 165 325 185 330 205
+                 C335 230 320 250 315 270
+                 C315 290 330 315 335 340
+                 C340 370 310 400 305 430
+                 C300 460 320 480 325 500
+                 C330 520 345 540 345 550
+                 C345 570 250 590 180 585
+                 C120 580 100 560 90 530
+                 C80 500 70 480 55 470
+                 C40 460 25 440 20 420
+                 C15 400 35 385 40 365
+                 C45 345 30 335 35 320
+                 C40 305 55 295 70 280
+                 C90 260 125 220 135 190
+                 C145 160 160 120 170 85
+                 C180 50 195 25 210 10 Z"
+              className="fill-primary/15 dark:fill-primary/20 stroke-primary stroke-[3] animate-pulse"
+              filter="url(#glow)"
+              strokeLinejoin="round"
+              strokeLinecap="round"
+            />
+
+            {/* Localisation Clignotante (Symbolise Yaoundé / Le cœur de l'app) */}
+            {/* Coordonnées ajustées pour être dans la partie Centre-Sud */}
+            <circle cx="200" cy="420" r="6" className="fill-primary animate-ping opacity-75" />
+            <circle cx="200" cy="420" r="3" className="fill-white dark:fill-zinc-950" />
+          </svg>
+        </div>
+
+        {/* --- TEXTE --- */}
+        <div className="flex flex-col items-center gap-3">
+          <div className="h-2 w-24 bg-zinc-200 dark:bg-zinc-800 rounded-full overflow-hidden">
+            <div className="h-full bg-primary w-2/3 animate-[shimmer_1.5s_infinite] rounded-full"
+                 style={{
+                   backgroundImage: "linear-gradient(to right, transparent, rgba(255,255,255,0.5), transparent)"
+                 }}
+            />
+          </div>
+
+          <h3 className="text-xl md:text-2xl font-black tracking-tight text-zinc-800 dark:text-white flex items-center gap-1.5 font-sans">
+            <span className="text-zinc-300 dark:text-zinc-600">Chargement</span>
+            <span className="text-primary animate-pulse">Navigoo</span>
+          </h3>
+        </div>
+
+      </div>
+    </div>
+  );
+};
+</file>
+
 <file path="app/layout.tsx">
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -3314,7 +3822,7 @@ export default function RootLayout({
 
 import { useState, useMemo, useEffect, useRef, memo } from "react";
 import Map, { Marker, NavigationControl, GeolocateControl, ScaleControl, Popup, MapRef, Source, Layer } from "react-map-gl/maplibre";
-import maplibregl, { LngLatBounds } from "maplibre-gl"; 
+import maplibregl, { LngLatBounds } from "maplibre-gl";
 import { POI, Location } from "@/types";
 import { getCategoryConfig } from "@/data/categories";
 import { motion, AnimatePresence } from "framer-motion";
@@ -3327,7 +3835,7 @@ interface MapProps {
   onSelectPoi: (poi: POI | null) => void;
   selectedPoi: POI | null;
   userLocation: Location | null;
-  routeGeometry: any | null; 
+  routeGeometry: any | null;
   mapStyleType: "streets-v2" | "hybrid";
 }
 
@@ -3343,7 +3851,7 @@ const MapMarker = memo(({ poi, isSelected, onClick, onHover }: { poi: POI, isSel
       anchor="bottom"
       onClick={onClick}
     >
-      <div 
+      <div
         onMouseEnter={() => onHover(poi)}
         onMouseLeave={() => onHover(null)}
         // Utilisation de classes Tailwind group et hardware acceleration (transform-gpu)
@@ -3363,7 +3871,7 @@ const MapMarker = memo(({ poi, isSelected, onClick, onHover }: { poi: POI, isSel
            </div>
         ) : (
           <>
-             <div 
+             <div
                className="flex items-center justify-center w-8 h-8 rounded-full shadow-lg border-2 border-white transition-transform duration-200 group-hover:scale-125 bg-zinc-900 will-change-transform"
                style={{ backgroundColor: config.color }}
              >
@@ -3386,7 +3894,7 @@ MapMarker.displayName = "MapMarker";
 
 function MapComponent({ apiKey, pois, onSelectPoi, selectedPoi, userLocation, routeGeometry, mapStyleType }: MapProps) {
   const mapRef = useRef<MapRef>(null);
-  
+
   // Utilisation d'un ref pour éviter les re-render inutiles lors des survols
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -3409,7 +3917,7 @@ function MapComponent({ apiKey, pois, onSelectPoi, selectedPoi, userLocation, ro
   };
 
   // --- EFFETS DE ZOOM (Ginchés inchangés mais optimisés via la condition) ---
-  
+
   useEffect(() => {
     if (userLocation && mapRef.current && !routeGeometry) {
       mapRef.current.flyTo({ center: [userLocation.longitude, userLocation.latitude], zoom: 15, duration: 1200 }); // Duration réduite pour sensation de vitesse
@@ -3427,21 +3935,21 @@ function MapComponent({ apiKey, pois, onSelectPoi, selectedPoi, userLocation, ro
         const coords = routeGeometry.coordinates;
         const bounds = new LngLatBounds(coords[0], coords[0]);
         for (const coord of coords) bounds.extend(coord as [number, number]);
-        
+
         mapRef.current.fitBounds(bounds, {
             padding: { top: 80, bottom: 80, right: 50, left: window.innerWidth > 768 ? 420 : 50 }, // Padding ajusté pour éviter Sidebar
-            duration: 1500 
+            duration: 1500
         });
     }
   }, [routeGeometry]);
 
   // --- RENDU OPTIMISÉ DES PINS ---
-  
+
   const pins = useMemo(() => {
     return pois.map((poi) => (
-      <MapMarker 
-        key={poi.poi_id} 
-        poi={poi} 
+      <MapMarker
+        key={poi.poi_id}
+        poi={poi}
         isSelected={selectedPoi?.poi_id === poi.poi_id}
         onHover={handleHover}
         onClick={(e) => {
@@ -3475,7 +3983,7 @@ function MapComponent({ apiKey, pois, onSelectPoi, selectedPoi, userLocation, ro
       {routeGeometry && (
           <Source id="route-source" type="geojson" data={routeGeometry}>
              {/* Bordure blanche pour contraste */}
-             <Layer 
+             <Layer
                id="route-outline"
                type="line"
                paint={{
@@ -3486,7 +3994,7 @@ function MapComponent({ apiKey, pois, onSelectPoi, selectedPoi, userLocation, ro
                layout={{ 'line-cap': 'round', 'line-join': 'round' }}
              />
              {/* Ligne principale */}
-             <Layer 
+             <Layer
                id="route-line"
                type="line"
                paint={{
@@ -3524,8 +4032,8 @@ function MapComponent({ apiKey, pois, onSelectPoi, selectedPoi, userLocation, ro
             offset={12}
             className="z-50 pointer-events-none" // pointer-events-none pour fluidité
           >
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.9 }} 
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.1 }} // Animation très rapide
@@ -3534,11 +4042,11 @@ function MapComponent({ apiKey, pois, onSelectPoi, selectedPoi, userLocation, ro
                {/* Petite image optimisée ou placeholder */}
                <div className="relative w-10 h-10 shrink-0 bg-zinc-100">
                   {hoveredPoi.poi_images_urls && hoveredPoi.poi_images_urls[0] && (
-                     <Image 
-                       src={hoveredPoi.poi_images_urls[0]} 
-                       alt="" 
-                       fill 
-                       className="object-cover" 
+                     <Image
+                       src={hoveredPoi.poi_images_urls[0]}
+                       alt=""
+                       fill
+                       className="object-cover"
                        sizes="40px" // Indication au navigateur pour charger petit format
                        quality={50} // Qualité basse suffisante pour thumbnail
                      />
@@ -3574,12 +4082,13 @@ import {
   Building, UserSearch, PanelLeftClose, MapPinHouse,
   User, LogIn, Mic, Layout
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { clsx } from "clsx";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
 
 interface SidebarProps {
-  isOpen: boolean; 
+  isOpen: boolean;
   onClose: () => void;
   // Actions
   onViewChange: (view: "saved" | "recent" | "trips" | "mypois") => void;
@@ -3589,10 +4098,10 @@ interface SidebarProps {
   onToggleSettings: () => void;
 }
 
-export const Sidebar = ({ 
-    isOpen, 
-    onClose, 
-    onViewChange, 
+export const Sidebar = ({
+    isOpen,
+    onClose,
+    onViewChange,
     onLocateMe,
     onShare,
     onPrint,
@@ -3602,6 +4111,7 @@ export const Sidebar = ({
   const { user, isAuthenticated } = useAuth();
   const router = useRouter();
   const isExpanded = isHovered || isOpen;
+  const router = useRouter();
 
   const handleAction = (action: () => void) => {
     action();    // 1. Exécute l'action demandée (ex: ouvrir panneau favoris)
@@ -3619,7 +4129,7 @@ export const Sidebar = ({
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
         className={clsx(
           "fixed top-0 left-0 h-full bg-white dark:bg-black/95 backdrop-blur-md shadow-2xl z-[60] flex flex-col border-r border-zinc-200 dark:border-zinc-800 overflow-hidden",
-          !isOpen && "hidden md:flex" 
+          !isOpen && "hidden md:flex"
         )}
       >
         {/* HEADER LOGO */}
@@ -3650,12 +4160,17 @@ export const Sidebar = ({
           <SidebarItem isExpanded={isExpanded} icon={<Layout size={22} />} label="Blocs" onClick={() => handleAction(() => isAuthenticated ? alert("Bientôt disponible") : router.push("/login"))} />
           <SidebarItem isExpanded={isExpanded} icon={<UserSearch size={22} />} label="Trouver ma position" onClick={() => handleAction(onLocateMe)} />
           <SidebarItem isExpanded={isExpanded} icon={<MapPin size={22} />} label="Mes trajets" onClick={() => handleAction(() => onViewChange("trips"))} />
-          
+
+          <div className="h-px bg-zinc-100 dark:bg-zinc-800 my-2 mx-2" />
+
+          <SidebarItem isExpanded={isExpanded} icon={<BookOpen size={22} />} label="Blogs (Blocs)" onClick={() => handleAction(() => router.push("/blogs"))} />
+          <SidebarItem isExpanded={isExpanded} icon={<Mic size={22} />} label="Podcasts" onClick={() => handleAction(() => router.push("/podcasts"))} />
+
           <div className="h-px bg-zinc-100 dark:bg-zinc-800 my-2 mx-2" />
 
           <SidebarItem isExpanded={isExpanded} icon={<Share2 size={22} />} label="Partager la carte" onClick={() => handleAction(onShare)} />
           <SidebarItem isExpanded={isExpanded} icon={<Printer size={22} />} label="Imprimer la carte" onClick={() => handleAction(onPrint)} />
-          
+
           <div className="h-px bg-zinc-100 dark:bg-zinc-800 my-2 mx-2" />
 
           <SidebarItem isExpanded={isExpanded} icon={<Settings size={22} />} label="Paramètres & Style" onClick={() => handleAction(onToggleSettings)} />
@@ -3685,12 +4200,340 @@ export const Sidebar = ({
              <Globe size={20} className="text-zinc-400 hover:text-primary cursor-pointer" />
         </div>
       </motion.div>
-      
+
       {/* Mobile Backdrop */}
       {isOpen && <div className="fixed inset-0 bg-black/50 z-[55] md:hidden" onClick={onClose} />}
     </>
   );
 };
+</file>
+
+<file path="hooks/useUserData.ts">
+"use client";
+
+import { useState, useEffect } from "react";
+import { POI, Trip, MapStyle } from "@/types";
+
+export const useUserData = () => {
+  const [savedPois, setSavedPois] = useState<POI[]>([]);
+  const [recentPois, setRecentPois] = useState<POI[]>([]);
+  const [recentTrips, setRecentTrips] = useState<Trip[]>([]);
+  const [myPois, setMyPois] = useState<POI[]>([]);
+  const [mapStyle, setMapStyle] = useState<MapStyle>("streets-v2");
+
+  // Chargement initial
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("navigoo_saved");
+      const recents = localStorage.getItem("navigoo_recent");
+      const trips = localStorage.getItem("navigoo_trips");
+      const style = localStorage.getItem("navigoo_style");
+      const my = localStorage.getItem("navigoo_my_pois");
+
+      if (saved) setSavedPois(JSON.parse(saved));
+      if (recents) setRecentPois(JSON.parse(recents));
+      if (trips) setRecentTrips(JSON.parse(trips));
+      if (my) setMyPois(JSON.parse(my));
+      if (style === "hybrid" || style === "streets-v2") setMapStyle(style);
+    }
+  }, []);
+
+  // --- ACTIONS ---
+
+  const toggleSavePoi = (poi: POI) => {
+    let newSaved;
+    if (savedPois.some((p) => p.poi_id === poi.poi_id)) {
+      newSaved = savedPois.filter((p) => p.poi_id !== poi.poi_id);
+    } else {
+      newSaved = [poi, ...savedPois];
+    }
+    setSavedPois(newSaved);
+    localStorage.setItem("navigoo_saved", JSON.stringify(newSaved));
+  };
+
+  const addRecentPoi = (poi: POI) => {
+    const filtered = recentPois.filter((p) => p.poi_id !== poi.poi_id);
+    const newRecent = [poi, ...filtered].slice(0, 10);
+    setRecentPois(newRecent);
+    localStorage.setItem("navigoo_recent", JSON.stringify(newRecent));
+  };
+
+  const addTrip = (trip: Trip) => {
+    const newTrips = [trip, ...recentTrips].slice(0, 10);
+    setRecentTrips(newTrips);
+    localStorage.setItem("navigoo_trips", JSON.stringify(newTrips));
+  };
+
+  // Ajout d'un nouveau POI utilisateur
+  const addMyPoi = (poi: POI) => {
+    const newPois = [poi, ...myPois];
+    setMyPois(newPois);
+    localStorage.setItem("navigoo_my_pois", JSON.stringify(newPois));
+  };
+
+  const validatePoi = (poiId: string) => {
+    const newPois = myPois.map(p => p.poi_id === poiId ? { ...p, status: "validated" as const } : p);
+    setMyPois(newPois);
+    localStorage.setItem("navigoo_my_pois", JSON.stringify(newPois));
+  };
+
+  // Modification d'un POI existant
+  const updateMyPoi = (updatedPoi: POI) => {
+    const newPois = myPois.map(p => p.poi_id === updatedPoi.poi_id ? updatedPoi : p);
+    setMyPois(newPois);
+    localStorage.setItem("navigoo_my_pois", JSON.stringify(newPois));
+  };
+
+  // Suppression d'un POI
+  const deleteMyPoi = (poiId: string) => {
+    const newPois = myPois.filter(p => p.poi_id !== poiId);
+    setMyPois(newPois);
+    localStorage.setItem("navigoo_my_pois", JSON.stringify(newPois));
+  };
+
+  const toggleMapStyle = () => {
+    const newStyle: MapStyle = mapStyle === "streets-v2" ? "hybrid" : "streets-v2";
+    setMapStyle(newStyle);
+    localStorage.setItem("navigoo_style", newStyle);
+  };
+
+  return {
+    savedPois,
+    recentPois,
+    recentTrips,
+    myPois,
+    mapStyle,
+    toggleSavePoi,
+    addRecentPoi,
+    addTrip,
+    addMyPoi,
+    updateMyPoi,
+    validatePoi,
+    deleteMyPoi,
+    toggleMapStyle,
+    isSaved: (id: string) => savedPois.some(p => p.poi_id === id)
+  };
+};
+</file>
+
+<file path="components/sidebar/POIDetailsSidebar.tsx">
+import { motion } from "framer-motion";
+import Image from "next/image";
+import { POI } from "@/types";
+import { X, Navigation, Bookmark, Share2, Smartphone, Globe, Clock, MapPin, Star, MessageSquare, Edit, CheckCircle } from "lucide-react";
+import { getCategoryConfig } from "@/data/categories";
+import { useRouter } from "next/navigation";
+import { useUserData } from "@/hooks/useUserData"; // Pour vérifier propriété
+import { useAuth } from "@/hooks/useAuth";
+
+interface PoiDetailsProps {
+  poi: POI;
+  onClose: () => void;
+  isOpen: boolean;
+  onOpenDirections: () => void;
+}
+
+export const PoiDetailsSidebar = ({ poi, onClose, isOpen, onOpenDirections }: PoiDetailsProps) => {
+  const categoryConfig = getCategoryConfig(poi.poi_category);
+  const router = useRouter();
+  const { myPois, validatePoi } = useUserData();
+  const { user } = useAuth();
+
+  // Vérifier si le POI appartient à l'utilisateur
+  const isOwner = myPois.some(p => p.poi_id === poi.poi_id);
+  const isAdmin = user?.role === "admin";
+  const canValidate = isAdmin && poi.status === "submitted";
+
+  const handleEdit = () => {
+    router.push(`/add-poi?id=${poi.poi_id}`);
+  };
+
+  return (
+    <motion.div
+      initial={{ x: "-100%" }}
+      animate={{ x: isOpen ? "0%" : "-100%" }}
+      exit={{ x: "-100%" }}
+      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+      className="fixed top-0 left-0 md:left-[72px] h-full w-full md:w-[400px] bg-white dark:bg-zinc-900 shadow-2xl z-[55] flex flex-col border-r border-zinc-200 dark:border-zinc-800 overflow-y-auto"
+    >
+      {/* HEADER IMAGE HERO */}
+      <div className="relative w-full h-56 shrink-0 bg-zinc-200">
+        {poi.poi_images_urls && poi.poi_images_urls[0] ? (
+            <Image src={poi.poi_images_urls[0]} alt={poi.poi_name} fill className="object-cover"/>
+        ) : (
+            <div className="w-full h-full flex items-center justify-center text-zinc-400 bg-zinc-100">Aucune image</div>
+        )}
+
+        {/* Close Button */}
+        <button onClick={onClose} className="absolute top-4 right-4 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full backdrop-blur-md transition-colors z-20">
+          <X size={20} />
+        </button>
+
+        {/* OWNER EDIT BUTTON */}
+        {isOwner && (
+            <button
+                onClick={handleEdit}
+                className="absolute bottom-4 right-4 bg-white text-black px-4 py-2 rounded-full shadow-lg font-bold text-sm flex items-center gap-2 hover:scale-105 transition-transform"
+            >
+                <Edit size={16} /> Modifier Infos
+            </button>
+        )}
+      </div>
+
+      {/* CONTENU */}
+      <div className="p-6 space-y-6 pb-20">
+        
+        {/* STATUS BADGE */}
+        {poi.status === "submitted" && (
+          <div className="bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 px-3 py-1 rounded-full text-xs font-bold w-fit mb-2">
+            En attente de validation
+          </div>
+        )}
+
+        {/* TITRE & REVIEW */}
+        <div className="flex justify-between items-start gap-4">
+          <h1 className="text-3xl font-bold text-zinc-900 dark:text-zinc-50 leading-tight flex-1">{poi.poi_name}</h1>
+          {canValidate && (
+             <button
+                onClick={() => { validatePoi(poi.poi_id); onClose(); }}
+                className="bg-green-600 hover:bg-green-700 text-white p-2 rounded-xl shadow-lg transition-colors flex items-center gap-2"
+                title="Valider ce point d&apos;intérêt"
+             >
+                <CheckCircle size={20} />
+                <span className="text-xs font-bold pr-1">Valider</span>
+             </button>
+          )}
+        </div>
+          <div className="flex items-center gap-2 mt-3">
+            <span className="font-black text-sm bg-green-600 text-white px-1.5 rounded">{poi.rating || "N/A"}</span>
+            <div className="flex text-yellow-500">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <Star key={star} size={14} fill={star <= Math.round(poi.rating) ? "currentColor" : "none"} />
+              ))}
+            </div>
+            <span className="text-zinc-500 text-sm underline">({poi.review_count} avis)</span>
+            <span className="text-zinc-300">•</span>
+            <span className="text-primary text-sm font-semibold flex items-center gap-1">
+                {categoryConfig.icon} {categoryConfig.label}
+            </span>
+          </div>
+
+        {/* ACTIONS CIRCULAIRES */}
+        <div className="flex justify-between px-2 py-2">
+          <ActionButton icon={<Navigation size={22} className="-rotate-45 ml-1 mt-1" />} label="Y aller" active onClick={onOpenDirections} />
+          <ActionButton icon={<Bookmark size={22} />} label="Sauver" onClick={() => {}}/>
+          <ActionButton icon={<Share2 size={22} />} label="Partager" onClick={() => {}}/>
+          <ActionButton icon={<Globe size={22} />} label="Site web" onClick={() => {}} disabled={!poi.poi_contacts?.website} />
+        </div>
+
+        <div className="h-px bg-zinc-100 dark:bg-zinc-800 w-full" />
+
+        {/* DESCRIPTION */}
+        <div className="text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed">
+          <p>{poi.poi_description || "Aucune description disponible."}</p>
+        </div>
+
+        {/* SUBMITTER INFO */}
+        {(poi.submitted_by_name || poi.organization) && (
+          <div className="bg-zinc-50 dark:bg-zinc-800/50 p-4 rounded-2xl border border-zinc-100 dark:border-zinc-800">
+             <h4 className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-2">Soumis par</h4>
+             <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-xs">
+                   {poi.submitted_by_name?.charAt(0) || "O"}
+                </div>
+                <div>
+                   <p className="text-sm font-bold text-zinc-700 dark:text-zinc-200">{poi.submitted_by_name || "Explorateur anonyme"}</p>
+                   {poi.organization && <p className="text-[11px] text-zinc-500">{poi.organization}</p>}
+                </div>
+             </div>
+          </div>
+        )}
+
+        {/* AMENITIES */}
+        {poi.poi_amenities && poi.poi_amenities.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+                {poi.poi_amenities.map(am => (
+                    <span key={am} className="text-xs px-3 py-1 bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 rounded-full font-medium border border-zinc-200 dark:border-zinc-700">
+                        {am}
+                    </span>
+                ))}
+            </div>
+        )}
+
+        <div className="h-px bg-zinc-100 dark:bg-zinc-800 w-full" />
+
+        {/* INFO PRATIQUES */}
+        <div className="space-y-4">
+          <InfoRow icon={<MapPin className="text-zinc-400" size={20} />} text={poi.address_informal || `${poi.address_city}, ${poi.address_country || "Cameroun"}`} />
+          <InfoRow icon={<Clock className="text-zinc-400" size={20} />} text="Ouvert maintenant (ferme à 22h)" isActive />
+          <InfoRow icon={<Smartphone className="text-zinc-400" size={20} />} text={poi.poi_contacts?.phone || "Non renseigné"} />
+        </div>
+
+        <div className="h-px bg-zinc-100 dark:bg-zinc-800 w-full" />
+
+        {/* SECTION AVIS / COMMENTAIRES */}
+        <div>
+            <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
+                <MessageSquare size={18} /> Avis et commentaires
+            </h3>
+
+            <div className="space-y-4">
+                {/* Simulation Commentaire 1 */}
+                <div className="flex gap-3">
+                    <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center font-bold text-blue-600 text-sm">JM</div>
+                    <div className="bg-zinc-50 dark:bg-zinc-800 p-3 rounded-r-xl rounded-bl-xl text-sm flex-1">
+                        <div className="flex justify-between items-center mb-1">
+                            <span className="font-bold">Jean-Marc</span>
+                            <div className="flex text-yellow-500"><Star size={10} fill="currentColor"/> 5.0</div>
+                        </div>
+                        <p className="text-zinc-600 dark:text-zinc-300">Très bel endroit, je recommande pour les soirées entre amis !</p>
+                    </div>
+                </div>
+
+                {/* Simulation Commentaire 2 */}
+                <div className="flex gap-3">
+                    <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center font-bold text-purple-600 text-sm">AL</div>
+                    <div className="bg-zinc-50 dark:bg-zinc-800 p-3 rounded-r-xl rounded-bl-xl text-sm flex-1">
+                        <div className="flex justify-between items-center mb-1">
+                            <span className="font-bold">Alice L.</span>
+                            <div className="flex text-yellow-500"><Star size={10} fill="currentColor"/> 4.0</div>
+                        </div>
+                        <p className="text-zinc-600 dark:text-zinc-300">Le service est un peu lent mais la nourriture est excellente.</p>
+                    </div>
+                </div>
+            </div>
+
+            <button className="w-full mt-4 py-2 border border-zinc-200 dark:border-zinc-700 text-zinc-500 text-sm font-medium rounded-lg hover:bg-zinc-50 transition-colors">
+                Voir les 45 avis
+            </button>
+        </div>
+
+      </div>
+    </motion.div>
+  );
+};
+
+const ActionButton = ({ icon, label, active, onClick, disabled }: any) => (
+  <button
+    onClick={onClick}
+    disabled={disabled}
+    className={`flex flex-col items-center gap-2 group ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+  >
+    <div className={`w-12 h-12 rounded-full flex items-center justify-center border transition-all ${
+      active ? "bg-primary text-white border-primary shadow-md" : "bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-600 dark:text-zinc-300 hover:text-primary hover:border-primary/30"
+    }`}>
+      {icon}
+    </div>
+    <span className={`text-[10px] font-medium uppercase tracking-wide ${active ? "text-primary" : "text-zinc-500"}`}>{label}</span>
+  </button>
+);
+
+const InfoRow = ({ icon, text, isActive }: any) => (
+  <div className="flex items-start gap-4">
+    <div className="mt-0.5 min-w-[20px]">{icon}</div>
+    <span className={`text-sm ${isActive ? "text-green-600 font-bold" : "text-zinc-700 dark:text-zinc-300"}`}>{text}</span>
+  </div>
+);
 </file>
 
 <file path="data/mockData.ts">
@@ -5351,7 +6194,7 @@ export const POI_DATA: POI[] = [
     validated_by_name: "Admin Navigoo",
     poi_images_urls: ["https://images.unsplash.com/photo-1605333144866-e3d8f8be0f96?q=80&w=800"],
   },
-  
+
   // --- SPÉCIALITÉS LOCALES & VILLAGES ---
   {
     poi_id: "86",
@@ -8794,342 +9637,14 @@ export const POI_DATA: POI[] = [
 ];
 </file>
 
-<file path="hooks/useUserData.ts">
-"use client";
-
-import { useState, useEffect } from "react";
-import { POI, Trip, MapStyle } from "@/types";
-
-export const useUserData = () => {
-  const [savedPois, setSavedPois] = useState<POI[]>([]);
-  const [recentPois, setRecentPois] = useState<POI[]>([]);
-  const [recentTrips, setRecentTrips] = useState<Trip[]>([]);
-  const [myPois, setMyPois] = useState<POI[]>([]); 
-  const [mapStyle, setMapStyle] = useState<MapStyle>("streets-v2");
-
-  // Chargement initial
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("navigoo_saved");
-      const recents = localStorage.getItem("navigoo_recent");
-      const trips = localStorage.getItem("navigoo_trips");
-      const style = localStorage.getItem("navigoo_style");
-      const my = localStorage.getItem("navigoo_my_pois");
-
-      if (saved) setSavedPois(JSON.parse(saved));
-      if (recents) setRecentPois(JSON.parse(recents));
-      if (trips) setRecentTrips(JSON.parse(trips));
-      if (my) setMyPois(JSON.parse(my));
-      if (style === "hybrid" || style === "streets-v2") setMapStyle(style);
-    }
-  }, []);
-
-  // --- ACTIONS ---
-
-  const toggleSavePoi = (poi: POI) => {
-    let newSaved;
-    if (savedPois.some((p) => p.poi_id === poi.poi_id)) {
-      newSaved = savedPois.filter((p) => p.poi_id !== poi.poi_id);
-    } else {
-      newSaved = [poi, ...savedPois];
-    }
-    setSavedPois(newSaved);
-    localStorage.setItem("navigoo_saved", JSON.stringify(newSaved));
-  };
-
-  const addRecentPoi = (poi: POI) => {
-    const filtered = recentPois.filter((p) => p.poi_id !== poi.poi_id);
-    const newRecent = [poi, ...filtered].slice(0, 10);
-    setRecentPois(newRecent);
-    localStorage.setItem("navigoo_recent", JSON.stringify(newRecent));
-  };
-
-  const addTrip = (trip: Trip) => {
-    const newTrips = [trip, ...recentTrips].slice(0, 10);
-    setRecentTrips(newTrips);
-    localStorage.setItem("navigoo_trips", JSON.stringify(newTrips));
-  };
-
-  // Ajout d'un nouveau POI utilisateur
-  const addMyPoi = (poi: POI) => {
-    const newPois = [poi, ...myPois];
-    setMyPois(newPois);
-    localStorage.setItem("navigoo_my_pois", JSON.stringify(newPois));
-  };
-
-  const validatePoi = (poiId: string) => {
-    const newPois = myPois.map(p => p.poi_id === poiId ? { ...p, status: "validated" as const } : p);
-    setMyPois(newPois);
-    localStorage.setItem("navigoo_my_pois", JSON.stringify(newPois));
-  };
-
-  // Modification d'un POI existant
-  const updateMyPoi = (updatedPoi: POI) => {
-    const newPois = myPois.map(p => p.poi_id === updatedPoi.poi_id ? updatedPoi : p);
-    setMyPois(newPois);
-    localStorage.setItem("navigoo_my_pois", JSON.stringify(newPois));
-  };
-
-  // Suppression d'un POI
-  const deleteMyPoi = (poiId: string) => {
-    const newPois = myPois.filter(p => p.poi_id !== poiId);
-    setMyPois(newPois);
-    localStorage.setItem("navigoo_my_pois", JSON.stringify(newPois));
-  };
-
-  const toggleMapStyle = () => {
-    const newStyle: MapStyle = mapStyle === "streets-v2" ? "hybrid" : "streets-v2";
-    setMapStyle(newStyle);
-    localStorage.setItem("navigoo_style", newStyle);
-  };
-
-  return {
-    savedPois,
-    recentPois,
-    recentTrips,
-    myPois,
-    mapStyle,
-    toggleSavePoi,
-    addRecentPoi,
-    addTrip,
-    addMyPoi,
-    updateMyPoi,
-    validatePoi,
-    deleteMyPoi,
-    toggleMapStyle,
-    isSaved: (id: string) => savedPois.some(p => p.poi_id === id)
-  };
-};
-</file>
-
-<file path="components/sidebar/POIDetailsSidebar.tsx">
-import { motion } from "framer-motion";
-import Image from "next/image";
-import { POI } from "@/types";
-import { X, Navigation, Bookmark, Share2, Smartphone, Globe, Clock, MapPin, Star, MessageSquare, Edit, CheckCircle } from "lucide-react";
-import { getCategoryConfig } from "@/data/categories";
-import { useRouter } from "next/navigation";
-import { useUserData } from "@/hooks/useUserData"; // Pour vérifier propriété
-import { useAuth } from "@/hooks/useAuth";
-
-interface PoiDetailsProps {
-  poi: POI;
-  onClose: () => void;
-  isOpen: boolean;
-  onOpenDirections: () => void;
-}
-
-export const PoiDetailsSidebar = ({ poi, onClose, isOpen, onOpenDirections }: PoiDetailsProps) => {
-  const categoryConfig = getCategoryConfig(poi.poi_category);
-  const router = useRouter();
-  const { myPois, validatePoi } = useUserData();
-  const { user } = useAuth();
-
-  // Vérifier si le POI appartient à l'utilisateur
-  const isOwner = myPois.some(p => p.poi_id === poi.poi_id);
-  const isAdmin = user?.role === "admin";
-  const canValidate = isAdmin && poi.status === "submitted";
-
-  const handleEdit = () => {
-    router.push(`/add-poi?id=${poi.poi_id}`);
-  };
-
-  return (
-    <motion.div
-      initial={{ x: "-100%" }}
-      animate={{ x: isOpen ? "0%" : "-100%" }}
-      exit={{ x: "-100%" }}
-      transition={{ type: "spring", stiffness: 300, damping: 30 }}
-      className="fixed top-0 left-0 md:left-[72px] h-full w-full md:w-[400px] bg-white dark:bg-zinc-900 shadow-2xl z-[55] flex flex-col border-r border-zinc-200 dark:border-zinc-800 overflow-y-auto"
-    >
-      {/* HEADER IMAGE HERO */}
-      <div className="relative w-full h-56 shrink-0 bg-zinc-200">
-        {poi.poi_images_urls && poi.poi_images_urls[0] ? (
-            <Image src={poi.poi_images_urls[0]} alt={poi.poi_name} fill className="object-cover"/>
-        ) : (
-            <div className="w-full h-full flex items-center justify-center text-zinc-400 bg-zinc-100">Aucune image</div>
-        )}
-        
-        {/* Close Button */}
-        <button onClick={onClose} className="absolute top-4 right-4 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full backdrop-blur-md transition-colors z-20">
-          <X size={20} />
-        </button>
-
-        {/* OWNER EDIT BUTTON */}
-        {isOwner && (
-            <button 
-                onClick={handleEdit}
-                className="absolute bottom-4 right-4 bg-white text-black px-4 py-2 rounded-full shadow-lg font-bold text-sm flex items-center gap-2 hover:scale-105 transition-transform"
-            >
-                <Edit size={16} /> Modifier Infos
-            </button>
-        )}
-      </div>
-
-      {/* CONTENU */}
-      <div className="p-6 space-y-6 pb-20">
-        
-        {/* STATUS BADGE */}
-        {poi.status === "submitted" && (
-          <div className="bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 px-3 py-1 rounded-full text-xs font-bold w-fit mb-2">
-            En attente de validation
-          </div>
-        )}
-
-        {/* TITRE & REVIEW */}
-        <div className="flex justify-between items-start gap-4">
-          <h1 className="text-3xl font-bold text-zinc-900 dark:text-zinc-50 leading-tight flex-1">{poi.poi_name}</h1>
-          {canValidate && (
-             <button
-                onClick={() => { validatePoi(poi.poi_id); onClose(); }}
-                className="bg-green-600 hover:bg-green-700 text-white p-2 rounded-xl shadow-lg transition-colors flex items-center gap-2"
-                title="Valider ce point d&apos;intérêt"
-             >
-                <CheckCircle size={20} />
-                <span className="text-xs font-bold pr-1">Valider</span>
-             </button>
-          )}
-        </div>
-          <div className="flex items-center gap-2 mt-3">
-            <span className="font-black text-sm bg-green-600 text-white px-1.5 rounded">{poi.rating || "N/A"}</span>
-            <div className="flex text-yellow-500">
-              {[1, 2, 3, 4, 5].map((star) => (
-                <Star key={star} size={14} fill={star <= Math.round(poi.rating) ? "currentColor" : "none"} />
-              ))}
-            </div>
-            <span className="text-zinc-500 text-sm underline">({poi.review_count} avis)</span>
-            <span className="text-zinc-300">•</span>
-            <span className="text-primary text-sm font-semibold flex items-center gap-1">
-                {categoryConfig.icon} {categoryConfig.label}
-            </span>
-          </div>
-
-        {/* ACTIONS CIRCULAIRES */}
-        <div className="flex justify-between px-2 py-2">
-          <ActionButton icon={<Navigation size={22} className="-rotate-45 ml-1 mt-1" />} label="Y aller" active onClick={onOpenDirections} />
-          <ActionButton icon={<Bookmark size={22} />} label="Sauver" onClick={() => {}}/>
-          <ActionButton icon={<Share2 size={22} />} label="Partager" onClick={() => {}}/>
-          <ActionButton icon={<Globe size={22} />} label="Site web" onClick={() => {}} disabled={!poi.poi_contacts?.website} />
-        </div>
-
-        <div className="h-px bg-zinc-100 dark:bg-zinc-800 w-full" />
-
-        {/* DESCRIPTION */}
-        <div className="text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed">
-          <p>{poi.poi_description || "Aucune description disponible."}</p>
-        </div>
-
-        {/* SUBMITTER INFO */}
-        {(poi.submitted_by_name || poi.organization) && (
-          <div className="bg-zinc-50 dark:bg-zinc-800/50 p-4 rounded-2xl border border-zinc-100 dark:border-zinc-800">
-             <h4 className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-2">Soumis par</h4>
-             <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-xs">
-                   {poi.submitted_by_name?.charAt(0) || "O"}
-                </div>
-                <div>
-                   <p className="text-sm font-bold text-zinc-700 dark:text-zinc-200">{poi.submitted_by_name || "Explorateur anonyme"}</p>
-                   {poi.organization && <p className="text-[11px] text-zinc-500">{poi.organization}</p>}
-                </div>
-             </div>
-          </div>
-        )}
-
-        {/* AMENITIES */}
-        {poi.poi_amenities && poi.poi_amenities.length > 0 && (
-            <div className="flex flex-wrap gap-2">
-                {poi.poi_amenities.map(am => (
-                    <span key={am} className="text-xs px-3 py-1 bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 rounded-full font-medium border border-zinc-200 dark:border-zinc-700">
-                        {am}
-                    </span>
-                ))}
-            </div>
-        )}
-
-        <div className="h-px bg-zinc-100 dark:bg-zinc-800 w-full" />
-
-        {/* INFO PRATIQUES */}
-        <div className="space-y-4">
-          <InfoRow icon={<MapPin className="text-zinc-400" size={20} />} text={poi.address_informal || `${poi.address_city}, ${poi.address_country || "Cameroun"}`} />
-          <InfoRow icon={<Clock className="text-zinc-400" size={20} />} text="Ouvert maintenant (ferme à 22h)" isActive />
-          <InfoRow icon={<Smartphone className="text-zinc-400" size={20} />} text={poi.poi_contacts?.phone || "Non renseigné"} />
-        </div>
-
-        <div className="h-px bg-zinc-100 dark:bg-zinc-800 w-full" />
-
-        {/* SECTION AVIS / COMMENTAIRES */}
-        <div>
-            <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
-                <MessageSquare size={18} /> Avis et commentaires
-            </h3>
-            
-            <div className="space-y-4">
-                {/* Simulation Commentaire 1 */}
-                <div className="flex gap-3">
-                    <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center font-bold text-blue-600 text-sm">JM</div>
-                    <div className="bg-zinc-50 dark:bg-zinc-800 p-3 rounded-r-xl rounded-bl-xl text-sm flex-1">
-                        <div className="flex justify-between items-center mb-1">
-                            <span className="font-bold">Jean-Marc</span>
-                            <div className="flex text-yellow-500"><Star size={10} fill="currentColor"/> 5.0</div>
-                        </div>
-                        <p className="text-zinc-600 dark:text-zinc-300">Très bel endroit, je recommande pour les soirées entre amis !</p>
-                    </div>
-                </div>
-
-                {/* Simulation Commentaire 2 */}
-                <div className="flex gap-3">
-                    <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center font-bold text-purple-600 text-sm">AL</div>
-                    <div className="bg-zinc-50 dark:bg-zinc-800 p-3 rounded-r-xl rounded-bl-xl text-sm flex-1">
-                        <div className="flex justify-between items-center mb-1">
-                            <span className="font-bold">Alice L.</span>
-                            <div className="flex text-yellow-500"><Star size={10} fill="currentColor"/> 4.0</div>
-                        </div>
-                        <p className="text-zinc-600 dark:text-zinc-300">Le service est un peu lent mais la nourriture est excellente.</p>
-                    </div>
-                </div>
-            </div>
-
-            <button className="w-full mt-4 py-2 border border-zinc-200 dark:border-zinc-700 text-zinc-500 text-sm font-medium rounded-lg hover:bg-zinc-50 transition-colors">
-                Voir les 45 avis
-            </button>
-        </div>
-
-      </div>
-    </motion.div>
-  );
-};
-
-const ActionButton = ({ icon, label, active, onClick, disabled }: any) => (
-  <button 
-    onClick={onClick}
-    disabled={disabled}
-    className={`flex flex-col items-center gap-2 group ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
-  >
-    <div className={`w-12 h-12 rounded-full flex items-center justify-center border transition-all ${
-      active ? "bg-primary text-white border-primary shadow-md" : "bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-600 dark:text-zinc-300 hover:text-primary hover:border-primary/30"
-    }`}>
-      {icon}
-    </div>
-    <span className={`text-[10px] font-medium uppercase tracking-wide ${active ? "text-primary" : "text-zinc-500"}`}>{label}</span>
-  </button>
-);
-
-const InfoRow = ({ icon, text, isActive }: any) => (
-  <div className="flex items-start gap-4">
-    <div className="mt-0.5 min-w-[20px]">{icon}</div>
-    <span className={`text-sm ${isActive ? "text-green-600 font-bold" : "text-zinc-700 dark:text-zinc-300"}`}>{text}</span>
-  </div>
-);
-</file>
-
 <file path="app/add-poi/page.tsx">
 "use client";
 
 import { useState, useEffect, Suspense, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { 
-  ArrowLeft, Save, Loader2, Camera, MapPin, 
-  Hash, Globe, Phone, Building2, Flag, Mail, 
+import {
+  ArrowLeft, Save, Loader2, Camera, MapPin,
+  Hash, Globe, Phone, Building2, Flag, Mail,
   ScanLine, Type, Sparkles, CheckCircle2, CircleDashed,
   Target, ImagePlus, LocateFixed, Maximize, Check
 } from "lucide-react";
@@ -9149,10 +9664,10 @@ import Image from "next/image";
 import { clsx } from "clsx";
 
 // Clé API MapTiler (la même que dans page.tsx)
-const MAPTILER_API_KEY = "Lr72DkH8TYyjpP7RNZS9"; 
+const MAPTILER_API_KEY = "Lr72DkH8TYyjpP7RNZS9";
 
 const AMENITIES_OPTIONS = [
-  "Wi-Fi", "Parking", "Climatisé", "Terrasse", "Mobile Money", 
+  "Wi-Fi", "Parking", "Climatisé", "Terrasse", "Mobile Money",
   "Traiteur", "Sécurité", "Vue", "Handicap", "Bar", "24h/24"
 ];
 
@@ -9165,7 +9680,7 @@ function AddPoiContent() {
   // States
   const [isLoading, setIsLoading] = useState(true);
   const [isMapOpen, setIsMapOpen] = useState(false); // Modal Carte
-  const [postalCode, setPostalCode] = useState(""); 
+  const [postalCode, setPostalCode] = useState("");
   const [keywordsString, setKeywordsString] = useState("");
   const [previewImage, setPreviewImage] = useState<string | null>(null);
 
@@ -9308,7 +9823,7 @@ function AddPoiContent() {
 
   return (
     <div className="h-screen w-full bg-zinc-50 dark:bg-black font-sans overflow-y-auto">
-      
+
       {/* HEADER FIXE */}
       <div className="sticky top-0 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md border-b border-zinc-200 dark:border-zinc-800 z-40 py-3 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 lg:px-8">
@@ -9327,15 +9842,15 @@ function AddPoiContent() {
                             </h1>
                         </div>
                         <p className="text-xs md:text-sm text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5 mt-1">
-                            <Sparkles size={12} className="text-yellow-500 fill-yellow-500" /> 
+                            <Sparkles size={12} className="text-yellow-500 fill-yellow-500" />
                             Partagez vos meilleures découvertes et enrichissez la carte.
                         </p>
                     </div>
                 </div>
                 <div className="flex items-center justify-end">
-                    <Button 
-                        onClick={handleSubmit} 
-                        variant="primary" 
+                    <Button
+                        onClick={handleSubmit}
+                        variant="primary"
                         className="px-6 py-2 h-11 text-sm font-bold shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-transform flex items-center gap-2"
                     >
                         <Save size={18} /> {editId ? "Mettre à jour" : "Publier le lieu"}
@@ -9374,40 +9889,40 @@ function AddPoiContent() {
                 </div>
 
                 <div className="space-y-12">
-                    <FormInput 
-                        label="Nom du lieu" name="poi_name" 
-                        value={formData.poi_name} onChange={handleChange} 
+                    <FormInput
+                        label="Nom du lieu" name="poi_name"
+                        value={formData.poi_name} onChange={handleChange}
                         icon={<Type size={16}/>} className="h-11" placeholder="Ex: Restaurant Le Délice"
                     />
-                    
-                    <FormSelect 
-                        label="Catégorie" name="poi_category" 
+
+                    <FormSelect
+                        label="Catégorie" name="poi_category"
                         value={formData.poi_category} onChange={handleChange}
                         icon={<Hash size={16}/>}
                         options={CATEGORIES.map(c => ({ id: c.id, label: c.label }))}
                     />
 
-                    <FormInput 
+                    <FormInput
                         as="textarea" label="Courte description" name="poi_description"
-                        value={formData.poi_description} onChange={handleChange} 
+                        value={formData.poi_description} onChange={handleChange}
                         icon={<Type size={16}/>} style={{ minHeight: '80px', maxHeight: '120px' }}
                     />
 
                     <div className="grid grid-cols-2 gap-3">
-                        <FormInput 
-                            label="Téléphone" name="phone" 
+                        <FormInput
+                            label="Téléphone" name="phone"
                             value={formData.poi_contacts?.phone} onChange={handleChange}
-                            icon={<Phone size={16}/>} className="h-11" 
+                            icon={<Phone size={16}/>} className="h-11"
                         />
-                        <FormInput 
-                            label="Site Web" name="website" 
+                        <FormInput
+                            label="Site Web" name="website"
                             value={formData.poi_contacts?.website} onChange={handleChange}
                             icon={<Globe size={16}/>} className="h-11" placeholder="facultatif"
                         />
                     </div>
 
-                    <FormInput 
-                        label="Mots-clés" name="keywords" 
+                    <FormInput
+                        label="Mots-clés" name="keywords"
                         value={keywordsString} onChange={(e) => setKeywordsString(e.target.value)}
                         icon={<Hash size={16}/>} className="h-11" placeholder="tag1, tag2..."
                     />
@@ -9420,7 +9935,7 @@ function AddPoiContent() {
                                     className={clsx(
                                         "px-3 py-1.5 rounded-lg text-[11px] font-bold border flex items-center gap-1.5 transition-all",
                                         formData.poi_amenities?.includes(am)
-                                        ? "bg-zinc-800 text-white border-zinc-800 dark:bg-white dark:text-black shadow-sm" 
+                                        ? "bg-zinc-800 text-white border-zinc-800 dark:bg-white dark:text-black shadow-sm"
                                         : "bg-white dark:bg-zinc-800 text-zinc-500 border-zinc-200 dark:border-zinc-700 hover:bg-zinc-50"
                                     )}
                                 >
@@ -9449,7 +9964,7 @@ function AddPoiContent() {
                 <div className="relative w-full h-48 rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-800 shadow-inner group">
                     {/* Carte Miniature Statique (MapLibre avec interactivité désactivée) */}
                     <div className="absolute inset-0 grayscale-[50%] group-hover:grayscale-0 transition-all duration-500">
-                       {/* Note: Pour éviter trop de lourdeur, on peut aussi utiliser une image statique, 
+                       {/* Note: Pour éviter trop de lourdeur, on peut aussi utiliser une image statique,
                            mais ici j'utilise la Map désactivée pour la précision visuelle */}
                         <Map
                             initialViewState={{
@@ -9472,12 +9987,12 @@ function AddPoiContent() {
                     {/* Overlay d'Action */}
                     <div className="absolute inset-0 bg-black/10 hover:bg-black/20 transition-colors flex items-center justify-center pointer-events-none">
                         <div className="pointer-events-auto transform transition-transform group-hover:scale-105">
-                            <button 
+                            <button
                                 type="button"
                                 onClick={() => { setTempLocation(formData.location!); setIsMapOpen(true); }}
                                 className="bg-white text-zinc-800 px-5 py-2.5 rounded-full font-bold shadow-xl flex items-center gap-2 text-sm border-2 border-primary/20 hover:border-primary transition-all"
                             >
-                                <Maximize size={16} className="text-primary"/> 
+                                <Maximize size={16} className="text-primary"/>
                                 Choisir sur la carte
                             </button>
                         </div>
@@ -9498,28 +10013,28 @@ function AddPoiContent() {
                         </span>
                     </div>
 
-                    <FormInput 
+                    <FormInput
                         label="Adresse / Lieu-dit" name="address_informal"
-                        value={formData.address_informal} onChange={handleChange} 
+                        value={formData.address_informal} onChange={handleChange}
                         icon={<MapPin size={16}/>} className="h-11" placeholder="Ex: Bastos, Face ambassade..."
                     />
 
                     <div className="grid grid-cols-2 gap-3">
-                        <FormInput 
+                        <FormInput
                             label="Ville" name="address_city"
-                            value={formData.address_city} onChange={handleChange} 
+                            value={formData.address_city} onChange={handleChange}
                             icon={<Building2 size={16}/>} className="h-11"
                         />
-                        <FormInput 
+                        <FormInput
                             label="Pays" name="address_country"
-                            value={formData.address_country} onChange={handleChange} 
+                            value={formData.address_country} onChange={handleChange}
                             icon={<Flag size={16}/>} className="h-11"
                         />
                     </div>
 
-                    <FormInput 
+                    <FormInput
                         label="Code Postal" name="postalCode"
-                        value={postalCode} onChange={(e) => setPostalCode(e.target.value)} 
+                        value={postalCode} onChange={(e) => setPostalCode(e.target.value)}
                         icon={<Mail size={16}/>} className="h-11"
                     />
                 </div>
@@ -9532,7 +10047,7 @@ function AddPoiContent() {
       {isMapOpen && (
         <div className="fixed inset-0 z-[60] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 md:p-8 animate-in fade-in zoom-in-95 duration-200">
             <div className="bg-white dark:bg-zinc-900 w-full h-full rounded-3xl overflow-hidden relative shadow-2xl flex flex-col">
-                
+
                 {/* En-tête Modal */}
                 <div className="absolute top-4 left-4 right-4 z-10 flex justify-between pointer-events-none">
                     <div className="bg-white/90 dark:bg-zinc-800/90 backdrop-blur px-4 py-2 rounded-full shadow-lg border border-zinc-200 dark:border-zinc-700 pointer-events-auto">
@@ -9541,7 +10056,7 @@ function AddPoiContent() {
                             Glissez le marqueur ou cliquez pour définir
                         </h3>
                     </div>
-                    <button 
+                    <button
                         onClick={() => setIsMapOpen(false)}
                         className="bg-white text-zinc-800 p-2 rounded-full shadow-lg pointer-events-auto hover:bg-zinc-100"
                     >
@@ -9564,9 +10079,9 @@ function AddPoiContent() {
                         <ScaleControl position="bottom-right" />
 
                         {/* Draggable Marker */}
-                        <Marker 
-                            longitude={tempLocation.longitude} 
-                            latitude={tempLocation.latitude} 
+                        <Marker
+                            longitude={tempLocation.longitude}
+                            latitude={tempLocation.latitude}
                             draggable
                             onDragEnd={handleDragEnd}
                             anchor="bottom"
@@ -9583,10 +10098,10 @@ function AddPoiContent() {
                 <div className="bg-white dark:bg-zinc-900 border-t border-zinc-200 dark:border-zinc-800 p-4 flex flex-col md:flex-row justify-between items-center gap-4 shrink-0">
                     <div className="flex items-center gap-2 text-zinc-500 text-xs font-mono">
                        <LocateFixed size={14}/>
-                       Lat: <span className="text-zinc-800 dark:text-zinc-200 font-bold">{tempLocation.latitude.toFixed(6)}</span> 
+                       Lat: <span className="text-zinc-800 dark:text-zinc-200 font-bold">{tempLocation.latitude.toFixed(6)}</span>
                        Lon: <span className="text-zinc-800 dark:text-zinc-200 font-bold">{tempLocation.longitude.toFixed(6)}</span>
                     </div>
-                    
+
                     <div className="flex gap-3 w-full md:w-auto">
                         <Button variant="secondary" onClick={() => navigator.geolocation.getCurrentPosition(p => setTempLocation({latitude: p.coords.latitude, longitude: p.coords.longitude}))} size="md" className="flex-1 md:flex-none">
                             <LocateFixed size={18} /> Ma position
@@ -9604,7 +10119,7 @@ function AddPoiContent() {
   );
 }
 
-// Wrapper Suspense pour Next.js 
+// Wrapper Suspense pour Next.js
 export default function AddPoiPage() {
     return (
         <Suspense fallback={<div className="h-screen w-full bg-white dark:bg-black" />}>
@@ -9625,6 +10140,38 @@ export interface User {
   role: UserRole;
   avatar?: string; // URL de l'avatar
 }
+
+export interface OperationTimePlan {
+  [day: string]: { open: string; close: string; closed?: boolean };
+}
+
+export interface RouteStats {
+  distance: number; // en mètres
+  duration: number; // en secondes
+  geometry: any; // GeoJSON geometry
+}
+
+export interface Trip {
+  id: string;
+  departName: string;
+  arriveName: string;
+  date: string; // ISO String
+  distance: number;
+  duration: number;
+}
+
+export type MapStyle = "streets-v2" | "hybrid";
+
+export interface Trip {
+
+}
+
+export interface Location {
+  latitude: number;
+  longitude: number;
+}
+
+export type TransportMode = 'driving' | 'walking' | 'cycling' | 'transit';
 
 /**
  * Statut d'un Point d'Intérêt
@@ -9647,10 +10194,7 @@ export interface POI {
   // ============================================================================
   // GÉOGRAPHIE
   // ============================================================================
-  location: {
-    latitude: number;
-    longitude: number;
-  };
+  location: Location;
 
   // Adresses
   address_informal?: string; // Ex: "Mvog-Betsi, face station Total"
@@ -9678,7 +10222,7 @@ export interface POI {
   // ============================================================================
   // HORAIRES
   // ============================================================================
-  operation_time_plan?: any;
+  operation_time_plan?: OperationTimePlan;
 
   // ============================================================================
   // WORKFLOW & VALIDATION
@@ -9757,6 +10301,7 @@ import { SecondarySidebar } from "@/components/sidebar/SecondarySidebar";
 import { POI_DATA } from "@/data/mockData";
 import { POI, Location, TransportMode } from "@/types";
 import { getRoute } from "@/services/routingService";
+import { apiService } from "@/services/apiService";
 import { useUserData } from "@/hooks/useUserData";
 import { useAuth } from "@/hooks/useAuth";
 import { Settings as SettingsIcon, Check, X } from "lucide-react";
@@ -9769,12 +10314,12 @@ const MapComponent = dynamic(() => import("@/components/map/Map"), {
   loading: () => <Loader />,
 });
 
-const MAPTILER_API_KEY = "Lr72DkH8TYyjpP7RNZS9"; 
+const MAPTILER_API_KEY = "Lr72DkH8TYyjpP7RNZS9";
 
 export default function Home() {
   // Gestionnaires d'ouverture
   const [isMainSidebarOpen, setIsMainSidebarOpen] = useState(false); // Le mode "étendu" du menu
-  
+
   // Contenu "Secondaire" (Panneaux qui s'affichent à coté du dock)
   // On utilise un state commun pour garantir qu'un seul panneau s'affiche à la fois
   // Types: "details" (fiche poi) | "directions" (itinéraire) | "list-saved" | "list-recent" | "list-trips" | "list-mypois" | null
@@ -9782,16 +10327,17 @@ export default function Home() {
      type: "details" | "directions" | "saved" | "recent" | "trips" | "mypois" | null;
      data?: any; // Pour passer le POI selectionné ou autre
   }>({ type: null });
-  
+
   const { savedPois, recentPois, recentTrips, mapStyle, addRecentPoi, addTrip, toggleMapStyle, myPois } = useUserData();
   const { user } = useAuth();
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  
+  const [pois, setPois] = useState<POI[]>([]);
+
   // États transverses
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [userLocation, setUserLocation] = useState<Location | null>(null);
-  
+
   // États Routing spécifiques
   const [routeStats, setRouteStats] = useState<any>(null);
   const [routeGeometry, setRouteGeometry] = useState<any>(null);
@@ -9805,6 +10351,14 @@ export default function Home() {
             err => console.warn(err)
         );
      }
+
+     // Fetch real POIs
+     apiService.getAllPois()
+       .then(setPois)
+       .catch(err => {
+         console.warn("Could not fetch POIs from API, using mock data.", err);
+         setPois(POI_DATA);
+       });
   }, []);
 
   // --- GESTIONNAIRES D'AFFICHAGE ---
@@ -9816,12 +10370,12 @@ export default function Home() {
         setPanelState({ type: null });
         return;
     }
-    
+
     // Ajout historique
     addRecentPoi(poi);
 
     // Ouvre le panneau détails et ferme le menu étendu s'il gêne
-    setIsMainSidebarOpen(false); 
+    setIsMainSidebarOpen(false);
     setPanelState({ type: "details", data: poi });
   };
 
@@ -9844,12 +10398,12 @@ export default function Home() {
 
   const handleCalculateRoute = async (destination: POI, mode: TransportMode) => {
     if (!userLocation) return alert("Géolocalisation requise pour le départ.");
-    
+
     setActiveTransportMode(mode);
     setIsRouteLoading(true);
 
     const result = await getRoute(userLocation, destination.location, mode, MAPTILER_API_KEY);
-    
+
     if (result) {
         addTrip({
             id: Date.now().toString(),
@@ -9877,7 +10431,7 @@ export default function Home() {
   const handleResetToMap = () => {
     setPanelState({ type: null }); // Ferme tout les panneaux
     setIsMainSidebarOpen(false);   // Ferme le menu latéral si ouvert
-    
+
     // Optionnel : Recentrer sur l'utilisateur
     if (userLocation) {
        // La MapComponent a un effet useEffect qui réagira si userLocation change ou si on le force
@@ -9887,7 +10441,7 @@ export default function Home() {
 
 
   const filteredPois = useMemo(() => {
-    const base = [...POI_DATA, ...myPois]; // Fusion
+    const base = pois.length > 0 ? [...pois, ...myPois] : [...POI_DATA, ...myPois]; // Fusion
     return base.filter((poi) => {
       // Visibilité basée sur le statut et le rôle
       const isVisible =
@@ -9905,9 +10459,9 @@ export default function Home() {
 
   return (
     <main className="relative h-screen w-screen overflow-hidden bg-zinc-50 dark:bg-black font-sans">
-      
+
       {/* Niveau 4 (Top) */}
-      <TopLayout 
+      <TopLayout
         onToggleSidebar={() => setIsMainSidebarOpen(!isMainSidebarOpen)}
         allPois={POI_DATA}
         selectedCategory={selectedCategory}
@@ -9915,13 +10469,13 @@ export default function Home() {
         onSearch={setSearchQuery}
         onSelectResult={handleSelectPoi}
         onLocateMe={() => userLocation && setUserLocation({...userLocation})}
-        recentSearches={[]} 
+        recentSearches={[]}
         recentPois={recentPois}
       />
 
       {/* Niveau 3 (Gauche) - Sidebar Navigation */}
-      <Sidebar 
-        isOpen={isMainSidebarOpen} 
+      <Sidebar
+        isOpen={isMainSidebarOpen}
         onClose={() => setIsMainSidebarOpen(false)}
         onViewChange={handleViewChange}
         onLocateMe={() => userLocation && setUserLocation({...userLocation})}
@@ -9931,7 +10485,7 @@ export default function Home() {
       />
 
       {/* ------ AJOUTER ICI : BARRE DE NAVIGATION MOBILE (Niveau 3.5) ------ */}
-      <MobileNavBar 
+      <MobileNavBar
         currentView={panelState.type === "details" || panelState.type === "directions" ? null : panelState.type}
         onViewChange={handleViewChange}
         onOpenSidebar={() => setIsMainSidebarOpen(true)}
@@ -9939,11 +10493,11 @@ export default function Home() {
       />
 
       {/* Niveau 2 (Panneaux glissants) - Mutuellement Exclusifs */}
-      
+
       {/* A. Fiche Détails POI */}
       {panelState.type === "details" && panelState.data && (
-        <PoiDetailsSidebar 
-          poi={panelState.data} 
+        <PoiDetailsSidebar
+          poi={panelState.data}
           isOpen={true}
           onClose={handleClosePanel}
           onOpenDirections={handleOpenDirections}
@@ -9952,7 +10506,7 @@ export default function Home() {
 
       {/* B. Itinéraire */}
       {panelState.type === "directions" && panelState.data && (
-        <DirectionsSidebar 
+        <DirectionsSidebar
             isOpen={true}
             onClose={handleClosePanel}
             originPoi={null}
@@ -9967,7 +10521,7 @@ export default function Home() {
 
       {/* C. Listes (Saved, Recent, Trips...) */}
       {(panelState.type === "saved" || panelState.type === "recent" || panelState.type === "trips" || panelState.type === "mypois") && (
-          <SecondarySidebar 
+          <SecondarySidebar
              view={panelState.type}
              onClose={handleClosePanel}
              data={{ savedPois, recentPois, trips: recentTrips }}
@@ -9986,7 +10540,7 @@ export default function Home() {
                     <button onClick={() => setIsSettingsOpen(false)} className="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-full"><X/></button>
                  </div>
                  <div className="grid grid-cols-2 gap-4">
-                    <button 
+                    <button
                        onClick={() => { toggleMapStyle(); setIsSettingsOpen(false); }}
                        className={`p-4 rounded-xl border-2 flex flex-col items-center gap-3 transition-all ${mapStyle === 'streets-v2' ? 'border-primary bg-primary/5' : 'border-zinc-200 dark:border-zinc-700'}`}
                     >
@@ -9994,7 +10548,7 @@ export default function Home() {
                         <span className="font-semibold text-sm">Plan</span>
                         {mapStyle === 'streets-v2' && <Check size={16} className="text-primary"/>}
                     </button>
-                    <button 
+                    <button
                        onClick={() => { toggleMapStyle(); setIsSettingsOpen(false); }}
                        className={`p-4 rounded-xl border-2 flex flex-col items-center gap-3 transition-all ${mapStyle === 'hybrid' ? 'border-primary bg-primary/5' : 'border-zinc-200 dark:border-zinc-700'}`}
                     >
@@ -10009,14 +10563,14 @@ export default function Home() {
 
       {/* Niveau 1 (Map) */}
       <div className="absolute top-0 left-0 w-full h-full z-0 print:block">
-        <MapComponent 
-          apiKey={MAPTILER_API_KEY} 
-          pois={filteredPois} 
+        <MapComponent
+          apiKey={MAPTILER_API_KEY}
+          pois={filteredPois}
           selectedPoi={panelState.type === "details" || panelState.type === "directions" ? panelState.data : null}
           userLocation={userLocation}
           onSelectPoi={handleSelectPoi}
           routeGeometry={routeGeometry}
-          mapStyleType={mapStyle} 
+          mapStyleType={mapStyle}
         />
       </div>
 
