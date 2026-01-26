@@ -1,15 +1,15 @@
-import { Search, Menu, X, ArrowRight, History, MapPin, Navigation2 } from "lucide-react";
-import { useState, useRef, useEffect } from "react";
+import { Search, Menu, X, History, MapPin, Navigation2 } from "lucide-react";
+import { useState, useRef } from "react";
 import clsx from "clsx";
 import { POI } from "@/types";
 
 interface SearchInputProps {
   onMenuClick: () => void;
   className?: string;
-  pois: POI[]; // Tous les POIs pour l'autocomplete
+  pois: POI[];
   onSearch: (query: string) => void;
   onSelectResult: (poi: POI) => void;
-  onLocateMe: () => void; // Nouvelle prop
+  onLocateMe: () => void;
   recentSearches: string[];
   recentPois: POI[];
 }
@@ -28,7 +28,6 @@ export const SearchInput = ({
   const [query, setQuery] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Filtrer les POIs pour l'autocomplétion (max 5 suggestions)
   const suggestions = query.length > 0 
     ? pois.filter(p => p.poi_name.toLowerCase().includes(query.toLowerCase())).slice(0, 5)
     : [];
@@ -42,32 +41,38 @@ export const SearchInput = ({
 
   const handleSelectPoi = (poi: POI) => {
     setQuery(poi.poi_name);
-    onSelectResult(poi); // Zoom sur la carte et ouvre details
+    onSelectResult(poi);
     setIsFocused(false);
   };
 
   return (
-    <div className={clsx("relative z-50", className)}>
-            <form 
+    <div className={clsx("relative group", className)}>
+      {/* Ombre portée améliorée pour détacher du fond de carte */}
+      <div className={clsx(
+          "absolute inset-0 bg-white/80 dark:bg-zinc-900/90 rounded-3xl transition-all duration-300",
+          isFocused ? "shadow-2xl scale-[1.02]" : "shadow-md hover:shadow-lg"
+      )} />
+
+      <form 
         onSubmit={handleSearchSubmit}
         className={clsx(
-          "flex items-center bg-white dark:bg-zinc-800 h-11 border border-zinc-200 dark:border-zinc-700 transition-shadow",
-          isFocused ? "rounded-t-[24px] rounded-b-none shadow-lg border-b-0" : "rounded-full shadow-sm hover:shadow-md"
+          "relative flex items-center h-12 px-1 z-10 transition-all border border-zinc-200/50 dark:border-zinc-700/50 backdrop-blur-md rounded-3xl",
+          isFocused ? "bg-white dark:bg-zinc-900 rounded-b-none border-b-0" : "bg-white/90 dark:bg-zinc-900/90"
         )}
       >
         <button 
           type="button"
           onClick={onMenuClick}
-          className="pl-3 pr-2 text-zinc-500 hover:text-black dark:text-zinc-400 dark:hover:text-white"
+          className="p-2.5 ml-1 text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-full transition-colors"
         >
-          {isFocused ? <Search size={20} /> : <Menu size={20} />}
+          {isFocused ? <Search size={20} className="text-primary"/> : <Menu size={20} />}
         </button>
 
         <input 
           ref={inputRef}
           type="text" 
-          placeholder="Rechercher ici..."
-          className="flex-1 bg-transparent border-none outline-none text-[15px] text-zinc-900 dark:text-zinc-100 px-2 truncate font-normal"
+          placeholder="Rechercher un lieu, un restaurant..."
+          className="flex-1 bg-transparent border-none outline-none text-[15px] text-zinc-800 dark:text-zinc-100 px-3 placeholder:text-zinc-400 font-medium"
           value={query}
           onFocus={() => setIsFocused(true)}
           onChange={(e) => {
@@ -76,29 +81,27 @@ export const SearchInput = ({
           }}
         />
 
-        <div className="flex items-center gap-1 pr-1.5">
+        <div className="flex items-center pr-1.5 gap-1">
           {query && (
             <button 
               type="button" 
-              onClick={() => { setQuery(""); onSearch(""); }} 
-              className="p-2 text-zinc-500 hover:text-black"
+              onClick={() => { setQuery(""); onSearch(""); inputRef.current?.focus(); }} 
+              className="p-2 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200"
             >
               <X size={18} />
             </button>
           )}
           
-          <div className="h-6 w-px bg-zinc-300 dark:bg-zinc-600 mx-1"></div>
+          {/* Séparateur */}
+          <div className="h-5 w-px bg-zinc-200 dark:bg-zinc-700 mx-1"></div>
           
-          {/* BOUTON LOCALISATION (Flèche Violette) */}
           <button 
             type="button" 
             onClick={onLocateMe}
-            className="p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-700 rounded-full group transition-colors"
+            className="p-2 bg-primary/10 hover:bg-primary/20 text-primary rounded-full transition-colors"
             title="Me localiser"
           >
-             <div className="w-7 h-7 bg-primary flex items-center justify-center rounded-full text-white shadow-sm group-hover:scale-105 transition-transform">
-                <Navigation2 size={14} className="-rotate-45" fill="currentColor" />
-             </div>
+             <Navigation2 size={18} className="-rotate-45 fill-primary/20" />
           </button>
         </div>
       </form>
@@ -106,57 +109,55 @@ export const SearchInput = ({
       {/* --- MENU DÉROULANT --- */}
       {isFocused && (
         <>
-          <div 
-            className="fixed inset-0 bg-transparent z-[-1]" 
-            onClick={() => setIsFocused(false)} 
-          />
-          <div className="absolute top-full left-0 w-full bg-white dark:bg-zinc-800 rounded-b-[24px] shadow-lg border-t-0 border border-zinc-200 dark:border-zinc-700 pb-2 overflow-hidden">
+          <div className="fixed inset-0 z-0" onClick={() => setIsFocused(false)} />
+          
+          <div className="absolute top-full left-0 w-full bg-white dark:bg-zinc-900 rounded-b-3xl shadow-2xl border-x border-b border-zinc-200 dark:border-zinc-800 overflow-hidden z-20 pb-2 animate-in slide-in-from-top-2 duration-200">
              
-             {/* CAS 1 : SUGGESTIONS AUTOCOMPLÉTION (Recherche active) */}
+             {/* Ligne de séparation visuelle */}
+             <div className="w-full h-px bg-gradient-to-r from-transparent via-zinc-200 dark:via-zinc-700 to-transparent mb-2"></div>
+
+             {/* RÉSULTATS ACTIFS */}
              {query.length > 0 && (
-                <div className="pt-2">
+                <div className="max-h-[60vh] overflow-y-auto scrollbar-thin">
                   {suggestions.length > 0 ? (
                     suggestions.map(poi => (
                       <SuggestionItem 
                         key={poi.poi_id}
-                        icon={<MapPin size={18} />} 
+                        icon={<MapPin size={18} className="text-red-500" />} 
                         title={poi.poi_name} 
                         subtitle={poi.address_city} 
                         onClick={() => handleSelectPoi(poi)}
-                        isLocation
+                        highlight
                       />
                     ))
                   ) : (
-                    <div className="px-4 py-3 text-sm text-zinc-500 italic">Aucun résultat trouvé</div>
+                    <div className="px-6 py-8 text-center text-zinc-400">
+                        <p className="text-sm">Aucun résultat pour &quot;{query}&quot;</p>
+                    </div>
                   )}
                 </div>
              )}
 
-             {/* CAS 2 : HISTORIQUE (Champ vide) */}
+             {/* HISTORIQUE (Si vide) */}
              {query.length === 0 && (
-                <div className="pt-1">
-                  <div className="px-4 py-2 text-xs font-semibold text-zinc-400 uppercase tracking-wider">Récents</div>
+                <div className="py-2">
+                  <div className="px-5 py-2 text-[11px] font-bold text-zinc-400 uppercase tracking-wider flex items-center justify-between">
+                      <span>Récemment consultés</span>
+                  </div>
                   
-                  {/* 3 Dernières Recherches (String) */}
-                  {recentSearches.map((term, i) => (
+                  {recentPois.length > 0 ? recentPois.map((poi) => (
                     <SuggestionItem 
-                      key={`hist-${i}`}
-                      icon={<History size={18} />} 
-                      title={term} 
-                      onClick={() => { setQuery(term); onSearch(term); setIsFocused(false); }}
-                    />
-                  ))}
-
-                  {/* 2 Derniers POIs Vus (Objets) */}
-                  {recentPois.map((poi) => (
-                    <SuggestionItem 
-                      key={`recent-poi-${poi.poi_id}`}
-                      icon={<Navigation2 size={18} className="text-primary" />} 
+                      key={`recent-${poi.poi_id}`}
+                      icon={<History size={18} className="text-primary/60" />} 
                       title={poi.poi_name} 
-                      subtitle={`${poi.poi_category} • Consulté récemment`}
+                      subtitle={poi.poi_category}
                       onClick={() => handleSelectPoi(poi)}
                     />
-                  ))}
+                  )) : (
+                    <div className="px-5 py-4 text-sm text-zinc-400 italic">
+                        Votre historique de recherche apparaîtra ici.
+                    </div>
+                  )}
                 </div>
              )}
           </div>
@@ -166,23 +167,25 @@ export const SearchInput = ({
   );
 };
 
-// Item générique de la liste
-const SuggestionItem = ({ icon, title, subtitle, onClick, isLocation }: any) => (
+const SuggestionItem = ({ icon, title, subtitle, onClick, highlight }: any) => (
   <div 
     onClick={onClick}
-    className="flex items-center gap-4 py-3 px-4 hover:bg-zinc-50 dark:hover:bg-zinc-700 cursor-pointer transition-colors"
+    className="flex items-center gap-4 py-3 px-5 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 cursor-pointer transition-colors group border-l-2 border-transparent hover:border-primary"
   >
     <div className={clsx(
-      "w-9 h-9 min-w-9 rounded-full flex items-center justify-center",
-      isLocation ? "bg-white border border-zinc-200" : "bg-zinc-100 dark:bg-zinc-900"
+      "w-10 h-10 rounded-full flex items-center justify-center shrink-0 transition-colors",
+      highlight ? "bg-red-50 dark:bg-red-900/20" : "bg-zinc-100 dark:bg-zinc-800 group-hover:bg-white dark:group-hover:bg-zinc-700"
     )}>
-      <span className="text-zinc-500 dark:text-zinc-400">{icon}</span>
+      {icon}
     </div>
-    <div className="flex flex-col overflow-hidden">
-      <span className={clsx("text-[15px] truncate font-medium text-zinc-800 dark:text-zinc-100")}>
+    <div className="flex flex-col min-w-0">
+      <span className={clsx(
+          "text-sm font-semibold truncate", 
+          highlight ? "text-zinc-900 dark:text-white" : "text-zinc-700 dark:text-zinc-200"
+      )}>
         {title}
       </span>
-      {subtitle && <span className="text-zinc-500 text-xs truncate">{subtitle}</span>}
+      {subtitle && <span className="text-xs text-zinc-500 truncate">{subtitle}</span>}
     </div>
   </div>
 );

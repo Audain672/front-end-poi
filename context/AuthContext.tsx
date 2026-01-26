@@ -1,98 +1,191 @@
 "use client";
 
-import React, { createContext, useState, useEffect, useContext } from "react";
-import { User, UserRole } from "@/types";
+import React, { createContext, useState, useEffect, useContext, useCallback } from "react";
+import { User } from "@/types";
+import { 
+  authService, 
+  LoginCredentials, 
+  SignupData, 
+  AuthError, 
+  UpdateProfileData
+} from "@/services/authService";
+
+// ============================================================================
+// TYPES
+// ============================================================================
 
 interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (email: string, password: string) => Promise<void>;
-  signup: (userData: Omit<User, "id">, password: string) => Promise<void>;
-  logout: () => void;
-  updateProfile: (data: Partial<Omit<User, "id" | "role">>) => Promise<void>;
+  error: string | null;
+  login: (credentials: LoginCredentials) => Promise<void>;
+  signup: (userData: SignupData) => Promise<void>;
+  logout: () => Promise<void>;
+  updateProfile: (userData: UpdateProfileData) => Promise<void>;
+  clearError: () => void;
 }
 
+// ============================================================================
+// CONTEXTE
+// ============================================================================
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+// ============================================================================
+// PROVIDER
+// ============================================================================
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
+  /**
+   * Initialisation - Récupérer l'utilisateur depuis le token
+   */
   useEffect(() => {
-    const savedUser = localStorage.getItem("navigoo_user");
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
-    }
-    setIsLoading(false);
+    const initAuth = async () => {
+      try {
+        if (authService.isAuthenticated()) {
+          const currentUser = await authService.getCurrentUser();
+          setUser(currentUser);
+        }
+      } catch (err) {
+        console.error("Erreur initialisation auth:", err);
+        // Token invalide/expiré, nettoyage
+        await authService.logout();
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    initAuth();
   }, []);
 
-  const login = async (email: string, password: string) => {
-    // Simulation d'un service d'authentification
-    // Pour le test, on accepte n'importe quel email/password
-    // et on définit le rôle en fonction de l'email
-    setIsLoading(true);
-    try {
-      const mockUser: User = {
-        id: "user_" + Date.now(),
-        name: email.split("@")[0],
-        email: email,
-        role: email.includes("admin") ? "admin" : "client",
-        organization: "My Org",
-      };
+  /**
+   * Gestion des erreurs avec timeout auto-clear
+   */
+  const handleError = useCallback((err: unknown) => {
+    const message = err instanceof AuthError 
+      ? err.message 
+      : "Une erreur inattendue est survenue";
+    
+    setError(message);
 
-      setUser(mockUser);
-      localStorage.setItem("navigoo_user", JSON.stringify(mockUser));
+    // Auto-clear après 5 secondes
+    setTimeout(() => setError(null), 5000);
+  }, []);
+
+  /**
+   * Connexion
+   */
+  const login = useCallback(async (credentials: LoginCredentials) => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await authService.login(credentials);
+      setUser(response.user);
+    } catch (err) {
+      handleError(err);
+      throw err; // Re-throw pour gestion dans les composants
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [handleError]);
 
-  const signup = async (userData: Omit<User, "id">, password: string) => {
+  /**
+   * Inscription
+   */
+  const signup = useCallback(async (userData: SignupData) => {
     setIsLoading(true);
+    setError(null);
+
     try {
-      const newUser: User = {
-        ...userData,
-        id: "user_" + Date.now(),
-      };
-      setUser(newUser);
-      localStorage.setItem("navigoo_user", JSON.stringify(newUser));
+      const response = await authService.signup(userData);
+      setUser(response.user);
+    } catch (err) {
+      handleError(err);
+      throw err;
     } finally {
       setIsLoading(false);
     }
+  }, [handleError]);
+
+  /**
+   * Déconnexion
+   */
+  const logout = useCallback(async () => {
+    setIsLoading(true);
+    
+    try {
+      await authService.logout();
+      setUser(null);
+      setError(null);
+    } catch (err) {
+      console.error("Erreur déconnexion:", err);
+      // Force le nettoyage même en cas d'erreur
+      setUser(null);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  /**
+   * Mise à jour du profil
+   */
+  const updateProfile = useCallback(async (data: Partial<Omit<User, "id" | "email" | "role">>) => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const updatedUser = await authService.updateProfile(data);
+      setUser(updatedUser);
+    } catch (err) {
+      handleError(err);
+      throw err;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [handleError]);
+
+  /**
+   * Clear manuel de l'erreur
+   */
+  const clearError = useCallback(() => {
+    setError(null);
+  }, []);
+
+  // ============================================================================
+  // VALEUR DU CONTEXTE
+  // ============================================================================
+
+  const value: AuthContextType = {
+    user,
+    isAuthenticated: !!user,
+    isLoading,
+    error,
+    login,
+    signup,
+    logout,
+    updateProfile,
+    clearError,
   };
 
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem("navigoo_user");
-  };
-
-  const updateProfile = async (data: Partial<Omit<User, "id" | "role">>) => {
-    if (!user) return;
-    const updatedUser = { ...user, ...data };
-    setUser(updatedUser);
-    localStorage.setItem("navigoo_user", JSON.stringify(updatedUser));
-  };
-
-  return (
-    <AuthContext.Provider value={{
-      user,
-      isAuthenticated: !!user,
-      isLoading,
-      login,
-      signup,
-      logout,
-      updateProfile
-    }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
+
+// ============================================================================
+// HOOK PERSONNALISÉ
+// ============================================================================
 
 export const useAuthContext = () => {
   const context = useContext(AuthContext);
+  
   if (context === undefined) {
     throw new Error("useAuthContext must be used within an AuthProvider");
   }
+  
   return context;
 };
